@@ -7,6 +7,12 @@ import { stylesFactory, useTheme } from '@grafana/ui';
 interface Props extends PanelProps<SimpleOptions> {}
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
+  // Start Psychrolib Test
+  const psychrolib = require('psychrolib.js');
+  psychrolib.SetUnitSystem(psychrolib.IP);
+  let dp = psychrolib.GetTDewPointFromRelHum(75.0, 0.8);
+  console.log('Dew point at 75F, 80%rh = ' + dp + 'F');
+  // End Psychrolib Test
   const theme = useTheme();
   const styles = getStyles();
   let color: string;
@@ -47,8 +53,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       >
         <g fill={color}>
           {radii.map((radius, index) => {
-            // blank lines
-            // blah
             const step = width / radii.length;
             return <circle key={index} r={radius} transform={`translate(${index * step + step / 2}, 0)`} />;
           })}
