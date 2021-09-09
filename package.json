@@ -1,5 +1,5 @@
 {
-  "name": "nersc-psychrometric-chart",
+  "name": "ventura-psychrometric-chart",
   "version": "1.0.0",
   "description": "View air conditions on a psychrometric chart.",
   "scripts": {
