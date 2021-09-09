@@ -9,6 +9,24 @@ interface Props extends PanelProps<SimpleOptions> {}
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme();
   const styles = getStyles();
+  let color: string;
+  switch (options.color) {
+    case 'red': {
+      color = theme.palette.redBase;
+      break;
+    }
+    case 'green': {
+      color = theme.palette.greenBase;
+      break;
+    }
+    case 'blue': {
+      color = theme.palette.blue95;
+      break;
+    }
+  }
+  const radii = data.series
+    .map((series) => series.fields.find((field) => field.type === 'number'))
+    .map((field) => field?.values.get(field.values.length - 1));
   return (
     <div
       className={cx(
@@ -25,10 +43,15 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
         height={height}
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+        viewBox={`0 -${height / 2} ${width} ${height}`}
       >
-        <g>
-          <circle style={{ fill: `${theme.isLight ? theme.palette.greenBase : theme.palette.blue95}` }} r={100} />
+        <g fill={color}>
+          {radii.map((radius, index) => {
+            // blank lines
+            // blah
+            const step = width / radii.length;
+            return <circle key={index} r={radius} transform={`translate(${index * step + step / 2}, 0)`} />;
+          })}
         </g>
       </svg>
 

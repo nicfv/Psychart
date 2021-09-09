@@ -36,5 +36,26 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOption
         ],
       },
       showIf: (config) => config.showSeriesCount,
+    })
+    .addRadio({
+      path: 'color',
+      defaultValue: 'green',
+      name: 'Circle Color',
+      settings: {
+        options: [
+          {
+            value: 'red',
+            label: 'Red',
+          },
+          {
+            value: 'green',
+            label: 'Green',
+          },
+          {
+            value: 'blue',
+            label: 'Blue',
+          },
+        ],
+      },
     });
 });

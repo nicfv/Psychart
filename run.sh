@@ -34,7 +34,7 @@ if [[ "${HELP}" == true ]] ; then
 fi
 
 if [[ "${BUILD}" == true ]] ; then
-  yarn dev
+  yarn "${YARN_ARG}"
   export GRAFANA_API_KEY
   npx @grafana/toolkit plugin:sign --rootUrls http://localhost:3000
 fi
