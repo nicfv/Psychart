@@ -9,6 +9,7 @@ BUILD=false
 INSTALL=false
 START=false
 STOP=false
+PSY=false
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
@@ -24,17 +25,40 @@ for ARG in "${@}" ; do
     START=true
   elif [[ "${ARG}" == -x ]] ; then
     STOP=true
+  elif [[ "${ARG}" == -p ]] ; then
+    PSY=true
+  elif [[ "${ARG}" == -o ]] ; then
+    open './svg/index.html'
+  elif [[ "${ARG}" == -A ]] ; then
+    clear
+    echo 'Building plugin in development mode.'
+    BUILD=true
+    START=true
+    PSY=true
   fi
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-bB] [-r] [-x]"
+  echo "Usage: ${0} [-h] [-i] [-bB] [-r] [-x] [-p] [-A]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -b: Build and sign the plugin. (Development mode)'
   echo '  -B: Build and sign the plugin. (Release mode)'
   echo '  -r: Run or restart the Grafana instance.'
   echo '  -x: Close the Grafana instance.'
+  echo '  -p: Publish the current psychart file.'
+  echo '  -o: Open the svg generator in a web browser.'
+  echo '  -A: Clears the terminal and executes flags -b -r -p.'
+fi
+
+if [[ "${PSY}" == true ]] ; then
+  IN='./svg/psychart.ts'
+  OUT='./src/psychart.js'
+  EXT='.bk'
+  cp -v "${IN}" "${OUT}"
+  sed -i"${EXT}" 's/function Psychart/export function Psychart/g' "${OUT}"
+  sed -i"${EXT}" "s/new Psychrometrics()/require('psychrolib.js')/g" "${OUT}"
+  rm -v "${OUT}${EXT}"
 fi
 
 if [[ "${INSTALL}" == true ]] ; then

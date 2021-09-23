@@ -1,7 +1,7 @@
 'use strict';
 
 // Generate a psychrometric chart as an svg element.
-function Psychart(width, height, unitSystem, db_min, db_max, dp_max) {
+function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, textColor) {
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
@@ -72,43 +72,60 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max) {
 
     // Draw constant dry bulb vertical lines.
     for(let db = db_min; db <= db_max; db += 10) {
-        const dbLine = new Line(1, '#CCC');
+        const dbLine = new Line(1);
         // The lower point is on the X-axis (rh = 0%)
         dbLine.addPoint(dr2xy(db, 0));
         // The upper point is on the dew point line (db = dp)
-        dbLine.addPoint(dd2xy(db, db));
+        let upper = dd2xy(db, db);
+        // Make sure that the line stays within bounds of the chart
+        if(upper.y < padding) {
+            upper.y = padding;
+        }
+        dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
-        Label(dr2xy(db, 0), 'u', '#000', db + '\u00B0' + tempUnit);
+        Label(dr2xy(db, 0), 'u', db + '\u00B0' + tempUnit);
     }
 
     // Draw constant dew point horizontal lines.
     for(let dp = 0; dp <= dp_max; dp += 10) {
-        const dpLine = new Line(1, '#CCC');
+        const dpLine = new Line(1);
         // The left point is on the dew point line (db = dp)
-        dpLine.addPoint(dd2xy(dp, dp));
+        let left = dd2xy(dp, dp);
+        // Make sure that the line stays within bounds of the chart
+        if(left.x < padding) {
+            left.x = padding;
+        }
+        dpLine.addPoint(left);
         // The right point is at the maximum dry bulb temperature
         dpLine.addPoint(dd2xy(db_max, dp));
         // Add a label for the constant dew point line
-        Label(dd2xy(db_max, dp), 'l', '#000', dp + '\u00B0' + tempUnit);
+        Label(dd2xy(db_max, dp), 'l', dp + '\u00B0' + tempUnit);
     }
 
     // Draw constant wet bulb diagonal lines.
     for(let wb = db_min; wb < db_max; wb += 10) {
-        const wbLine = new Line(1, '#CCC');
+        const wbLine = new Line(1);
         // Dry bulb is always equal or greater than wet bulb.
         for(let db = wb; db <= db_max; db++) {
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
-        Label(dd2xy(wb, wb), 'r', '#000', wb + '\u00B0' + tempUnit);
+        Label(dd2xy(wb, wb), 'r', wb + '\u00B0' + tempUnit);
     }
 
     // Draw constant relative humidity lines.
     for(let rh = 0; rh <= 100; rh += 20) {
-        const rhLine = new Line(1, '#CCC');
+        const rhLine = new Line(1);
         // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
         for(let db = db_min; db <= db_max; db++) {
-            rhLine.addPoint(dr2xy(db, rh/100));
+            let pt = dr2xy(db, rh/100);
+            // Stop drawing when the line surpasses the bounds of the chart
+            if(pt.y < padding) {
+                pt.y = padding;
+                rhLine.addPoint(pt);
+                break;
+            }
+            rhLine.addPoint(pt);
         }
     }
 
@@ -116,16 +133,16 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max) {
     this.el = () => chart;
 
     // Define a method to draw a line.
-    function Line(weight, color) {
+    function Line(weight) {
         // Perform some error checking.
-        if(typeof weight !== 'number' || typeof color !== 'string') {
-            throw 'Line(weight: number, color: string) has incorrect parameter types.';
+        if(typeof weight !== 'number') {
+            throw 'Line(weight: number) has incorrect parameter types.';
         }
 
         // Define the path element and assign its attributes.
         const pathElement = document.createElementNS(NS, 'path');
         pathElement.setAttribute('fill', 'none');
-        pathElement.setAttribute('stroke', color);
+        pathElement.setAttribute('stroke', lineColor);
         pathElement.setAttribute('stroke-width', weight + 'px');
         pathElement.setAttribute('vector-effect', 'non-scaling-stroke');
         psyGroup.appendChild(pathElement);
@@ -163,17 +180,17 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max) {
     }
 
     // Define a method to write a label.
-    function Label(pt, anchor, color, text) {
+    function Label(pt, anchor, text) {
         // Perform some error checking.
-        if(typeof pt.x !== 'number' || typeof pt.y !== 'number' || typeof anchor !== 'string' || typeof color !== 'string' || typeof text !== 'string') {
-            throw 'Label({ pt.x: number, pt.y: number }, anchor: string, color: string, text: string) has incorrect parameter types.';
+        if(typeof pt.x !== 'number' || typeof pt.y !== 'number' || typeof anchor !== 'string' || typeof text !== 'string') {
+            throw 'Label({ pt.x: number, pt.y: number }, anchor: string, text: string) has incorrect parameter types.';
         }
 
         const size = 12;
 
         // Define a text element and assign its attributes.
         const labelElement = document.createElementNS(NS, 'text');
-        labelElement.setAttribute('fill', color);
+        labelElement.setAttribute('fill', textColor);
         labelElement.setAttribute('x', pt.x);
         labelElement.setAttribute('y', pt.y + size / 2);
         labelElement.setAttribute('font-family', 'sans-serif');
