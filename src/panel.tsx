@@ -6,8 +6,8 @@ import { PsyOptions } from 'types';
 interface Props extends PanelProps<PsyOptions> {}
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme();
-  const psModule = require('psychart.js'),
+  const theme = useTheme(),
+    psModule = require('psychart.js'),
     ps = new psModule.Psychart(
       width,
       height,
@@ -15,8 +15,8 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
       20,
       120,
       90,
-      theme.isLight ? '#CCC' : '#333',
-      theme.isLight ? '#333' : '#CCC'
+      theme.isLight ? '#CCC' : '#666',
+      theme.isLight ? '#666' : '#CCC'
     );
   return <div dangerouslySetInnerHTML={{ __html: ps.el().outerHTML }}></div>;
 };

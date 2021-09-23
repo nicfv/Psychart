@@ -39,7 +39,7 @@ for ARG in "${@}" ; do
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-bB] [-r] [-x] [-p] [-A]"
+  echo "Usage: ${0} [-h] [-i] [-bB] [-r] [-x] [-p] [-o] [-A]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -b: Build and sign the plugin. (Development mode)'
