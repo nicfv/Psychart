@@ -6,12 +6,15 @@ YARN_ARG='dev'
 
 HELP=false
 BUILD=false
+INSTALL=false
 START=false
 STOP=false
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
     HELP=true
+  elif [[ "${ARG}" == -i ]] ; then
+    INSTALL=true
   elif [[ "${ARG}" == -b ]] ; then
     BUILD=true
   elif [[ "${ARG}" == -B ]] ; then
@@ -25,12 +28,17 @@ for ARG in "${@}" ; do
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-bB] [-r] [-x]"
+  echo "Usage: ${0} [-h] [-i] [-bB] [-r] [-x]"
   echo '  -h: Show this help message.'
+  echo '  -i: (Re)install node packages.'
   echo '  -b: Build and sign the plugin. (Development mode)'
   echo '  -B: Build and sign the plugin. (Release mode)'
   echo '  -r: Run or restart the Grafana instance.'
   echo '  -x: Close the Grafana instance.'
+fi
+
+if [[ "${INSTALL}" == true ]] ; then
+  npm install
 fi
 
 if [[ "${BUILD}" == true ]] ; then
