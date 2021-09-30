@@ -4,6 +4,9 @@ type RelHumType = 'p' | 'f';
 
 export interface PsyOptions {
   unitSystem: UnitSystem;
+  dbMin: number;
+  dbMax: number;
+  dpMax: number;
   measurements: MeasurementType;
   dryBulb: string;
   wetBulb: string;

@@ -11,10 +11,10 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     ps = new psModule.Psychart(
       width,
       height,
-      1,
-      20,
-      120,
-      90,
+      options.unitSystem === 'IP' ? 1 : 2,
+      options.dbMin,
+      options.dbMax,
+      options.dpMax,
       theme.isLight ? '#CCC' : '#666',
       theme.isLight ? '#666' : '#CCC'
     );

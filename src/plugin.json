@@ -1,12 +1,12 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "psychrometric-chart",
+  "name": "Psychrometric Chart",
   "id": "ventura-psychrometric-panel",
   "info": {
     "description": "View air conditions on a psychrometric chart.",
     "author": {
-      "name": "ventura",
+      "name": "Nicolas Ventura",
       "url": "nersc.gov"
     },
     "keywords": [
