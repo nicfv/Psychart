@@ -84,12 +84,20 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Dry Bulb Series',
       description: 'Select a series that measures the dry bulb temperature.',
       category: ['Query Information'],
+      settings: {
+        filter: (f) => f.type === 'number',
+        noFieldsMessage: 'No valid fields found',
+      },
     })
     .addFieldNamePicker({
       path: 'wetBulb',
       name: 'Wet Bulb Series',
       description: 'Select a series that measures the wet bulb temperature.',
       category: ['Query Information'],
+      settings: {
+        filter: (f) => f.type === 'number',
+        noFieldsMessage: 'No valid fields found',
+      },
       showIf: (x) => x.measurements === 'dbwb',
     })
     .addFieldNamePicker({
@@ -97,6 +105,10 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Dew Point Series',
       description: 'Select a series that measures the dew point temperature.',
       category: ['Query Information'],
+      settings: {
+        filter: (f) => f.type === 'number',
+        noFieldsMessage: 'No valid fields found',
+      },
       showIf: (x) => x.measurements === 'dbdp',
     })
     .addFieldNamePicker({
@@ -104,6 +116,10 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Relative Humidity Series',
       description: 'Select a series that measures the relative humidity.',
       category: ['Query Information'],
+      settings: {
+        filter: (f) => f.type === 'number',
+        noFieldsMessage: 'No valid fields found',
+      },
       showIf: (x) => x.measurements === 'dbrh',
     })
     .addRadio({
