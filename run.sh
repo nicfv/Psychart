@@ -32,6 +32,8 @@ for ARG in "${@}" ; do
     BUILD=true
     GRAFANA=true
     PSY=true
+  else
+    echo "Unknown switch ${ARG}. Use ${0} -h for help."
   fi
 done
 

@@ -35,23 +35,32 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     // Translate a number 'n' from one number line [min1-max1] to [min2-max2]
     const translate = (n, min1, max1, min2, max2) => expand(normalize(n, min1, max1), min2, max2);
 
-    // Return a set of normalized cartesian coordinates [0-1] from a dry bulb and relative humidity.
+    // Return a set of cartesian coordinates from a dry bulb and relative humidity.
     const dr2xy = (db, rh) => { return {
         'x': translate(db, db_min, db_max, padding, width - padding),
         'y': height - translate(psychrolib.GetHumRatioFromRelHum(db, rh, atm), hr_min, hr_max, padding, height - padding),
     }};
 
-    // Return a set of normalized cartesian coordinates [0-1] from a dry bulb and wet bulb.
+    // Return a set of cartesian coordinates from a dry bulb and wet bulb.
     const dw2xy = (db, wb) => { return {
         'x': translate(db, db_min, db_max, padding, width - padding),
         'y': height - translate(psychrolib.GetHumRatioFromTWetBulb(db, wb, atm), hr_min, hr_max, padding, height - padding),
     }};
 
-    // Return a set of normalized cartesian coordinates [0-1] from a dry bulb and dew point.
+    // Return a set of cartesian coordinates from a dry bulb and dew point.
     const dd2xy = (db, dp) => { return {
         'x': translate(db, db_min, db_max, padding, width - padding),
         'y': height - translate(psychrolib.GetHumRatioFromTDewPoint(dp, atm), hr_min, hr_max, padding, height - padding),
     }};
+
+    // Return a set of cartesian coordinates from a dry bulb and relative humidity for the shaded region.
+    this.dr2xy = (db, rh) => dr2xy(db, rh);
+
+    // Return a set of cartesian coordinates from a dry bulb and wet bulb for the shaded region.
+    this.dw2xy = (db, wb) => dw2xy(db, wb);
+
+    // Return a set of cartesian coordinates from a dry bulb and dew point for the shaded region.
+    this.dd2xy = (db, dp) => dd2xy(db, dp);
 
     // Plot a point using dry bulb and relative humidity.
     this.plotDbRh = (db, rh) => Point(dr2xy(db, rh), 5, '#f00');
@@ -61,6 +70,10 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
 
     // Plot a point using dry bulb and dew point.
     this.plotDbDp = (db, dp) => Point(dd2xy(db, dp), 5, '#f00');
+
+    // Create a new SVG group for shaded regions.
+    const regGroup = document.createElementNS(NS, 'g');
+    chart.appendChild(regGroup)
 
     // Create a new SVG group for axis lines.
     const psyGroup = document.createElementNS(NS, 'g');
@@ -129,6 +142,8 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         }
     }
 
+    this.addRegion = (color, ...d) => Region(color, d);
+
     // Return the SVG element to render to the screen.
     this.el = () => chart;
 
@@ -177,6 +192,21 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         ptElement.setAttribute('vector-effect', 'non-scaling-stroke');
         ptElement.setAttribute('d', 'M ' + c.x + ',' + c.y + ' h 0');
         psyGroup.appendChild(ptElement);
+    }
+
+    // Define a method to plot a shaded region.
+    function Region(color, d) {
+        // Perform some error checking.
+        if(typeof color !== 'string' || !Array.isArray(d)) {
+            throw 'Region(color: string, d: object[]) has incorrect parameter types.';
+        }
+
+        // Define a path element for the shaded region.
+        const regElement = document.createElementNS(NS, 'path');
+        regElement.setAttribute('fill', color);
+        regElement.setAttribute('stroke', 'none');
+        regElement.setAttribute('d', 'M ' + d.map(pt => pt.x + ',' + pt.y).join(' ') + ' z');
+        regGroup.appendChild(regElement);
     }
 
     // Define a method to write a label.
