@@ -92,23 +92,14 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         }
     };
 
-    // Return a set of cartesian coordinates from a dry bulb and relative humidity for the shaded region.
-    // this.dr2xy = (db, rh) => dr2xy(db, rh);
-
-    // Return a set of cartesian coordinates from a dry bulb and wet bulb for the shaded region.
-    // this.dw2xy = (db, wb) => dw2xy(db, wb);
-
-    // Return a set of cartesian coordinates from a dry bulb and dew point for the shaded region.
-    // this.dd2xy = (db, dp) => dd2xy(db, dp);
-
     // Plot a point using dry bulb and relative humidity.
-    this.plotDbRh = (db, rh) => Point(dr2xy(db, rh), 5, '#f00');
+    this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
 
     // Plot a point using dry bulb and wet bulb.
-    this.plotDbWb = (db, wb) => Point(dw2xy(db, wb), 5, '#f00');
+    this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
 
     // Plot a point using dry bulb and dew point.
-    this.plotDbDp = (db, dp) => Point(dd2xy(db, dp), 5, '#f00');
+    this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
 
     // Create a new SVG group for shaded regions.
     const regGroup = document.createElementNS(NS, 'g');
@@ -220,10 +211,10 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     }
 
     // Define a method to plot a point.
-    function Point(c, r, color) {
+    function PlotPoint(c, r, color) {
         // Perform some error checking.
         if(typeof c.x !== 'number' || typeof c.y !== 'number' || typeof r !== 'number' || typeof color !== 'string') {
-            throw 'Point({ c.x: number, c.y: number }, r: number, color: string) has incorrect parameter types.';
+            throw 'PlotPoint({ c.x: number, c.y: number }, r: number, color: string) has incorrect parameter types.';
         }
 
         // Define a 0-length path element and assign its attributes.

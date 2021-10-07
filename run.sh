@@ -54,7 +54,7 @@ if [[ "${HELP}" == true ]] ; then
 fi
 
 if [[ "${PSY}" == true ]] ; then
-  IN='./svg/psychart.ts'
+  IN='./svg/psychart.js'
   OUT='./src/psychart.js'
   EXT='.bk'
   cp -v "${IN}" "${OUT}"
