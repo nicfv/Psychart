@@ -1,7 +1,57 @@
 'use strict';
 
+/**
+ * Validate
+ * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
+ * @param  {...any} args The arguments object or the individual arguments going into the function.
+ */
+function Validate(types, ...args) {
+    // Validate parameters going into this function.
+    if (typeof types !== 'string') {
+        throw 'Incorrect validation parameter types.';
+    }
+
+    // Define functions that check parameter types.
+    const TYPEOF = {
+        'i': x => typeof x === 'bigint',
+        'b': x => typeof x === 'boolean',
+        'f': x => typeof x === 'function',
+        'n': x => typeof x === 'number',
+        'o': x => typeof x === 'object',
+        's': x => typeof x === 'string',
+        'y': x => typeof x === 'symbol',
+        'u': x => typeof x === 'undefined',
+        '*': () => true,
+    };
+
+    // Capture the name of the calling function.
+    const CALLER = new Error().stack.match(/at +[^ ]+/gi).slice(0, -1).join(', ');
+
+    // Create the argument list using the parameters or just the arguments object.
+    let argList = args;
+    if (args.length === 1 && typeof args[0] === 'object' && args[0]['length']) {
+        argList = args[0];
+    }
+
+    // Verify that the correct number of parameters are inputted.
+    if (types.length !== argList.length) {
+        throw 'Found ' + (argList.length > types.length ? argList.length - types.length : types.length - argList.length) + ' too ' + (argList.length > types.length ? 'many' : 'few') + ' arguments ' + CALLER + '.';
+    }
+
+    // Validate each parameter type.
+    for (let i = 0; i < types.length; i++) {
+        if (!TYPEOF[types[i]]) {
+            throw types[i] + ' is not a valid type.';
+        }
+        if (!TYPEOF[types[i]](argList[i])) {
+            throw TYPEOF[types[i]] + ' failed for parameter ' + (i + 1) + ', ' + (typeof argList[i]) + ' found ' + CALLER + '.';
+        }
+    }
+}
+
 // Generate a psychrometric chart as an svg element.
 export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, textColor) {
+    Validate('nnnnnnss', arguments);
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
@@ -29,76 +79,79 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     // Set the chart's viewport size.
     chart.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
 
-    // Normalize the number 'n' between min and max, returns a number [0-1]
+    /**
+     * Normalize the number 'n' between min and max, returns a number [0-1]
+     */
     const normalize = (n, min, max) => (n - min) / (max - min);
 
-    // Expand the normalized number 'n' [0-1] between min and max, returns a number [min-max]
+    /**
+     * Expand the normalized number 'n' [0-1] between min and max, returns a number [min-max]
+     */
     const expand = (n, min, max) => n * (max - min) + min;
 
-    // Translate a number 'n' from one number line [min1-max1] to [min2-max2]
+    /**
+     * Translate a number 'n' from one number line [min1-max1] to [min2-max2]
+     */
     const translate = (n, min1, max1, min2, max2) => expand(normalize(n, min1, max1), min2, max2);
 
-    // Return a set of cartesian coordinates from a dry bulb and relative humidity.
-    const dr2xy = (db, rh) => { return {
-        'x': translate(db, db_min, db_max, padding, width - padding),
-        'y': height - translate(dr2psy(db, rh).hr, hr_min, hr_max, padding, height - padding),
-    }};
+    /**
+     * Return a set of cartesian coordinates from a dry bulb and relative humidity.
+     */
+    const dr2xy = (db, rh) => new Point(
+        translate(db, db_min, db_max, padding, width - padding),
+        height - translate(dr2psy(db, rh).hr, hr_min, hr_max, padding, height - padding));
 
-    // Return a set of cartesian coordinates from a dry bulb and wet bulb.
-    const dw2xy = (db, wb) => { return {
-        'x': translate(db, db_min, db_max, padding, width - padding),
-        'y': height - translate(dw2psy(db, wb).hr, hr_min, hr_max, padding, height - padding),
-    }};
+    /**
+     * Return a set of cartesian coordinates from a dry bulb and wet bulb.
+     */
+    const dw2xy = (db, wb) => new Point(
+        translate(db, db_min, db_max, padding, width - padding),
+        height - translate(dw2psy(db, wb).hr, hr_min, hr_max, padding, height - padding));
 
-    // Return a set of cartesian coordinates from a dry bulb and dew point.
-    const dd2xy = (db, dp) => { return {
-        'x': translate(db, db_min, db_max, padding, width - padding),
-        'y': height - translate(dd2psy(db, dp).hr, hr_min, hr_max, padding, height - padding),
-    }};
+    /**
+     * Return a set of cartesian coordinates from a dry bulb and dew point.
+     */
+    const dd2xy = (db, dp) => new Point(
+        translate(db, db_min, db_max, padding, width - padding),
+        height - translate(dd2psy(db, dp).hr, hr_min, hr_max, padding, height - padding));
 
-    // Return 5 air parameters from a dry bulb and relative humidity.
+    /**
+     * Return 5 air parameters from a dry bulb and relative humidity.
+     */
     const dr2psy = (db, rh) => {
         const psy = psychrolib.CalcPsychrometricsFromRelHum(db, rh, atm);
-        return {
-            'db': db,
-            'rh': rh,
-            'wb': psy[1],
-            'dp': psy[2],
-            'hr': psy[0],
-        }
+        return new Psy(db, rh, psy[1], psy[2], psy[0]);
     };
 
-    // Return 5 air parameters from a dry bulb and wet bulb.
+    /**
+     * Return 5 air parameters from a dry bulb and wet bulb.
+     */
     const dw2psy = (db, wb) => {
         const psy = psychrolib.CalcPsychrometricsFromTWetBulb(db, wb, atm);
-        return {
-            'db': db,
-            'rh': psy[2],
-            'wb': wb,
-            'dp': psy[1],
-            'hr': psy[0],
-        }
+        return new Psy(db, psy[2], wb, psy[1], psy[0]);
     };
 
-    // Return 5 air parameters from a dry bulb and dew point.
+    /**
+     * Return 5 air parameters from a dry bulb and dew point.
+     */
     const dd2psy = (db, dp) => {
         const psy = psychrolib.CalcPsychrometricsFromTDewPoint(db, dp, atm);
-        return {
-            'db': db,
-            'rh': psy[2],
-            'wb': psy[1],
-            'dp': dp,
-            'hr': psy[0],
-        }
+        return new Psy(db, psy[2], psy[1], dp, psy[0]);
     };
 
-    // Plot a point using dry bulb and relative humidity.
+    /**
+     * Plot a point using dry bulb and relative humidity.
+     */
     this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
 
-    // Plot a point using dry bulb and wet bulb.
+    /**
+     * Plot a point using dry bulb and wet bulb.
+     */
     this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
 
-    // Plot a point using dry bulb and dew point.
+    /**
+     * Plot a point using dry bulb and dew point.
+     */
     this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
 
     // Create a new SVG group for shaded regions.
@@ -114,15 +167,15 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     chart.appendChild(txtGroup);
 
     // Draw constant dry bulb vertical lines.
-    for(let db = db_min; db <= db_max; db += 10) {
+    for (let db = db_min; db <= db_max; db += 10) {
         const dbLine = new Line(1);
         // The lower point is on the X-axis (rh = 0%)
         dbLine.addPoint(dr2xy(db, 0));
         // The upper point is on the dew point line (db = dp)
         let upper = dd2xy(db, db);
         // Make sure that the line stays within bounds of the chart
-        if(upper.y < padding) {
-            upper.y = padding;
+        if (upper.y < padding) {
+            upper = new Point(upper.x, padding);
         }
         dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
@@ -130,13 +183,13 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     }
 
     // Draw constant dew point horizontal lines.
-    for(let dp = 0; dp <= dp_max; dp += 10) {
+    for (let dp = 0; dp <= dp_max; dp += 10) {
         const dpLine = new Line(1);
         // The left point is on the dew point line (db = dp)
         let left = dd2xy(dp, dp);
         // Make sure that the line stays within bounds of the chart
-        if(left.x < padding) {
-            left.x = padding;
+        if (left.x < padding) {
+            left = new Point(padding, left.y);
         }
         dpLine.addPoint(left);
         // The right point is at the maximum dry bulb temperature
@@ -146,10 +199,10 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     }
 
     // Draw constant wet bulb diagonal lines.
-    for(let wb = db_min; wb < db_max; wb += 10) {
+    for (let wb = db_min; wb < db_max; wb += 10) {
         const wbLine = new Line(1);
         // Dry bulb is always equal or greater than wet bulb.
-        for(let db = wb; db <= db_max; db++) {
+        for (let db = wb; db <= db_max; db++) {
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
@@ -157,15 +210,15 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     }
 
     // Draw constant relative humidity lines.
-    for(let rh = 0; rh <= 100; rh += 10) {
+    for (let rh = 0; rh <= 100; rh += 10) {
         const rhLine = new Line(1);
         let drawLabel = true;
         // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
-        for(let db = db_min; db <= db_max; db++) {
-            let pt = dr2xy(db, rh/100);
+        for (let db = db_min; db <= db_max; db++) {
+            let pt = dr2xy(db, rh / 100);
             // Stop drawing when the line surpasses the bounds of the chart
-            if(pt.y < padding) {
-                pt.y = padding;
+            if (pt.y < padding) {
+                pt = new Point(pt.x, padding);
                 rhLine.addPoint(pt);
                 Label(pt, 'd', (rh === 0 || rh === 100) ? '' : rh + '%');
                 drawLabel = false;
@@ -173,20 +226,59 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
             }
             rhLine.addPoint(pt);
         }
-        if(drawLabel) {
-            Label(dr2xy(db_max, rh/100), 'r', (rh === 0 || rh === 100) ? '' : rh + '%');
+        if (drawLabel) {
+            Label(dr2xy(db_max, rh / 100), 'r', (rh === 0 || rh === 100) ? '' : rh + '%');
         }
     }
 
-    // Return the SVG element to render to the screen.
+    /**
+     * Return the SVG element to render to the screen.
+     */
     this.el = () => chart;
 
-    // Define a method to draw a line.
+    /**
+     * Represents an (x,y) cartesian coordinate pair.
+     */
+    function Point(x, y) {
+        Validate('nn', arguments);
+        this.x = x;
+        this.y = y;
+        Object.freeze(this);
+    }
+
+    /**
+     * Represents a single air condition using 5 states.
+     */
+    function Psy(db, rh, wb, dp, hr) {
+        Validate('nnnnn', arguments);
+        /**
+         * Dew Point
+         */
+        this.db = db;
+        /**
+         * Relative Humidity
+         */
+        this.rh = rh;
+        /**
+         * Wet Bulb
+         */
+        this.wb = wb;
+        /**
+         * Dew Point
+         */
+        this.dp = dp;
+        /**
+         * Humidity Ratio
+         */
+        this.hr = hr;
+        Object.freeze(this);
+    }
+
+    /**
+     * Define a method to dynamically draw a line.
+     */
     function Line(weight) {
-        // Perform some error checking.
-        if(typeof weight !== 'number') {
-            throw 'Line(weight: number) has incorrect parameter types.';
-        }
+        Validate('n', arguments);
 
         // Define the path element and assign its attributes.
         const pathElement = document.createElementNS(NS, 'path');
@@ -201,7 +293,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
 
         // Add an (x,y) coordinate pair to the end of this line.
         this.addPoint = (pt) => {
-            if(typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
                 d += ' ' + pt.x + ',' + pt.y;
                 pathElement.setAttribute('d', d);
             } else {
@@ -210,11 +302,13 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         };
     }
 
-    // Define a method to plot a point.
+    /**
+     * Define a method to plot a point.
+     */
     function PlotPoint(c, r, color) {
-        // Perform some error checking.
-        if(typeof c.x !== 'number' || typeof c.y !== 'number' || typeof r !== 'number' || typeof color !== 'string') {
-            throw 'PlotPoint({ c.x: number, c.y: number }, r: number, color: string) has incorrect parameter types.';
+        Validate('ons', arguments);
+        if (!(c instanceof Point)) {
+            throw 'Incorrect parameter types in PlotPoint.';
         }
 
         // Define a 0-length path element and assign its attributes.
@@ -230,15 +324,12 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
 
     // Define a method to plot a shaded region.
     function Region(color) {
-        // Perform some error checking.
-        if(typeof color !== 'string') {
-            throw 'Region(color: string) has incorrect parameter types.';
-        }
+        Validate('s', arguments);
 
         let d = 'M', psy = undefined;
 
         const addPoint = (pt) => {
-            if(typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
                 d += ' ' + pt.x + ',' + pt.y;
                 pathElement.setAttribute('d', d);
             } else {
@@ -256,11 +347,14 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         };
     }
 
-    // Define a method to write a label.
+    /**
+     * Define a method to write a label.
+     */
     function Label(pt, anchor, text) {
         // Perform some error checking.
-        if(typeof pt.x !== 'number' || typeof pt.y !== 'number' || typeof anchor !== 'string' || typeof text !== 'string') {
-            throw 'Label({ pt.x: number, pt.y: number }, anchor: string, text: string) has incorrect parameter types.';
+        Validate('oss', arguments);
+        if (!(pt instanceof Point)) {
+            throw 'Incorrect parameter types in PlotPoint.';
         }
 
         const size = 12;
@@ -279,22 +373,22 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
 
         switch (anchor.toLowerCase()) {
             case ('l'): {
-                labelElement.setAttribute('x', pt.x + size/2);
+                labelElement.setAttribute('x', pt.x + size / 2);
                 labelElement.setAttribute('text-anchor', 'start');
                 break;
             }
             case ('r'): {
-                labelElement.setAttribute('x', pt.x - size/2);
+                labelElement.setAttribute('x', pt.x - size / 2);
                 labelElement.setAttribute('text-anchor', 'end');
                 break;
             }
             case ('u'): {
-                labelElement.setAttribute('y', pt.y + size/2);
+                labelElement.setAttribute('y', pt.y + size / 2);
                 labelElement.setAttribute('dominant-baseline', 'hanging');
                 break;
             }
             case ('d'): {
-                labelElement.setAttribute('y', pt.y - size/2);
+                labelElement.setAttribute('y', pt.y - size / 2);
                 labelElement.setAttribute('dominant-baseline', 'alphabetic');
                 break;
             }
