@@ -25,7 +25,7 @@ function Validate(types, ...args) {
     };
 
     // Capture the name of the calling function.
-    const CALLER = new Error().stack.match(/at +[^ ]+/gi).slice(0, -1).join(', ');
+    const CALLER = new Error().stack.match(/at +[^\(\)]+/gi).slice(1, -1).map(x => x.slice(0, -1)).join(', ');
 
     // Create the argument list using the parameters or just the arguments object.
     let argList = args;
@@ -72,6 +72,49 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         padding = 30,
         // The temperature unit to display
         tempUnit = psychrolib.isIP() ? 'F' : 'C';
+
+    /**
+     * Label anchor enum type.
+     */
+    const Anchor = {
+        /**
+         * Northwest
+         */
+        NW: 0,
+        /**
+         * North center
+         */
+        N: 1,
+        /**
+         * Northeast
+         */
+        NE: 2,
+        /**
+         * East center
+         */
+        E: 3,
+        /**
+         * Southeast
+         */
+        SE: 4,
+        /**
+         * South center
+         */
+        S: 5,
+        /**
+         * Southwest
+         */
+        SW: 6,
+        /**
+         * West center
+         */
+        W: 7,
+        /**
+         * Center
+         */
+        C: 8,
+    };
+    Object.freeze(Anchor);
 
     // Define the current region.
     let region;
@@ -139,21 +182,6 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         return new Psy(db, psy[2], psy[1], dp, psy[0]);
     };
 
-    /**
-     * Plot a point using dry bulb and relative humidity.
-     */
-    this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
-
-    /**
-     * Plot a point using dry bulb and wet bulb.
-     */
-    this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
-
-    /**
-     * Plot a point using dry bulb and dew point.
-     */
-    this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
-
     // Create a new SVG group for shaded regions.
     const regGroup = document.createElementNS(NS, 'g');
     chart.appendChild(regGroup)
@@ -179,7 +207,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         }
         dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
-        Label(dr2xy(db, 0), 'u', db + '\u00B0' + tempUnit);
+        Label(dr2xy(db, 0), Anchor.N, db + '\u00B0' + tempUnit);
     }
 
     // Draw constant dew point horizontal lines.
@@ -195,7 +223,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         // The right point is at the maximum dry bulb temperature
         dpLine.addPoint(dd2xy(db_max, dp));
         // Add a label for the constant dew point line
-        Label(dd2xy(db_max, dp), 'l', dp + '\u00B0' + tempUnit);
+        Label(dd2xy(db_max, dp), Anchor.W, dp + '\u00B0' + tempUnit);
     }
 
     // Draw constant wet bulb diagonal lines.
@@ -206,7 +234,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
-        Label(dd2xy(wb, wb), 'd', wb + '\u00B0' + tempUnit);
+        Label(dd2xy(wb, wb), Anchor.SE, wb + '\u00B0' + tempUnit);
     }
 
     // Draw constant relative humidity lines.
@@ -220,16 +248,31 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             if (pt.y < padding) {
                 pt = new Point(pt.x, padding);
                 rhLine.addPoint(pt);
-                Label(pt, 'd', (rh === 0 || rh === 100) ? '' : rh + '%');
+                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%');
                 drawLabel = false;
                 break;
             }
             rhLine.addPoint(pt);
         }
         if (drawLabel) {
-            Label(dr2xy(db_max, rh / 100), 'r', (rh === 0 || rh === 100) ? '' : rh + '%');
+            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%');
         }
     }
+
+    /**
+     * Plot a point using dry bulb and relative humidity.
+     */
+    this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
+
+    /**
+     * Plot a point using dry bulb and wet bulb.
+     */
+    this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
+
+    /**
+     * Plot a point using dry bulb and dew point.
+     */
+    this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
 
     /**
      * Return the SVG element to render to the screen.
@@ -323,10 +366,13 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     }
 
     // Define a method to plot a shaded region.
-    function Region(color) {
-        Validate('s', arguments);
+    function Region(color, initialPsy) {
+        Validate('so', arguments);
+        if (!(initialPsy instanceof Psy)) {
+            throw 'Expected parameter 2 to be Psy.';
+        }
 
-        let d = 'M', psy = undefined;
+        let d = 'M', psy = initialPsy;
 
         const addPoint = (pt) => {
             if (typeof pt.x === 'number' && typeof pt.y === 'number') {
@@ -352,7 +398,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
      */
     function Label(pt, anchor, text) {
         // Perform some error checking.
-        Validate('oss', arguments);
+        Validate('ons', arguments);
         if (!(pt instanceof Point)) {
             throw 'Incorrect parameter types in PlotPoint.';
         }
@@ -371,33 +417,60 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         labelElement.textContent = text;
         txtGroup.appendChild(labelElement);
 
-        switch (anchor.toLowerCase()) {
-            case ('l'): {
-                labelElement.setAttribute('x', pt.x + size / 2);
-                labelElement.setAttribute('text-anchor', 'start');
-                break;
+        const top = () => {
+            labelElement.setAttribute('y', pt.y + size / 2);
+            labelElement.setAttribute('dominant-baseline', 'hanging');
+        };
+
+        const bot = () => {
+            labelElement.setAttribute('y', pt.y - size / 2);
+            labelElement.setAttribute('dominant-baseline', 'alphabetic');
+        };
+
+        const left = () => {
+            labelElement.setAttribute('x', pt.x + size / 2);
+            labelElement.setAttribute('text-anchor', 'start');
+        };
+
+        const right = () => {
+            labelElement.setAttribute('x', pt.x - size / 2);
+            labelElement.setAttribute('text-anchor', 'end');
+        };
+
+        // Move the point anchor if it is not in the center.
+        switch (anchor) {
+            case (Anchor.NW): {
+                top(); left(); break;
             }
-            case ('r'): {
-                labelElement.setAttribute('x', pt.x - size / 2);
-                labelElement.setAttribute('text-anchor', 'end');
-                break;
+            case (Anchor.N): {
+                top(); break;
             }
-            case ('u'): {
-                labelElement.setAttribute('y', pt.y + size / 2);
-                labelElement.setAttribute('dominant-baseline', 'hanging');
-                break;
+            case (Anchor.NE): {
+                top(); right(); break;
             }
-            case ('d'): {
-                labelElement.setAttribute('y', pt.y - size / 2);
-                labelElement.setAttribute('dominant-baseline', 'alphabetic');
-                break;
+            case (Anchor.E): {
+                right(); break;
             }
-            case ('c'): {
+            case (Anchor.SE): {
+                bot(); right(); break;
+            }
+            case (Anchor.S): {
+                bot(); break;
+            }
+            case (Anchor.SW): {
+                bot(); left(); break;
+            }
+            case (Anchor.W): {
+                left(); break;
+            }
+            case (Anchor.C): {
                 break;
             }
             default: {
-                throw 'anchor should be one of the following: [l, r, u, d, c]';
+                throw 'Incorrect Anchor type (' + anchor + '). Expected ' + JSON.stringify(Anchor);
             }
         }
     }
+
+    Object.freeze(this);
 }
