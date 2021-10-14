@@ -138,6 +138,11 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const translate = (n, min1, max1, min2, max2) => expand(normalize(n, min1, max1), min2, max2);
 
     /**
+     * Check if two numbers 'a' and 'b' are approximately equal eith a maximum error of 'epsilon'.
+     */
+    const approx = (a, b, epsilon) => a - b < epsilon && b - a < epsilon;
+
+    /**
      * Return a set of cartesian coordinates from a dry bulb and relative humidity.
      */
     const dr2xy = (db, rh) => new Point(
@@ -274,6 +279,16 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
      */
     this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
 
+    this.newRegion = () => region = new Region('#0f0'); // TODO: this
+
+    this.regionDbRh = (db, rh) => (region instanceof Region) && region.nextPsy(dr2psy(db, rh));
+
+    this.regionDbWb = (db, wb) => (region instanceof Region) && region.nextPsy(dw2psy(db, wb));
+
+    this.regionDbDp = (db, dp) => (region instanceof Region) && region.nextPsy(dd2psy(db, dp));
+
+    this.buildRegion = () => (region instanceof Region) && region.build();
+
     /**
      * Return the SVG element to render to the screen.
      */
@@ -284,7 +299,13 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
      */
     function Point(x, y) {
         Validate('nn', arguments);
+        /**
+         * X-coordinate
+         */
         this.x = x;
+        /**
+         * Y-coordinate
+         */
         this.y = y;
         Object.freeze(this);
     }
@@ -295,7 +316,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     function Psy(db, rh, wb, dp, hr) {
         Validate('nnnnn', arguments);
         /**
-         * Dew Point
+         * Dry Bulb
          */
         this.db = db;
         /**
@@ -334,15 +355,18 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         // This is the collection of (x,y) points that make up this path.
         let d = 'M';
 
-        // Add an (x,y) coordinate pair to the end of this line.
+        /**
+         * Add an (x,y) coordinate pair to the end of this line.
+         */
         this.addPoint = (pt) => {
-            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (pt instanceof Point) {
                 d += ' ' + pt.x + ',' + pt.y;
                 pathElement.setAttribute('d', d);
             } else {
-                throw 'Line.addPoint(pt) requires pt.x and pt.y to be numeric values.';
+                throw 'Incorrect parameter types for Line.addPoint(Point).';
             }
         };
+        Object.freeze(this);
     }
 
     /**
@@ -365,25 +389,64 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         psyGroup.appendChild(ptElement);
     }
 
-    // Define a method to plot a shaded region.
-    function Region(color, initialPsy) {
-        Validate('so', arguments);
-        if (!(initialPsy instanceof Psy)) {
-            throw 'Expected parameter 2 to be Psy.';
-        }
+    /**
+     * Define a method to plot a shaded region.
+     */
+    function Region(color) {
+        Validate('s', arguments);
 
-        let d = 'M', psy = initialPsy;
+        let d = 'M', first = undefined, state = undefined;
 
+        // Add an (x,y) coordinate pair to the outline of this region.
         const addPoint = (pt) => {
-            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (pt instanceof Point) {
                 d += ' ' + pt.x + ',' + pt.y;
-                pathElement.setAttribute('d', d);
             } else {
-                throw 'Line.addPoint(pt) requires pt.x and pt.y to be numeric values.';
+                throw 'Incorrect parameter types for Region.addPoint(Point).';
             }
         };
 
+        /**
+         * Draw a line going from the last psychrometric state to the current one.
+         */
+        this.nextPsy = (psy) => {
+            if (psy instanceof Psy) {
+                if (state instanceof Psy) {
+                    const EPS = 0.001;
+                    if (approx(psy.rh, state.rh, EPS)) {
+                        // Iso relative humidity line (curved line)
+                        if (state.db < psy.db) {
+                            // LTR
+                            for (let db = state.db; db < psy.db; db += 0.1) {
+                                addPoint(dr2xy(db, state.rh));
+                            }
+                        } else {
+                            // RTL
+                            for (let db = state.db; db > psy.db; db -= 0.1) {
+                                addPoint(dr2xy(db, state.rh));
+                            }
+                        }
+                    } else {
+                        // Iso dry bulb, wet bulb, or dew point (straight line)
+                        addPoint(dd2xy(psy.db, psy.dp));
+                    }
+                } else {
+                    // Set the first state and add the point.
+                    first = psy;
+                    addPoint(dd2xy(psy.db, psy.dp));
+                }
+                state = psy;
+            } else {
+                throw 'Incorrect parameter types for Region.nextPsy(Psy).'
+            }
+        };
+
+        /**
+         * Draw the region.
+         */
         this.build = () => {
+            // Close the path.
+            this.nextPsy(first);
             // Define a path element for the shaded region.
             const regElement = document.createElementNS(NS, 'path');
             regElement.setAttribute('fill', color);
@@ -391,6 +454,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             regElement.setAttribute('d', d + ' z');
             regGroup.appendChild(regElement);
         };
+        Object.freeze(this);
     }
 
     /**
