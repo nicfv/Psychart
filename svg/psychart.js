@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Validate
+ * Validate parameter types.
  * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
  * @param  {...any} args The arguments object or the individual arguments going into the function.
  */
@@ -55,6 +55,8 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
+        // The resolution of the graph.
+        res = 0.1,
         // The SVG element on which to draw lines, points, etc.
         chart = document.createElementNS(NS, 'svg'),
         // Import the functionality of Psychrolib.js.
@@ -117,7 +119,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     Object.freeze(Anchor);
 
     // Define the current region.
-    let region;
+    let region = undefined;
 
     // Set the chart's viewport size.
     chart.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
@@ -133,7 +135,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const expand = (n, min, max) => n * (max - min) + min;
 
     /**
-     * Translate a number 'n' from one number line [min1-max1] to [min2-max2]
+     * Linearly interpolate a number 'n' from one range [min1-max1] to [min2-max2]
      */
     const translate = (n, min1, max1, min2, max2) => expand(normalize(n, min1, max1), min2, max2);
 
@@ -235,7 +237,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     for (let wb = db_min; wb < db_max; wb += 10) {
         const wbLine = new Line(1);
         // Dry bulb is always equal or greater than wet bulb.
-        for (let db = wb; db <= db_max; db++) {
+        for (let db = wb; db <= db_max; db += res) {
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
@@ -247,7 +249,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         const rhLine = new Line(1);
         let drawLabel = true;
         // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
-        for (let db = db_min; db <= db_max; db++) {
+        for (let db = db_min; db <= db_max; db += res) {
             let pt = dr2xy(db, rh / 100);
             // Stop drawing when the line surpasses the bounds of the chart
             if (pt.y < padding) {
@@ -267,27 +269,47 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Plot a point using dry bulb and relative humidity.
      */
-    this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
+    this.plotDbRh = (db, rh, color = '#f00') => PlotPoint(dr2xy(db, rh), 5, color);
 
     /**
      * Plot a point using dry bulb and wet bulb.
      */
-    this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
+    this.plotDbWb = (db, wb, color = '#f00') => PlotPoint(dw2xy(db, wb), 5, color);
 
     /**
      * Plot a point using dry bulb and dew point.
      */
-    this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
+    this.plotDbDp = (db, dp, color = '#f00') => PlotPoint(dd2xy(db, dp), 5, color);
 
-    this.newRegion = () => region = new Region('#0f0'); // TODO: this
+    /**
+     * Create a new region.
+     */
+    this.newRegion = (color) => !(region instanceof Region) && (region = new Region(color));
 
+    /**
+     * Add a corner to the region defined by a dry bulb and relative humidity.
+     */
     this.regionDbRh = (db, rh) => (region instanceof Region) && region.nextPsy(dr2psy(db, rh));
 
+    /**
+     * Add a corner to the region defined by a dry bulb and wet bulb.
+     */
     this.regionDbWb = (db, wb) => (region instanceof Region) && region.nextPsy(dw2psy(db, wb));
 
+    /**
+     * Add a corner to the region defined by a dry bulb and dew point.
+     */
     this.regionDbDp = (db, dp) => (region instanceof Region) && region.nextPsy(dd2psy(db, dp));
 
-    this.buildRegion = () => (region instanceof Region) && region.build();
+    /**
+     * Draw the region onto the chart.
+     */
+    this.buildRegion = () => { if (region instanceof Region) { region.build(); region = undefined; } };
+
+    /**
+     * Delete all regions from the psychrometric chart.
+     */
+    this.clearRegions = () => regGroup.innerHTML = '';
 
     /**
      * Return the SVG element to render to the screen.
@@ -417,12 +439,12 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
                         // Iso relative humidity line (curved line)
                         if (state.db < psy.db) {
                             // LTR
-                            for (let db = state.db; db < psy.db; db += 0.1) {
+                            for (let db = state.db; db < psy.db; db += res) {
                                 addPoint(dr2xy(db, state.rh));
                             }
                         } else {
                             // RTL
-                            for (let db = state.db; db > psy.db; db -= 0.1) {
+                            for (let db = state.db; db > psy.db; db -= res) {
                                 addPoint(dr2xy(db, state.rh));
                             }
                         }
