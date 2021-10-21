@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Validate
+ * Validate parameter types.
  * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
  * @param  {...any} args The arguments object or the individual arguments going into the function.
  */
@@ -25,7 +25,7 @@ function Validate(types, ...args) {
     };
 
     // Capture the name of the calling function.
-    const CALLER = new Error().stack.match(/at +[^ ]+/gi).slice(0, -1).join(', ');
+    const CALLER = new Error().stack.match(/at +[^\(\)]+/gi).slice(1, -1).map(x => x.slice(0, -1)).join(', ');
 
     // Create the argument list using the parameters or just the arguments object.
     let argList = args;
@@ -49,12 +49,16 @@ function Validate(types, ...args) {
     }
 }
 
-// Generate a psychrometric chart as an svg element.
+/**
+ * Generate a psychrometric chart as an svg element.
+ */
 export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, textColor) {
     Validate('nnnnnnss', arguments);
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
+        // The resolution of the graph.
+        res = 0.1,
         // The SVG element on which to draw lines, points, etc.
         chart = document.createElementNS(NS, 'svg'),
         // Import the functionality of Psychrolib.js.
@@ -73,8 +77,51 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         // The temperature unit to display
         tempUnit = psychrolib.isIP() ? 'F' : 'C';
 
+    /**
+     * Label anchor enum type.
+     */
+    const Anchor = {
+        /**
+         * Northwest
+         */
+        NW: 0,
+        /**
+         * North center
+         */
+        N: 1,
+        /**
+         * Northeast
+         */
+        NE: 2,
+        /**
+         * East center
+         */
+        E: 3,
+        /**
+         * Southeast
+         */
+        SE: 4,
+        /**
+         * South center
+         */
+        S: 5,
+        /**
+         * Southwest
+         */
+        SW: 6,
+        /**
+         * West center
+         */
+        W: 7,
+        /**
+         * Center
+         */
+        C: 8,
+    };
+    Object.freeze(Anchor);
+
     // Define the current region.
-    let region;
+    let region = undefined;
 
     // Set the chart's viewport size.
     chart.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
@@ -90,9 +137,14 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     const expand = (n, min, max) => n * (max - min) + min;
 
     /**
-     * Translate a number 'n' from one number line [min1-max1] to [min2-max2]
+     * Linearly interpolate a number 'n' from one range [min1-max1] to [min2-max2]
      */
     const translate = (n, min1, max1, min2, max2) => expand(normalize(n, min1, max1), min2, max2);
+
+    /**
+     * Check if two numbers 'a' and 'b' are approximately equal eith a maximum error of 'epsilon'.
+     */
+    const approx = (a, b, epsilon) => a - b < epsilon && b - a < epsilon;
 
     /**
      * Return a set of cartesian coordinates from a dry bulb and relative humidity.
@@ -139,24 +191,9 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         return new Psy(db, psy[2], psy[1], dp, psy[0]);
     };
 
-    /**
-     * Plot a point using dry bulb and relative humidity.
-     */
-    this.plotDbRh = (db, rh) => PlotPoint(dr2xy(db, rh), 5, '#f00');
-
-    /**
-     * Plot a point using dry bulb and wet bulb.
-     */
-    this.plotDbWb = (db, wb) => PlotPoint(dw2xy(db, wb), 5, '#f00');
-
-    /**
-     * Plot a point using dry bulb and dew point.
-     */
-    this.plotDbDp = (db, dp) => PlotPoint(dd2xy(db, dp), 5, '#f00');
-
     // Create a new SVG group for shaded regions.
     const regGroup = document.createElementNS(NS, 'g');
-    chart.appendChild(regGroup)
+    chart.appendChild(regGroup);
 
     // Create a new SVG group for axis lines.
     const psyGroup = document.createElementNS(NS, 'g');
@@ -179,7 +216,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         }
         dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
-        Label(dr2xy(db, 0), 'u', db + '\u00B0' + tempUnit);
+        Label(dr2xy(db, 0), Anchor.N, db + '\u00B0' + tempUnit);
     }
 
     // Draw constant dew point horizontal lines.
@@ -195,18 +232,18 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         // The right point is at the maximum dry bulb temperature
         dpLine.addPoint(dd2xy(db_max, dp));
         // Add a label for the constant dew point line
-        Label(dd2xy(db_max, dp), 'l', dp + '\u00B0' + tempUnit);
+        Label(dd2xy(db_max, dp), Anchor.W, dp + '\u00B0' + tempUnit);
     }
 
     // Draw constant wet bulb diagonal lines.
     for (let wb = db_min; wb < db_max; wb += 10) {
         const wbLine = new Line(1);
         // Dry bulb is always equal or greater than wet bulb.
-        for (let db = wb; db <= db_max; db++) {
+        for (let db = wb; db <= db_max; db += res) {
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
-        Label(dd2xy(wb, wb), 'd', wb + '\u00B0' + tempUnit);
+        Label(dd2xy(wb, wb), Anchor.SE, wb + '\u00B0' + tempUnit);
     }
 
     // Draw constant relative humidity lines.
@@ -214,22 +251,67 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         const rhLine = new Line(1);
         let drawLabel = true;
         // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
-        for (let db = db_min; db <= db_max; db++) {
+        for (let db = db_min; db <= db_max; db += res) {
             let pt = dr2xy(db, rh / 100);
             // Stop drawing when the line surpasses the bounds of the chart
             if (pt.y < padding) {
                 pt = new Point(pt.x, padding);
                 rhLine.addPoint(pt);
-                Label(pt, 'd', (rh === 0 || rh === 100) ? '' : rh + '%');
+                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%');
                 drawLabel = false;
                 break;
             }
             rhLine.addPoint(pt);
         }
         if (drawLabel) {
-            Label(dr2xy(db_max, rh / 100), 'r', (rh === 0 || rh === 100) ? '' : rh + '%');
+            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%');
         }
     }
+
+    /**
+     * Plot a point using dry bulb and relative humidity.
+     */
+    this.plotDbRh = (db, rh, color = '#f00') => PlotPoint(dr2xy(db, rh), 5, color);
+
+    /**
+     * Plot a point using dry bulb and wet bulb.
+     */
+    this.plotDbWb = (db, wb, color = '#f00') => PlotPoint(dw2xy(db, wb), 5, color);
+
+    /**
+     * Plot a point using dry bulb and dew point.
+     */
+    this.plotDbDp = (db, dp, color = '#f00') => PlotPoint(dd2xy(db, dp), 5, color);
+
+    /**
+     * Create a new region.
+     */
+    this.newRegion = (color) => !(region instanceof Region) && (region = new Region(color));
+
+    /**
+     * Add a corner to the region defined by a dry bulb and relative humidity.
+     */
+    this.regionDbRh = (db, rh) => (region instanceof Region) && region.nextPsy(dr2psy(db, rh));
+
+    /**
+     * Add a corner to the region defined by a dry bulb and wet bulb.
+     */
+    this.regionDbWb = (db, wb) => (region instanceof Region) && region.nextPsy(dw2psy(db, wb));
+
+    /**
+     * Add a corner to the region defined by a dry bulb and dew point.
+     */
+    this.regionDbDp = (db, dp) => (region instanceof Region) && region.nextPsy(dd2psy(db, dp));
+
+    /**
+     * Draw the region onto the chart.
+     */
+    this.buildRegion = () => { if (region instanceof Region) { region.build(); region = undefined; } };
+
+    /**
+     * Delete all regions from the psychrometric chart.
+     */
+    this.clearRegions = () => regGroup.innerHTML = '';
 
     /**
      * Return the SVG element to render to the screen.
@@ -241,7 +323,13 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
      */
     function Point(x, y) {
         Validate('nn', arguments);
+        /**
+         * X-coordinate
+         */
         this.x = x;
+        /**
+         * Y-coordinate
+         */
         this.y = y;
         Object.freeze(this);
     }
@@ -252,7 +340,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     function Psy(db, rh, wb, dp, hr) {
         Validate('nnnnn', arguments);
         /**
-         * Dew Point
+         * Dry Bulb
          */
         this.db = db;
         /**
@@ -291,15 +379,18 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         // This is the collection of (x,y) points that make up this path.
         let d = 'M';
 
-        // Add an (x,y) coordinate pair to the end of this line.
+        /**
+         * Add an (x,y) coordinate pair to the end of this line.
+         */
         this.addPoint = (pt) => {
-            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (pt instanceof Point) {
                 d += ' ' + pt.x + ',' + pt.y;
                 pathElement.setAttribute('d', d);
             } else {
-                throw 'Line.addPoint(pt) requires pt.x and pt.y to be numeric values.';
+                throw 'Incorrect parameter types for Line.addPoint(Point).';
             }
         };
+        Object.freeze(this);
     }
 
     /**
@@ -322,22 +413,64 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         psyGroup.appendChild(ptElement);
     }
 
-    // Define a method to plot a shaded region.
+    /**
+     * Define a method to plot a shaded region.
+     */
     function Region(color) {
         Validate('s', arguments);
 
-        let d = 'M', psy = undefined;
+        let d = 'M', first = undefined, state = undefined;
 
+        // Add an (x,y) coordinate pair to the outline of this region.
         const addPoint = (pt) => {
-            if (typeof pt.x === 'number' && typeof pt.y === 'number') {
+            if (pt instanceof Point) {
                 d += ' ' + pt.x + ',' + pt.y;
-                pathElement.setAttribute('d', d);
             } else {
-                throw 'Line.addPoint(pt) requires pt.x and pt.y to be numeric values.';
+                throw 'Incorrect parameter types for Region.addPoint(Point).';
             }
         };
 
+        /**
+         * Draw a line going from the last psychrometric state to the current one.
+         */
+        this.nextPsy = (psy) => {
+            if (psy instanceof Psy) {
+                if (state instanceof Psy) {
+                    const EPS = 0.001;
+                    if (approx(psy.rh, state.rh, EPS)) {
+                        // Iso relative humidity line (curved line)
+                        if (state.db < psy.db) {
+                            // LTR
+                            for (let db = state.db; db < psy.db; db += res) {
+                                addPoint(dr2xy(db, state.rh));
+                            }
+                        } else {
+                            // RTL
+                            for (let db = state.db; db > psy.db; db -= res) {
+                                addPoint(dr2xy(db, state.rh));
+                            }
+                        }
+                    } else {
+                        // Iso dry bulb, wet bulb, or dew point (straight line)
+                        addPoint(dd2xy(psy.db, psy.dp));
+                    }
+                } else {
+                    // Set the first state and add the point.
+                    first = psy;
+                    addPoint(dd2xy(psy.db, psy.dp));
+                }
+                state = psy;
+            } else {
+                throw 'Incorrect parameter types for Region.nextPsy(Psy).'
+            }
+        };
+
+        /**
+         * Draw the region.
+         */
         this.build = () => {
+            // Close the path.
+            this.nextPsy(first);
             // Define a path element for the shaded region.
             const regElement = document.createElementNS(NS, 'path');
             regElement.setAttribute('fill', color);
@@ -345,6 +478,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
             regElement.setAttribute('d', d + ' z');
             regGroup.appendChild(regElement);
         };
+        Object.freeze(this);
     }
 
     /**
@@ -352,7 +486,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
      */
     function Label(pt, anchor, text) {
         // Perform some error checking.
-        Validate('oss', arguments);
+        Validate('ons', arguments);
         if (!(pt instanceof Point)) {
             throw 'Incorrect parameter types in PlotPoint.';
         }
@@ -371,33 +505,60 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         labelElement.textContent = text;
         txtGroup.appendChild(labelElement);
 
-        switch (anchor.toLowerCase()) {
-            case ('l'): {
-                labelElement.setAttribute('x', pt.x + size / 2);
-                labelElement.setAttribute('text-anchor', 'start');
-                break;
+        const top = () => {
+            labelElement.setAttribute('y', pt.y + size / 2);
+            labelElement.setAttribute('dominant-baseline', 'hanging');
+        };
+
+        const bot = () => {
+            labelElement.setAttribute('y', pt.y - size / 2);
+            labelElement.setAttribute('dominant-baseline', 'alphabetic');
+        };
+
+        const left = () => {
+            labelElement.setAttribute('x', pt.x + size / 2);
+            labelElement.setAttribute('text-anchor', 'start');
+        };
+
+        const right = () => {
+            labelElement.setAttribute('x', pt.x - size / 2);
+            labelElement.setAttribute('text-anchor', 'end');
+        };
+
+        // Move the point anchor if it is not in the center.
+        switch (anchor) {
+            case (Anchor.NW): {
+                top(); left(); break;
             }
-            case ('r'): {
-                labelElement.setAttribute('x', pt.x - size / 2);
-                labelElement.setAttribute('text-anchor', 'end');
-                break;
+            case (Anchor.N): {
+                top(); break;
             }
-            case ('u'): {
-                labelElement.setAttribute('y', pt.y + size / 2);
-                labelElement.setAttribute('dominant-baseline', 'hanging');
-                break;
+            case (Anchor.NE): {
+                top(); right(); break;
             }
-            case ('d'): {
-                labelElement.setAttribute('y', pt.y - size / 2);
-                labelElement.setAttribute('dominant-baseline', 'alphabetic');
-                break;
+            case (Anchor.E): {
+                right(); break;
             }
-            case ('c'): {
+            case (Anchor.SE): {
+                bot(); right(); break;
+            }
+            case (Anchor.S): {
+                bot(); break;
+            }
+            case (Anchor.SW): {
+                bot(); left(); break;
+            }
+            case (Anchor.W): {
+                left(); break;
+            }
+            case (Anchor.C): {
                 break;
             }
             default: {
-                throw 'anchor should be one of the following: [l, r, u, d, c]';
+                throw 'Incorrect Anchor type (' + anchor + '). Expected ' + JSON.stringify(Anchor);
             }
         }
     }
+
+    Object.freeze(this);
 }
