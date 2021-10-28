@@ -75,7 +75,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         // The padding, in px, of the chart
         padding = 30,
         // The temperature unit to display
-        tempUnit = psychrolib.isIP() ? 'F' : 'C';
+        tempUnit = '\u00B0' + (psychrolib.isIP() ? 'F' : 'C');
 
     /**
      * Label anchor enum type.
@@ -147,6 +147,11 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     const approx = (a, b, epsilon) => a - b < epsilon && b - a < epsilon;
 
     /**
+     * Round the number 'a' to 'd' decimal places.
+     */
+    const round = (a, d = 0) => Math.round(a * 10 ** d) / (10 ** d);
+
+    /**
      * Return a set of cartesian coordinates from a dry bulb and relative humidity.
      */
     const dr2xy = (db, rh) => new Point(
@@ -203,6 +208,10 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     const txtGroup = document.createElementNS(NS, 'g');
     chart.appendChild(txtGroup);
 
+    // Create a new SVG group for points and point labels.
+    const ptGroup = document.createElementNS(NS, 'g');
+    chart.appendChild(ptGroup);
+
     // Draw constant dry bulb vertical lines.
     for (let db = db_min; db <= db_max; db += 10) {
         const dbLine = new Line(1);
@@ -216,7 +225,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         }
         dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
-        Label(dr2xy(db, 0), Anchor.N, db + '\u00B0' + tempUnit);
+        Label(dr2xy(db, 0), Anchor.N, db + tempUnit, true);
     }
 
     // Draw constant dew point horizontal lines.
@@ -232,7 +241,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         // The right point is at the maximum dry bulb temperature
         dpLine.addPoint(dd2xy(db_max, dp));
         // Add a label for the constant dew point line
-        Label(dd2xy(db_max, dp), Anchor.W, dp + '\u00B0' + tempUnit);
+        Label(dd2xy(db_max, dp), Anchor.W, dp + tempUnit, true);
     }
 
     // Draw constant wet bulb diagonal lines.
@@ -243,7 +252,7 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
-        Label(dd2xy(wb, wb), Anchor.SE, wb + '\u00B0' + tempUnit);
+        Label(dd2xy(wb, wb), Anchor.SE, wb + tempUnit, true);
     }
 
     // Draw constant relative humidity lines.
@@ -257,31 +266,31 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
             if (pt.y < padding) {
                 pt = new Point(pt.x, padding);
                 rhLine.addPoint(pt);
-                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%');
+                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%', true);
                 drawLabel = false;
                 break;
             }
             rhLine.addPoint(pt);
         }
         if (drawLabel) {
-            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%');
+            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%', true);
         }
     }
 
     /**
      * Plot a point using dry bulb and relative humidity.
      */
-    this.plotDbRh = (db, rh, color = '#f00') => PlotPoint(dr2xy(db, rh), 5, color);
+    this.plotDbRh = (t, db, rh, color = '#f00') => PlotPoint(t, dr2psy(db, rh), 5, color);
 
     /**
      * Plot a point using dry bulb and wet bulb.
      */
-    this.plotDbWb = (db, wb, color = '#f00') => PlotPoint(dw2xy(db, wb), 5, color);
+    this.plotDbWb = (t, db, wb, color = '#f00') => PlotPoint(t, dw2psy(db, wb), 5, color);
 
     /**
      * Plot a point using dry bulb and dew point.
      */
-    this.plotDbDp = (db, dp, color = '#f00') => PlotPoint(dd2xy(db, dp), 5, color);
+    this.plotDbDp = (t, db, dp, color = '#f00') => PlotPoint(t, dd2psy(db, dp), 5, color);
 
     /**
      * Create a new region.
@@ -396,11 +405,14 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     /**
      * Define a method to plot a point.
      */
-    function PlotPoint(c, r, color) {
-        Validate('ons', arguments);
-        if (!(c instanceof Point)) {
+    function PlotPoint(t, psy, r, color) {
+        Validate('sons', arguments);
+        if (!(psy instanceof Psy)) {
             throw 'Incorrect parameter types in PlotPoint.';
         }
+
+        // Determine the spatial location of psy.
+        const c = dd2xy(psy.db, psy.dp);
 
         // Define a 0-length path element and assign its attributes.
         const ptElement = document.createElementNS(NS, 'path');
@@ -410,7 +422,50 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         ptElement.setAttribute('stroke-linecap', 'round');
         ptElement.setAttribute('vector-effect', 'non-scaling-stroke');
         ptElement.setAttribute('d', 'M ' + c.x + ',' + c.y + ' h 0');
-        psyGroup.appendChild(ptElement);
+        ptGroup.appendChild(ptElement);
+
+        // Define the padding and label elements.
+        const PADDING = 10,
+            labelGroupElement = document.createElementNS(NS, 'g'),
+            labelBackground = document.createElementNS(NS, 'rect'),
+            labelElements = [
+                Label(new Point(c.x + PADDING, c.y + PADDING), Anchor.NW, t, false),
+                Label(new Point(c.x + PADDING, c.y + PADDING + 12), Anchor.NW, round(psy.db, 1) + tempUnit + ' Dry Bulb', false),
+                Label(new Point(c.x + PADDING, c.y + PADDING + 24), Anchor.NW, round(psy.rh * 100) + '% Rel. Hum.', false),
+                Label(new Point(c.x + PADDING, c.y + PADDING + 36), Anchor.NW, round(psy.wb, 1) + tempUnit + ' Wet Bulb', false),
+                Label(new Point(c.x + PADDING, c.y + PADDING + 48), Anchor.NW, round(psy.dp, 1) + tempUnit + ' Dew Point', false),
+            ];
+
+        // Hide the group by default
+        labelGroupElement.setAttribute('visibility', 'hidden');
+        ptGroup.appendChild(labelGroupElement);
+
+        // Set the attributes of the label background
+        labelBackground.setAttribute('stroke', lineColor);
+        labelBackground.setAttribute('fill', color);
+        labelBackground.setAttribute('x', c.x + PADDING);
+        labelBackground.setAttribute('y', c.y + PADDING);
+        labelBackground.setAttribute('height', PADDING + 60);
+        labelBackground.setAttribute('rx', 2);
+        labelBackground.setAttribute('stroke-width', '1px');
+        labelGroupElement.appendChild(labelBackground);
+
+        // Determine the width of the label background
+        let maxWidth = 0, currWidth;
+        for (let i in labelElements) {
+            labelGroupElement.appendChild(labelElements[i]);
+            currWidth = labelElements[i].getBBox().width + PADDING;
+            if (currWidth > maxWidth) {
+                maxWidth = currWidth;
+            }
+        }
+        labelBackground.setAttribute('width', maxWidth);
+
+        // Set the behavior when the user interacts with this point
+        ptElement.onmouseover = () => labelGroupElement.setAttribute('visibility', 'visible');
+
+        // Set the behavior when the user interacts with this point
+        ptElement.onmouseleave = () => labelGroupElement.setAttribute('visibility', 'hidden');
     }
 
     /**
@@ -484,11 +539,11 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
     /**
      * Define a method to write a label.
      */
-    function Label(pt, anchor, text) {
+    function Label(pt, anchor, text, append) {
         // Perform some error checking.
-        Validate('ons', arguments);
+        Validate('onsb', arguments);
         if (!(pt instanceof Point)) {
-            throw 'Incorrect parameter types in PlotPoint.';
+            throw 'Incorrect parameter types in Label.';
         }
 
         const size = 12;
@@ -503,7 +558,10 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
         labelElement.setAttribute('text-anchor', 'middle');
         labelElement.setAttribute('dominant-baseline', 'middle');
         labelElement.textContent = text;
-        txtGroup.appendChild(labelElement);
+
+        if (append) {
+            txtGroup.appendChild(labelElement);
+        }
 
         const top = () => {
             labelElement.setAttribute('y', pt.y + size / 2);
@@ -558,6 +616,8 @@ export function Psychart(width, height, unitSystem, db_min, db_max, dp_max, line
                 throw 'Incorrect Anchor type (' + anchor + '). Expected ' + JSON.stringify(Anchor);
             }
         }
+
+        return labelElement;
     }
 
     Object.freeze(this);
