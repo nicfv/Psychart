@@ -54,13 +54,21 @@ if [[ "${HELP}" == true ]] ; then
 fi
 
 if [[ "${PSY}" == true ]] ; then
-  IN='./svg/psychart.js'
+  IN1='./svg/psychrolib.js'
+  IN2='./svg/psychart.js'
   OUT='./src/psychart.js'
   EXT='.bk'
-  cp -v "${IN}" "${OUT}"
+  MIN='.min'
+  cp -v "${IN1}" "${OUT}"
+  cat "${IN2}" >> "${OUT}"
   sed -i"${EXT}" 's/function Psychart/export function Psychart/g' "${OUT}"
-  sed -i"${EXT}" "s/new Psychrometrics()/require('psychrolib.js')/g" "${OUT}"
+  sed -i"${EXT}" -E "s/(Validate\(.*\);)/\/\/\1/g" "${OUT}"
+  sed -i"${EXT}" -E "s/(['\"]use strict['\"];)/\/\/\1/g" "${OUT}"
+  sed -i"${EXT}" -E "s/(Object.freeze\(.*\);)/\/\/\1/g" "${OUT}"
   rm -v "${OUT}${EXT}"
+  curl -X POST -s --data-urlencode "input@${OUT}" https://www.toptal.com/developers/javascript-minifier/raw > "${OUT}${MIN}"
+  cp -v "${OUT}${MIN}" "${OUT}"
+  rm -v "${OUT}${MIN}"
 fi
 
 if [[ "${INSTALL}" == true ]] ; then

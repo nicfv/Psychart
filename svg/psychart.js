@@ -1,64 +1,63 @@
 'use strict';
 
 /**
- * Validate parameter types.
- * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
- * @param  {...any} args The arguments object or the individual arguments going into the function.
- */
-function Validate(types, ...args) {
-    // Validate parameters going into this function.
-    if (typeof types !== 'string') {
-        throw 'Incorrect validation parameter types.';
-    }
-
-    // Define functions that check parameter types.
-    const TYPEOF = {
-        'i': x => typeof x === 'bigint',
-        'b': x => typeof x === 'boolean',
-        'f': x => typeof x === 'function',
-        'n': x => typeof x === 'number',
-        'o': x => typeof x === 'object',
-        's': x => typeof x === 'string',
-        'y': x => typeof x === 'symbol',
-        'u': x => typeof x === 'undefined',
-        '*': () => true,
-    };
-
-    // Capture the name of the calling function.
-    const CALLER = new Error().stack.match(/at +[^\(\)]+/gi).slice(1, -1).map(x => x.slice(0, -1)).join(', ');
-
-    // Create the argument list using the parameters or just the arguments object.
-    let argList = args;
-    if (args.length === 1 && typeof args[0] === 'object' && args[0]['length']) {
-        argList = args[0];
-    }
-
-    // Verify that the correct number of parameters are inputted.
-    if (types.length !== argList.length) {
-        throw 'Found ' + (argList.length > types.length ? argList.length - types.length : types.length - argList.length) + ' too ' + (argList.length > types.length ? 'many' : 'few') + ' arguments ' + CALLER + '.';
-    }
-
-    // Validate each parameter type.
-    for (let i = 0; i < types.length; i++) {
-        if (!TYPEOF[types[i]]) {
-            throw types[i] + ' is not a valid type.';
-        }
-        if (!TYPEOF[types[i]](argList[i])) {
-            throw TYPEOF[types[i]] + ' failed for parameter ' + (i + 1) + ', ' + (typeof argList[i]) + ' found ' + CALLER + '.';
-        }
-    }
-}
-
-/**
  * Generate a psychrometric chart as an svg element.
  */
 function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, textColor) {
+    /**
+     * Validate parameter types.
+     * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
+     * @param  {...any} args The arguments object or the individual arguments going into the function.
+     */
+    function Validate(types, ...args) {
+        // Validate parameters going into this function.
+        if (typeof types !== 'string') {
+            throw 'Incorrect validation parameter types.';
+        }
+
+        // Define functions that check parameter types.
+        const TYPEOF = {
+            'i': x => typeof x === 'bigint',
+            'b': x => typeof x === 'boolean',
+            'f': x => typeof x === 'function',
+            'n': x => typeof x === 'number',
+            'o': x => typeof x === 'object',
+            's': x => typeof x === 'string',
+            'y': x => typeof x === 'symbol',
+            'u': x => typeof x === 'undefined',
+            '*': () => true,
+        };
+
+        // Capture the name of the calling function.
+        const CALLER = new Error().stack.match(/at +[^\(\)]+/gi).slice(1, -1).map(x => x.slice(0, -1)).join(', ');
+
+        // Create the argument list using the parameters or just the arguments object.
+        let argList = args;
+        if (args.length === 1 && typeof args[0] === 'object' && args[0]['length']) {
+            argList = args[0];
+        }
+
+        // Verify that the correct number of parameters are inputted.
+        if (types.length !== argList.length) {
+            throw 'Found ' + (argList.length > types.length ? argList.length - types.length : types.length - argList.length) + ' too ' + (argList.length > types.length ? 'many' : 'few') + ' arguments ' + CALLER + '.';
+        }
+
+        // Validate each parameter type.
+        for (let i = 0; i < types.length; i++) {
+            if (!TYPEOF[types[i]]) {
+                throw types[i] + ' is not a valid type.';
+            }
+            if (!TYPEOF[types[i]](argList[i])) {
+                throw TYPEOF[types[i]] + ' failed for parameter ' + (i + 1) + ', ' + (typeof argList[i]) + ' found ' + CALLER + '.';
+            }
+        }
+    }
     Validate('nnnnnnss', arguments);
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
         // The resolution of the graph.
-        res = 0.1,
+        res = 0.5,
         // The SVG element on which to draw lines, points, etc.
         chart = document.createElementNS(NS, 'svg'),
         // Import the functionality of Psychrolib.js.
