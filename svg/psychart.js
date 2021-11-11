@@ -495,12 +495,12 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
                         // Iso relative humidity line (curved line)
                         if (state.db < psy.db) {
                             // LTR
-                            for (let db = state.db; db < psy.db; db += res) {
+                            for (let db = state.db; db <= psy.db + EPS; db += res) {
                                 addPoint(dr2xy(db, state.rh));
                             }
                         } else {
                             // RTL
-                            for (let db = state.db; db > psy.db; db -= res) {
+                            for (let db = state.db; db >= psy.db - EPS; db -= res) {
                                 addPoint(dr2xy(db, state.rh));
                             }
                         }
