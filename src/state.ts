@@ -5,7 +5,7 @@ import { Psychart } from 'psychart';
 interface JState {
   ps: any;
   width: number;
-  height: number;
+  height: number; // TODO: may need to include more variables in the state (e.g. dbMin, etc.) so that we don't re-create the psychart every frame
 }
 
 class CState implements JState {
@@ -28,6 +28,10 @@ class CState implements JState {
       isLightTheme ? '#CCC' : '#666',
       isLightTheme ? '#666' : '#CCC'
     );
+    // TODO: testing a large number of points for performance
+    for (let i = 0; i < 1000; i++) {
+      this.ps.plotDbRh(i + ' sec', (i % 70) + 30, (i / 60) % 0.99);
+    }
   }
   setSize(w: number, h: number) {
     if (w !== this.width || h !== this.height) {

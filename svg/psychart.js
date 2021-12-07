@@ -126,6 +126,11 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     chart.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
 
     /**
+     * Dispatch the `updatePsychart` event on the SVG element.
+     */
+    const dispatch = () => chart.dispatchEvent(new Event('updatePsychart'));
+
+    /**
      * Normalize the number 'n' between min and max, returns a number [0-1]
      */
     const normalize = (n, min, max) => (n - min) / (max - min);
@@ -319,7 +324,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Delete all regions from the psychrometric chart.
      */
-    this.clearRegions = () => regGroup.innerHTML = '';
+    this.clearRegions = () => !(region instanceof Region) && new Region('').clearAll();
 
     /**
      * Return the SVG element to render to the screen.
@@ -465,6 +470,9 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
 
         // Set the behavior when the user interacts with this point
         ptElement.onmouseleave = () => labelGroupElement.setAttribute('visibility', 'hidden');
+
+        // Let the program know that the view needs to be updated.
+        dispatch();
     }
 
     /**
@@ -531,6 +539,15 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             regElement.setAttribute('stroke', 'none');
             regElement.setAttribute('d', d + ' z');
             regGroup.appendChild(regElement);
+            dispatch();
+        };
+
+        /**
+         * Delete all regions.
+         */
+        this.clearAll = () => {
+            regGroup.innerHTML = '';
+            dispatch();
         };
         Object.freeze(this);
     }
