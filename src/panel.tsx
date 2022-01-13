@@ -1,21 +1,40 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
-import { useTheme } from '@grafana/ui';
+//import { useTheme } from '@grafana/ui';
 import { PsyOptions } from 'types';
-import { State } from 'state';
+//import { State } from 'state';
 // import { Dynamic } from 'Dynamic';
 // import ReactDOM from 'react-dom';
-import { VanillaChildren } from 'VanillaChildren';
+//import { VanillaChildren } from 'VanillaChildren';
 
 interface Props extends PanelProps<PsyOptions> {}
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme();
+  //const theme = useTheme();
   //   const NS = 'http://www.w3.org/2000/svg';
-  State.setSize(width, height);
-  State.initPsyChart(options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
+  //State.setSize(width, height);
+  //State.initPsyChart(options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
 
-  return <VanillaChildren>{State.getElement()}</VanillaChildren>;
+  const b = document.createElement('button');
+  b.innerText = 'Click me';
+  b.onclick = () => alert('You clicked me!');
+  b.addEventListener(
+    'click',
+    () => {
+      alert('Maybe this will work.');
+    },
+    false
+  );
+  b.addEventListener(
+    'click',
+    () => {
+      alert('Or maybe this will work.');
+    },
+    true
+  );
+  return <div dangerouslySetInnerHTML={{ __html: b.outerHTML }}></div>;
+
+  //return <VanillaChildren>{State.getElement()}</VanillaChildren>;
 
   //   const dynamic = new Dynamic({});
   //
