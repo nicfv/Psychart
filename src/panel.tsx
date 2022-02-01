@@ -17,21 +17,22 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
 
   const b = document.createElement('button');
   b.innerText = 'Click me';
-  b.onclick = () => alert('You clicked me!');
-  b.addEventListener(
-    'click',
-    () => {
-      alert('Maybe this will work.');
-    },
-    false
-  );
-  b.addEventListener(
-    'click',
-    () => {
-      alert('Or maybe this will work.');
-    },
-    true
-  );
+  //   b.onclick = () => alert('You clicked me!');
+  //   b.addEventListener(
+  //     'click',
+  //     () => {
+  //       alert('Maybe this will work.');
+  //     },
+  //     false
+  //   );
+  //   b.addEventListener(
+  //     'click',
+  //     () => {
+  //       alert('Or maybe this will work.');
+  //     },
+  //     true
+  //   );
+  b.setAttribute('onclick', '(() => { alert("Hello world! I like bold text."); })()');
   return <div dangerouslySetInnerHTML={{ __html: b.outerHTML }}></div>;
 
   //return <VanillaChildren>{State.getElement()}</VanillaChildren>;
