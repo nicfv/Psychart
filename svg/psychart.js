@@ -657,47 +657,39 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
 
         // Define the padding and label elements.
         const PADDING = 10,
-            lines = text.split('\n'),
-            thisLabel = document.createElementNS(NS, 'g'),
+            labelGroupElement = document.createElementNS(NS, 'g'),
             labelBackground = document.createElementNS(NS, 'rect'),
             labelElements = [];
 
-        // Generate array of text elements.
-        for (let i = 0; i < lines.length; i++) {
-            labelElements.push(new Label(new Point(PADDING, PADDING + i * fontSize), Anchor.NW, lines[i], false));
+        const lines = text.split('\n');
+        for (let i in lines) {
+            labelElements.push(Label(new Point(x + PADDING, y + PADDING + i * fontSize), Anchor.NW, lines[i], false));
         }
 
-        // Append the background to the label layer
-        thisLabel.appendChild(labelBackground);
-
-        // Determine the size of the label background and append text elements
-        const labelHeight = (fontSize * lines.length) + PADDING;
-        let labelWidth = 0, currWidth;
-        for (let i in labelElements) {
-            thisLabel.appendChild(labelElements[i]);
-            currWidth = labelElements[i].getBBox().width + PADDING; console.log(labelElements[i], labelElements[i].getBBox(), labelElements[i].getBBox().width, currWidth);
-            if (currWidth > labelWidth) {
-                labelWidth = currWidth;
-            }
-        }
+        // Hide the group by default
+        // labelGroupElement.setAttribute('visibility', 'hidden');
+        lblGroup.appendChild(labelGroupElement);
 
         // Set the attributes of the label background
         labelBackground.setAttribute('stroke', lineColor);
         labelBackground.setAttribute('fill', color);
-        labelBackground.setAttribute('x', PADDING);
-        labelBackground.setAttribute('y', PADDING);
-        labelBackground.setAttribute('width', labelWidth);
-        labelBackground.setAttribute('height', labelHeight);
+        labelBackground.setAttribute('x', x + PADDING);
+        labelBackground.setAttribute('y', y + PADDING);
+        labelBackground.setAttribute('height', PADDING + fontSize * lines.length);
         labelBackground.setAttribute('rx', 2);
         labelBackground.setAttribute('stroke-width', '1px');
+        labelGroupElement.appendChild(labelBackground);
 
-        // Correct position if out of bounds
-        if (x + labelWidth + PADDING > width) { x -= (labelWidth + PADDING); }
-        if (y + labelHeight + PADDING > height) { y -= (labelHeight + PADDING); }
-
-        // Add this label to the SVG layer.
-        thisLabel.setAttribute('transform', 'translate(' + x + ',' + y + ')');
-        lblGroup.appendChild(thisLabel);
+        // Determine the width of the label background
+        let maxWidth = 0, currWidth;
+        for (let i in labelElements) {
+            labelGroupElement.appendChild(labelElements[i]);
+            currWidth = labelElements[i].getBBox().width + PADDING;
+            if (currWidth > maxWidth) {
+                maxWidth = currWidth;
+            }
+        }
+        labelBackground.setAttribute('width', maxWidth);
     }
 
     Object.freeze(this);
