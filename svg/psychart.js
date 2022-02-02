@@ -133,6 +133,11 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const dispatch = () => chart.dispatchEvent(new Event('updatePsychart'));
 
     /**
+     * Clear any existing tooltips.
+     */
+    const clearTip = () => ttGroup.innerHTML = '';
+
+    /**
      * Normalize the number 'n' between min and max, returns a number [0-1]
      */
     const normalize = (n, min, max) => (n - min) / (max - min);
@@ -218,9 +223,9 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const ptGroup = document.createElementNS(NS, 'g');
     chart.appendChild(ptGroup);
 
-    // Create a new SVG group for point labels.
-    const lblGroup = document.createElementNS(NS, 'g');
-    chart.appendChild(lblGroup);
+    // Create a new SVG group for tooltips.
+    const ttGroup = document.createElementNS(NS, 'g');
+    chart.appendChild(ttGroup);
 
     // Draw constant dry bulb vertical lines.
     for (let db = db_min; db <= db_max; db += 10) {
@@ -434,52 +439,20 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         ptElement.setAttribute('d', 'M ' + c.x + ',' + c.y + ' h 0');
         ptGroup.appendChild(ptElement);
 
-        // Define the padding and label elements.
-        const PADDING = 10,
-            labelGroupElement = document.createElementNS(NS, 'g'),
-            labelBackground = document.createElementNS(NS, 'rect'),
-            labelElements = [
-                Label(new Point(c.x + PADDING, c.y + PADDING), Anchor.NW, t, false),
-                Label(new Point(c.x + PADDING, c.y + PADDING + 12), Anchor.NW, round(psy.db, 1) + tempUnit + ' Dry Bulb', false),
-                Label(new Point(c.x + PADDING, c.y + PADDING + 24), Anchor.NW, round(psy.rh * 100) + '% Rel. Hum.', false),
-                Label(new Point(c.x + PADDING, c.y + PADDING + 36), Anchor.NW, round(psy.wb, 1) + tempUnit + ' Wet Bulb', false),
-                Label(new Point(c.x + PADDING, c.y + PADDING + 48), Anchor.NW, round(psy.dp, 1) + tempUnit + ' Dew Point', false),
-            ];
-
-        // Hide the group by default
-        labelGroupElement.setAttribute('visibility', 'hidden');
-        ptGroup.appendChild(labelGroupElement);
-
-        // Set the attributes of the label background
-        labelBackground.setAttribute('stroke', lineColor);
-        labelBackground.setAttribute('fill', color);
-        labelBackground.setAttribute('x', c.x + PADDING);
-        labelBackground.setAttribute('y', c.y + PADDING);
-        labelBackground.setAttribute('height', PADDING + 60);
-        labelBackground.setAttribute('rx', 2);
-        labelBackground.setAttribute('stroke-width', '1px');
-        labelGroupElement.appendChild(labelBackground);
-
-        // Determine the width of the label background
-        let maxWidth = 0, currWidth;
-        for (let i in labelElements) {
-            labelGroupElement.appendChild(labelElements[i]);
-            currWidth = labelElements[i].getBBox().width + PADDING;
-            if (currWidth > maxWidth) {
-                maxWidth = currWidth;
-            }
-        }
-        labelBackground.setAttribute('width', maxWidth);
+        // Generate the text to display on mouse hover.
+        const tooltipString = t + '\n' +
+            round(psy.db, 1) + tempUnit + ' Dry Bulb\n' +
+            round(psy.rh * 100) + '% Rel. Hum.\n' +
+            round(psy.wb, 1) + tempUnit + ' Wet Bulb\n' +
+            round(psy.dp, 1) + tempUnit + ' Dew Point';
 
         // Set the behavior when the user interacts with this point
-        // ptElement.onmouseover = () => labelGroupElement.setAttribute('visibility', 'visible');
-        ptElement.onmouseover = () => Info(c.x, c.y, color, 'hello\nworld', true);
-        // ptElement.setAttribute('onmouseover', 'Info(' + c.x + ', ' + c.y + ', "' + color + '", "hello")');
+        ptElement.onmouseover = () => Tooltip(c.x, c.y, color, tooltipString, true);
+        // ptElement.setAttribute('onmouseover', 'Tooltip(' + c.x + ', ' + c.y + ', "' + color + '", "' + tooltipString + '", true)');
 
         // Set the behavior when the user interacts with this point
-        // ptElement.onmouseleave = () => labelGroupElement.setAttribute('visibility', 'hidden');
-        ptElement.onmouseleave = () => Info(c.x, c.y, color, 'goodbye\nworld', true);
-        // ptElement.setAttribute('onmouseleave', Info);
+        ptElement.onmouseleave = () => clearTip();
+        // ptElement.setAttribute('onmouseleave', 'clearTip()');
 
         // Let the program know that the view needs to be updated.
         dispatch();
@@ -647,49 +620,55 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Define a method to display a tooltip.
      */
-    function Info(x, y, color, text, clear) {
+    function Tooltip(x, y, color, text, clear) {
         // Perform some error checking.
         Validate('nnssb', arguments);
 
+        // Clear any existing tooltips.
         if (clear) {
-            lblGroup.innerHTML = '';
+            clearTip();
         }
 
-        // Define the padding and label elements.
+        // Define the padding and SVG elements.
         const PADDING = 10,
-            labelGroupElement = document.createElementNS(NS, 'g'),
-            labelBackground = document.createElementNS(NS, 'rect'),
+            tooltipElement = document.createElementNS(NS, 'g'),
+            tooltipBackground = document.createElementNS(NS, 'rect'),
             labelElements = [];
 
+        // Generate the array of label elements.
         const lines = text.split('\n');
         for (let i in lines) {
-            labelElements.push(Label(new Point(x + PADDING, y + PADDING + i * fontSize), Anchor.NW, lines[i], false));
+            labelElements.push(Label(new Point(0, i * fontSize), Anchor.NW, lines[i], false));
         }
 
-        // Hide the group by default
-        // labelGroupElement.setAttribute('visibility', 'hidden');
-        lblGroup.appendChild(labelGroupElement);
+        // Append the tooltip element to the label group and append the background to the element
+        ttGroup.appendChild(tooltipElement);
+        tooltipElement.appendChild(tooltipBackground);
 
-        // Set the attributes of the label background
-        labelBackground.setAttribute('stroke', lineColor);
-        labelBackground.setAttribute('fill', color);
-        labelBackground.setAttribute('x', x + PADDING);
-        labelBackground.setAttribute('y', y + PADDING);
-        labelBackground.setAttribute('height', PADDING + fontSize * lines.length);
-        labelBackground.setAttribute('rx', 2);
-        labelBackground.setAttribute('stroke-width', '1px');
-        labelGroupElement.appendChild(labelBackground);
-
-        // Determine the width of the label background
-        let maxWidth = 0, currWidth;
+        // Determine the width of the tooltip background
+        let maxWidth = 0, currWidth, maxHeight = fontSize * lines.length + PADDING;
         for (let i in labelElements) {
-            labelGroupElement.appendChild(labelElements[i]);
+            tooltipElement.appendChild(labelElements[i]);
             currWidth = labelElements[i].getBBox().width + PADDING;
             if (currWidth > maxWidth) {
                 maxWidth = currWidth;
             }
         }
-        labelBackground.setAttribute('width', maxWidth);
+
+        // Set the attributes of the tooltip background
+        tooltipBackground.setAttribute('stroke', lineColor);
+        tooltipBackground.setAttribute('fill', color);
+        tooltipBackground.setAttribute('x', 0);
+        tooltipBackground.setAttribute('y', 0);
+        tooltipBackground.setAttribute('width', maxWidth);
+        tooltipBackground.setAttribute('height', maxHeight);
+        tooltipBackground.setAttribute('rx', 2);
+        tooltipBackground.setAttribute('stroke-width', '1px');
+
+        // Append this to the label layer and adjust position if out of bounds
+        if (x + maxWidth + PADDING > width) { x -= (maxWidth + PADDING); } else { x += PADDING; }
+        if (y + maxHeight + PADDING > height) { y -= (maxHeight + PADDING); } else { y += PADDING; }
+        tooltipElement.setAttribute('transform', 'translate(' + x + ',' + y + ')')
     }
 
     Object.freeze(this);
