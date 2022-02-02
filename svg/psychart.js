@@ -71,6 +71,8 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         hr_min = 0,
         // Humidity ratio [grains of water per mass of dry air]
         hr_max = psychrolib.GetHumRatioFromTDewPoint(dp_max, atm),
+        // The font size, in px, of the chart
+        fontSize = 12,
         // The padding, in px, of the chart
         padding = 30,
         // The temperature unit to display
@@ -212,9 +214,13 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const txtGroup = document.createElementNS(NS, 'g');
     chart.appendChild(txtGroup);
 
-    // Create a new SVG group for points and point labels.
+    // Create a new SVG group for points.
     const ptGroup = document.createElementNS(NS, 'g');
     chart.appendChild(ptGroup);
+
+    // Create a new SVG group for point labels.
+    const lblGroup = document.createElementNS(NS, 'g');
+    chart.appendChild(lblGroup);
 
     // Draw constant dry bulb vertical lines.
     for (let db = db_min; db <= db_max; db += 10) {
@@ -466,10 +472,14 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         labelBackground.setAttribute('width', maxWidth);
 
         // Set the behavior when the user interacts with this point
-        ptElement.onmouseover = () => labelGroupElement.setAttribute('visibility', 'visible');
+        // ptElement.onmouseover = () => labelGroupElement.setAttribute('visibility', 'visible');
+        ptElement.onmouseover = () => Info(c.x, c.y, color, 'hello\nworld', true);
+        // ptElement.setAttribute('onmouseover', 'Info(' + c.x + ', ' + c.y + ', "' + color + '", "hello")');
 
         // Set the behavior when the user interacts with this point
-        ptElement.onmouseleave = () => labelGroupElement.setAttribute('visibility', 'hidden');
+        // ptElement.onmouseleave = () => labelGroupElement.setAttribute('visibility', 'hidden');
+        ptElement.onmouseleave = () => Info(c.x, c.y, color, 'goodbye\nworld', true);
+        // ptElement.setAttribute('onmouseleave', Info);
 
         // Let the program know that the view needs to be updated.
         dispatch();
@@ -562,15 +572,13 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             throw 'Incorrect parameter types in Label.';
         }
 
-        const size = 12;
-
         // Define a text element and assign its attributes.
         const labelElement = document.createElementNS(NS, 'text');
         labelElement.setAttribute('fill', textColor);
         labelElement.setAttribute('x', pt.x);
         labelElement.setAttribute('y', pt.y);
         labelElement.setAttribute('font-family', 'sans-serif');
-        labelElement.setAttribute('font-size', size + 'px');
+        labelElement.setAttribute('font-size', fontSize + 'px');
         labelElement.setAttribute('text-anchor', 'middle');
         labelElement.setAttribute('dominant-baseline', 'middle');
         labelElement.textContent = text;
@@ -580,22 +588,22 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         }
 
         const top = () => {
-            labelElement.setAttribute('y', pt.y + size / 2);
+            labelElement.setAttribute('y', pt.y + fontSize / 2);
             labelElement.setAttribute('dominant-baseline', 'hanging');
         };
 
         const bot = () => {
-            labelElement.setAttribute('y', pt.y - size / 2);
+            labelElement.setAttribute('y', pt.y - fontSize / 2);
             labelElement.setAttribute('dominant-baseline', 'alphabetic');
         };
 
         const left = () => {
-            labelElement.setAttribute('x', pt.x + size / 2);
+            labelElement.setAttribute('x', pt.x + fontSize / 2);
             labelElement.setAttribute('text-anchor', 'start');
         };
 
         const right = () => {
-            labelElement.setAttribute('x', pt.x - size / 2);
+            labelElement.setAttribute('x', pt.x - fontSize / 2);
             labelElement.setAttribute('text-anchor', 'end');
         };
 
@@ -634,6 +642,62 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         }
 
         return labelElement;
+    }
+
+    /**
+     * Define a method to display a tooltip.
+     */
+    function Info(x, y, color, text, clear) {
+        // Perform some error checking.
+        Validate('nnssb', arguments);
+
+        if (clear) {
+            lblGroup.innerHTML = '';
+        }
+
+        // Define the padding and label elements.
+        const PADDING = 10,
+            lines = text.split('\n'),
+            thisLabel = document.createElementNS(NS, 'g'),
+            labelBackground = document.createElementNS(NS, 'rect'),
+            labelElements = [];
+
+        // Generate array of text elements.
+        for (let i = 0; i < lines.length; i++) {
+            labelElements.push(new Label(new Point(PADDING, PADDING + i * fontSize), Anchor.NW, lines[i], false));
+        }
+
+        // Append the background to the label layer
+        thisLabel.appendChild(labelBackground);
+
+        // Determine the size of the label background and append text elements
+        const labelHeight = (fontSize * lines.length) + PADDING;
+        let labelWidth = 0, currWidth;
+        for (let i in labelElements) {
+            thisLabel.appendChild(labelElements[i]);
+            currWidth = labelElements[i].getBBox().width + PADDING; console.log(labelElements[i], labelElements[i].getBBox(), labelElements[i].getBBox().width, currWidth);
+            if (currWidth > labelWidth) {
+                labelWidth = currWidth;
+            }
+        }
+
+        // Set the attributes of the label background
+        labelBackground.setAttribute('stroke', lineColor);
+        labelBackground.setAttribute('fill', color);
+        labelBackground.setAttribute('x', PADDING);
+        labelBackground.setAttribute('y', PADDING);
+        labelBackground.setAttribute('width', labelWidth);
+        labelBackground.setAttribute('height', labelHeight);
+        labelBackground.setAttribute('rx', 2);
+        labelBackground.setAttribute('stroke-width', '1px');
+
+        // Correct position if out of bounds
+        if (x + labelWidth + PADDING > width) { x -= (labelWidth + PADDING); }
+        if (y + labelHeight + PADDING > height) { y -= (labelHeight + PADDING); }
+
+        // Add this label to the SVG layer.
+        thisLabel.setAttribute('transform', 'translate(' + x + ',' + y + ')');
+        lblGroup.appendChild(thisLabel);
     }
 
     Object.freeze(this);
