@@ -8,7 +8,6 @@ interface Props extends PanelProps<PsyOptions> {}
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme();
-  State.setSize(width, height);
-  State.initPsyChart(options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
+  State.initPsyChart(width, height, options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
   return <div dangerouslySetInnerHTML={{ __html: State.getElement().outerHTML }}></div>;
 };
