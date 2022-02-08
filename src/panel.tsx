@@ -3,7 +3,6 @@ import { PanelProps } from '@grafana/data';
 import { useTheme } from '@grafana/ui';
 import { PsyOptions } from 'types';
 import { State } from 'state';
-// import { VanillaChildren } from 'VanillaChildren';
 
 interface Props extends PanelProps<PsyOptions> {}
 
