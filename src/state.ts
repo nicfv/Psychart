@@ -71,8 +71,13 @@ class CState implements JState {
       this.isLightTheme ? '#666' : '#CCC'
     );
     // TODO: testing a large number of points for performance
-    for (let i = 0; i < 2000; i++) {
-      this.ps.plotDbRh(i + ' sec', (i % 70) + 30, (i / 60) % 0.99);
+    for (let i = 0; i < 100; i++) {
+      this.ps.plotDbRh(
+        i + ' sec',
+        Math.random() * 70 + 30,
+        Math.random(),
+        'rgb(' + 255 * (1 - i / 100) + ',' + 25 * (i / 100) + ',' + 255 * (i / 100) + ')'
+      );
     }
   }
   getElement() {

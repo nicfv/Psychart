@@ -6,6 +6,8 @@ import { State } from 'state';
 
 interface Props extends PanelProps<PsyOptions> {}
 
+const divEl = <div ref={(ref) => ref!.appendChild(State.getElement())}></div>;
+
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme();
   const values = data.series
@@ -18,5 +20,5 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   console.log(typeof values);
   console.log(JSON.stringify(values, null, 2));
   State.initPsyChart(width, height, options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
-  return <div ref={(ref) => ref!.appendChild(State.getElement())}></div>;
+  return divEl;
 };
