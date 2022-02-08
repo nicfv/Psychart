@@ -3,6 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { useTheme } from '@grafana/ui';
 import { PsyOptions } from 'types';
 import { State } from 'state';
+// import { VanillaChildren } from 'VanillaChildren';
 
 interface Props extends PanelProps<PsyOptions> {}
 
@@ -18,5 +19,5 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   console.log(typeof values);
   console.log(JSON.stringify(values, null, 2));
   State.initPsyChart(width, height, options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
-  return <div dangerouslySetInnerHTML={{ __html: State.getElement().outerHTML }}></div>;
+  return <div ref={(ref) => ref!.appendChild(State.getElement())}></div>;
 };
