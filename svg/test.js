@@ -63,16 +63,16 @@ window.onload = () => {
     const pre = document.getElementById('result');
     const setText = (text) => pre.innerText += JSON.stringify(text, null, 2) + '\n\n';
 
-    setText(data.series.map(serie => {
-        const formatted = {};
+    const formatted = {};
+    data.series.forEach(serie => {
         serie.fields.find(field => field.type === 'time').values.forEach((t, i) => {
             serie.fields.filter(field => field.type === 'number').forEach(numberField => {
                 console.log(t, i, numberField.name);
                 formatted[t] = formatted[t] || {};
-                formatted[t][numberField.name] = numberField.values[i];
+                formatted[t][serie.name + '.' + numberField.name] = numberField.values[i];
             })
         });
-        return formatted;
-    }));
+    });
+    setText(formatted);
 
 };
