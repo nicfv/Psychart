@@ -11,18 +11,18 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme();
   const formatted = new Map();
   data.series.forEach((serie) => {
-    serie.fields
-      .find((field) => field.type === 'time')
-      ?.values?.forEach((t: any, i: any) => {
-        serie.fields
-          .filter((field) => field.type === 'number')
-          .forEach((numberField) => {
-            if (!formatted.get(t)) {
-              formatted.set(t, new Map());
-            }
-            formatted.get(t).set(serie.name + '.' + numberField.name, numberField.values.get(i));
-          });
-      });
+    const vals: any[] = serie.fields.find((field) => field.type === 'time')?.values;
+    console.log(vals, typeof vals, vals?.constructor?.name, JSON.stringify(vals, null, 2));
+    //     vals?.forEach((t: any, i: any) => {
+    //       serie.fields
+    //         .filter((field) => field.type === 'number')
+    //         .forEach((numberField) => {
+    //           if (!formatted.get(t)) {
+    //             formatted.set(t, new Map());
+    //           }
+    //           formatted.get(t).set(serie.name + '.' + numberField.name, numberField.values.get(i));
+    //         });
+    //     });
   });
   console.log(formatted);
   console.log(typeof formatted);
