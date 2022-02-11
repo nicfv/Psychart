@@ -40,7 +40,8 @@ class CState implements JState {
     dbMin: number,
     dbMax: number,
     dpMax: number,
-    isLightTheme: boolean
+    isLightTheme: boolean,
+    data: { [index: string]: { [index: string]: any } }
   ) {
     if (
       this.width === width &&
@@ -70,14 +71,8 @@ class CState implements JState {
       this.isLightTheme ? '#CCC' : '#666',
       this.isLightTheme ? '#666' : '#CCC'
     );
-    // TODO: testing a large number of points for performance
-    for (let i = 0; i < 100; i++) {
-      this.ps.plotDbRh(
-        i + ' sec',
-        Math.random() * 70 + 30,
-        Math.random(),
-        'rgb(' + 255 * (1 - i / 100) + ',' + 25 * (i / 100) + ',' + 255 * (i / 100) + ')'
-      );
+    for (let t in data) {
+      this.ps.plotDbRh(t, data[t]['A.Dry Bulb [F]'], data[t]['A.Relative Humidity [0.0-1.0]']);
     }
   }
   getElement() {

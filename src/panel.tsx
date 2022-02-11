@@ -32,6 +32,15 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   console.log(formatted);
   console.log(typeof formatted);
   console.log(JSON.stringify(formatted, null, 2));
-  State.initPsyChart(width, height, options.unitSystem, options.dbMin, options.dbMax, options.dpMax, theme.isLight);
+  State.initPsyChart(
+    width,
+    height,
+    options.unitSystem,
+    options.dbMin,
+    options.dbMax,
+    options.dpMax,
+    theme.isLight,
+    formatted
+  );
   return <Container>{State.getElement()}</Container>;
 };
