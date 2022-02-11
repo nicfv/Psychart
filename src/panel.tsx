@@ -9,20 +9,24 @@ interface Props extends PanelProps<PsyOptions> {}
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme();
+  data = JSON.parse(JSON.stringify(data));
   const formatted = new Map();
   data.series.forEach((serie) => {
-    const vals: any[] = serie.fields.find((field) => field.type === 'time')?.values;
-    console.log(vals, typeof vals, vals?.constructor?.name, JSON.stringify(vals, null, 2));
-    //     vals?.forEach((t: any, i: any) => {
-    //       serie.fields
-    //         .filter((field) => field.type === 'number')
-    //         .forEach((numberField) => {
-    //           if (!formatted.get(t)) {
-    //             formatted.set(t, new Map());
-    //           }
-    //           formatted.get(t).set(serie.name + '.' + numberField.name, numberField.values.get(i));
-    //         });
-    //     });
+    const vals = serie.fields.find((field) => field.type === 'time')?.values;
+    if (Array.isArray(vals)) {
+      vals?.forEach((t: any, i: any) => {
+        serie.fields
+          .filter((field) => field.type === 'number')
+          .forEach((numberField) => {
+            if (!formatted.get(t)) {
+              formatted.set(t, new Map());
+            }
+            if (Array.isArray(numberField.values)) {
+              formatted.get(t).set(serie.name + '.' + numberField.name, numberField.values[i]);
+            }
+          });
+      });
+    }
   });
   console.log(formatted);
   console.log(typeof formatted);
