@@ -67,10 +67,9 @@ window.onload = () => {
     data.series.forEach(serie => {
         serie.fields.find(field => field.type === 'time').values.forEach((t, i) => {
             serie.fields.filter(field => field.type === 'number').forEach(numberField => {
-                console.log(t, i, numberField.name);
                 formatted[t] = formatted[t] || {};
                 formatted[t][serie.name + '.' + numberField.name] = numberField.values[i];
-            })
+            });
         });
     });
     setText(formatted);
