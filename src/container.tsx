@@ -1,5 +1,5 @@
 import React from 'react';
-import { State } from 'state';
+import { state } from 'state';
 
 export class Container extends React.Component {
   render() {
@@ -11,7 +11,7 @@ export class Container extends React.Component {
             if (FIRST_CHILD instanceof Element) {
               ref!.removeChild(FIRST_CHILD);
             }
-            ref!.appendChild(State.getElement());
+            ref!.appendChild(state.getElement());
           }
         }}
       ></div>

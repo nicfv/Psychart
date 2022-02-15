@@ -1,6 +1,6 @@
-type UnitSystem = 'IP' | 'SI';
-type MeasurementType = 'dbwb' | 'dbrh' | 'dbdp';
-type RelHumType = 'p' | 'f';
+export type UnitSystem = 'IP' | 'SI';
+export type MeasurementType = 'dbwb' | 'dbrh' | 'dbdp';
+export type RelHumType = 'p' | 'f';
 
 export interface PsyOptions {
   unitSystem: UnitSystem;

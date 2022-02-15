@@ -1,23 +1,11 @@
-'use strict';
-
 import { Psychart } from 'psychart';
+import { UnitSystem } from 'types';
 
-interface JState {
-  ps: any;
-  width: number;
-  height: number; // TODO: may need to include more variables in the state (e.g. dbMin, etc.) so that we don't re-create the psychart every frame
-  unitSystem: string;
-  dbMin: number;
-  dbMax: number;
-  dpMax: number;
-  isLightTheme: boolean;
-}
-
-class CState implements JState {
+class State {
   ps: any;
   width: number;
   height: number;
-  unitSystem: string;
+  unitSystem: UnitSystem;
   dbMin: number;
   dbMax: number;
   dpMax: number;
@@ -27,7 +15,7 @@ class CState implements JState {
     this.ps = null;
     this.width = 0;
     this.height = 0;
-    this.unitSystem = '';
+    this.unitSystem = 'SI';
     this.dbMin = 0;
     this.dbMax = 0;
     this.dpMax = 0;
@@ -36,7 +24,7 @@ class CState implements JState {
   initPsyChart(
     width: number,
     height: number,
-    unitSystem: string,
+    unitSystem: UnitSystem,
     dbMin: number,
     dbMax: number,
     dpMax: number,
@@ -44,35 +32,34 @@ class CState implements JState {
     data: { [index: string]: { [index: string]: number } }
   ) {
     if (
-      this.width === width &&
-      this.height === height &&
-      this.unitSystem === unitSystem &&
-      this.dbMin === dbMin &&
-      this.dbMax === dbMax &&
-      this.dpMax === dpMax &&
-      this.isLightTheme === isLightTheme
+      this.width !== width ||
+      this.height !== height ||
+      this.unitSystem !== unitSystem ||
+      this.dbMin !== dbMin ||
+      this.dbMax !== dbMax ||
+      this.dpMax !== dpMax ||
+      this.isLightTheme !== isLightTheme
     ) {
-      return;
+      this.width = width;
+      this.height = height;
+      this.unitSystem = unitSystem;
+      this.dbMin = dbMin;
+      this.dbMax = dbMax;
+      this.dpMax = dpMax;
+      this.isLightTheme = isLightTheme;
+      this.ps = new Psychart(
+        this.width,
+        this.height,
+        this.unitSystem === 'IP' ? 1 : 2,
+        this.dbMin,
+        this.dbMax,
+        this.dpMax,
+        this.isLightTheme ? '#CCC' : '#666',
+        this.isLightTheme ? '#666' : '#CCC'
+      );
     }
-    this.width = width;
-    this.height = height;
-    this.unitSystem = unitSystem;
-    this.dbMin = dbMin;
-    this.dbMax = dbMax;
-    this.dpMax = dpMax;
-    this.isLightTheme = isLightTheme;
-    this.ps = new Psychart(
-      this.width,
-      this.height,
-      this.unitSystem === 'IP' ? 1 : 2,
-      this.dbMin,
-      this.dbMax,
-      this.dpMax,
-      this.isLightTheme ? '#CCC' : '#666',
-      this.isLightTheme ? '#666' : '#CCC'
-    );
     for (let t in data) {
-      this.ps.plotDbRh(t, data[t]['A.Dry Bulb [F]'], data[t]['A.Relative Humidity [0.0-1.0]']);
+      this.ps.plotDbRh(t, data[t]['Dry Bulb [F]'], data[t]['Relative Humidity [0.0-1.0]']);
     }
   }
   getElement() {
@@ -80,4 +67,4 @@ class CState implements JState {
   }
 }
 
-export var State = new CState();
+export var state = new State();
