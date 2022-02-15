@@ -41,7 +41,7 @@ class CState implements JState {
     dbMax: number,
     dpMax: number,
     isLightTheme: boolean,
-    data: { [index: string]: { [index: string]: any } }
+    data: { [index: string]: { [index: string]: number } }
   ) {
     if (
       this.width === width &&
