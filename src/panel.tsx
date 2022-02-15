@@ -21,5 +21,5 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     theme.isLight,
     formatted
   );
-  return <Container />;
+  return <Container child={state.getElement()} />;
 };
