@@ -20,7 +20,7 @@ export function format(data: PanelData): { [index: string]: { [index: string]: n
           .filter((field) => field.type === 'number')
           .forEach((numberField) => {
             formatted[time] = formatted[time] || {};
-            formatted[time][numberField.name] = numberField.values.get(i);
+            formatted[time][frame.name + '::' + numberField.name] = numberField.values.get(i);
           });
       });
   });

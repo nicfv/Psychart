@@ -11,6 +11,7 @@ interface Props extends PanelProps<PsyOptions> {}
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const theme = useTheme(),
     formatted = format(data);
+  console.log(data, formatted);
   state.initPsyChart(
     width,
     height,

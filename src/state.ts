@@ -59,7 +59,7 @@ class State {
       );
     }
     for (let t in data) {
-      this.ps.plotDbRh(t, data[t]['Dry Bulb [F]'], data[t]['Relative Humidity [0.0-1.0]']);
+      this.ps.plotDbRh(t, data[t]['A::Dry Bulb [F]'], data[t]['A::Relative Humidity [0.0-1.0]']);
     }
   }
   getElement() {
