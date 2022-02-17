@@ -124,6 +124,9 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     // Define the current region.
     let region = undefined;
 
+    // Define the last plotted point.
+    let lastPoint = undefined;
+
     // Set the chart's viewport size.
     chart.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
 
@@ -219,6 +222,10 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const txtGroup = document.createElementNS(NS, 'g');
     chart.appendChild(txtGroup);
 
+    // Create a new SVG group for trendlines.
+    const lineGroup = document.createElementNS(NS, 'g');
+    chart.appendChild(lineGroup);
+
     // Create a new SVG group for points.
     const ptGroup = document.createElementNS(NS, 'g');
     chart.appendChild(ptGroup);
@@ -295,17 +302,17 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Plot a point using dry bulb and relative humidity.
      */
-    this.plotDbRh = (t, db, rh, color = '#f00') => PlotPoint(t, dr2psy(db, rh), 5, color);
+    this.plotDbRh = (db, rh, t = '', color = '#f00', r = 5, lineWidth = 0) => PlotPoint(t, dr2psy(db, rh), r, color, lineWidth);
 
     /**
      * Plot a point using dry bulb and wet bulb.
      */
-    this.plotDbWb = (t, db, wb, color = '#f00') => PlotPoint(t, dw2psy(db, wb), 5, color);
+    this.plotDbWb = (db, wb, t = '', color = '#f00', r = 5, lineWidth = 0) => PlotPoint(t, dw2psy(db, wb), r, color, lineWidth);
 
     /**
      * Plot a point using dry bulb and dew point.
      */
-    this.plotDbDp = (t, db, dp, color = '#f00') => PlotPoint(t, dd2psy(db, dp), 5, color);
+    this.plotDbDp = (db, dp, t = '', color = '#f00', r = 5, lineWidth = 0) => PlotPoint(t, dd2psy(db, dp), r, color, lineWidth);
 
     /**
      * Create a new region.
@@ -336,6 +343,18 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
      * Delete all regions from the psychrometric chart.
      */
     this.clearRegions = () => !(region instanceof Region) && new Region('').clearAll();
+
+    /**
+     * Delete all data in the graph.
+     */
+    this.clearData = () => {
+        let x;
+        while (x = ptGroup.firstChild) {
+            ptGroup.removeChild(x);
+        }
+        lastPoint = undefined;
+        dispatch();
+    };
 
     /**
      * Return the SVG element to render to the screen.
@@ -420,14 +439,27 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Define a method to plot a point.
      */
-    function PlotPoint(t, psy, r, color) {
-        Validate('sons', arguments);
+    function PlotPoint(t, psy, r, color, lineWidth) {
+        Validate('sonsn', arguments);
         if (!(psy instanceof Psy)) {
             throw 'Incorrect parameter types in PlotPoint.';
         }
 
         // Determine the spatial location of psy.
         const c = dd2xy(psy.db, psy.dp);
+
+        // Draw a line from the last point to this point.
+        if (lineWidth > 0 && lastPoint instanceof Point) {
+            const lineElement = document.createElementNS(NS, 'path');
+            lineElement.setAttribute('fill', 'none');
+            lineElement.setAttribute('stroke', color);
+            lineElement.setAttribute('stroke-width', lineWidth + 'px');
+            lineElement.setAttribute('stroke-linecap', 'round');
+            lineElement.setAttribute('vector-effect', 'non-scaling-stroke');
+            lineElement.setAttribute('d', 'M ' + lastPoint.x + ',' + lastPoint.y + ' ' + c.x + ',' + c.y);
+            lineGroup.appendChild(lineElement);
+        }
+        lastPoint = c;
 
         // Define a 0-length path element and assign its attributes.
         const ptElement = document.createElementNS(NS, 'path');
@@ -440,7 +472,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         ptGroup.appendChild(ptElement);
 
         // Generate the text to display on mouse hover.
-        const tooltipString = t + '\n' +
+        const tooltipString = (!!t ? t + '\n' : '') +
             round(psy.db, 1) + tempUnit + ' Dry Bulb\n' +
             round(psy.rh * 100) + '% Rel. Hum.\n' +
             round(psy.wb, 1) + tempUnit + ' Wet Bulb\n' +
@@ -448,11 +480,9 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
 
         // Set the behavior when the user interacts with this point
         ptElement.onmouseover = () => Tooltip(c.x, c.y, color, tooltipString, true);
-        // ptElement.setAttribute('onmouseover', 'Tooltip(' + c.x + ', ' + c.y + ', "' + color + '", "' + tooltipString + '", true)');
 
         // Set the behavior when the user interacts with this point
         ptElement.onmouseleave = () => clearTip();
-        // ptElement.setAttribute('onmouseleave', 'clearTip()');
 
         // Let the program know that the view needs to be updated.
         dispatch();

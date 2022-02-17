@@ -5,7 +5,7 @@ var ps;
 window.onload = () => {
     const width = 800, height = 600;
     const container = document.getElementById('svg-container');
-    ps = new Psychart(width, height, 1, 20, 120, 90, '#CCC', '#333');
+    ps = new Psychart(width, height, 1, 20, 120, 90, '#DDD', '#222');
     container.appendChild(ps.el());
     ps.el().addEventListener('updatePsychart', function () {
         // container.innerHTML = ps.el().outerHTML;
@@ -16,14 +16,21 @@ window.onload = () => {
 
 const generateRandomData = (n) => {
     const ran = (min, max) => Math.random() * (max - min) + min;
+    const clamp = (x, min, max) => Math.min(Math.max(min, x), max);
     if (ps instanceof Psychart) {
+        let ranDb = ran(30, 110), ranRh = ran(0, 1);
         for (let i = 0; i < n; i++) {
-            ps.plotDbRh(i + ' sec', ran(20, 120), ran(0, 1), 'rgb(' + ran(0, 255) + ',' + ran(0, 255) + ',' + ran(0, 255) + ')');
+            ranDb += ran(-2, 2);
+            ranRh += ran(-0.1, 0.1);
+            ranRh = clamp(ranRh, 0, 1);
+            ps.plotDbRh(ranDb, ranRh, i + ' sec', 'rgb(' + i + ', ' + (255 - i) + ', ' + i + ')', 5, 1);
         }
-        ps.newRegion('#0f0');
-        ps.regionDbDp(ran(30, 40), ran(10, 20));
-        ps.regionDbDp(ran(100, 110), ran(10, 20));
-        ps.regionDbDp(ran(100, 110), ran(80, 90));
+        const minDb = ran(30, 50), maxDb = ran(60, 110), minRh = ran(0.0, 0.4), maxRh = ran(0.6, 1.0);
+        ps.newRegion('#0f6');
+        ps.regionDbRh(minDb, minRh);
+        ps.regionDbRh(maxDb, minRh);
+        ps.regionDbRh(maxDb, maxRh);
+        ps.regionDbRh(minDb, maxRh);
         ps.buildRegion();
     }
 };
