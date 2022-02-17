@@ -9,18 +9,9 @@ import { format } from 'formatter';
 interface Props extends PanelProps<PsyOptions> {}
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme(),
+  const isLightTheme = useTheme().isLight,
     formatted = format(data);
   console.log(data, formatted);
-  state.initPsyChart(
-    width,
-    height,
-    options.unitSystem,
-    options.dbMin,
-    options.dbMax,
-    options.dpMax,
-    theme.isLight,
-    formatted
-  );
+  state.initPsyChart(width, height, options, isLightTheme, formatted);
   return <Container child={state.getElement()} />;
 };
