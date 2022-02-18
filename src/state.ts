@@ -71,8 +71,16 @@ class State {
         this.isLightTheme ? '#222' : '#CCD'
       );
     }
+    this.ps.clearData();
     for (let t in data) {
-      this.ps.plotDbRh(t, data[t]['A::Dry Bulb [F]'], data[t]['A::Relative Humidity [0.0-1.0]']);
+      this.ps.plotDbRh(
+        data[t][this.options.dryBulb + '::Value'],
+        data[t][this.options.relHum + '::Value'],
+        t,
+        '#03c',
+        5,
+        1
+      );
     }
   }
 

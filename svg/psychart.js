@@ -138,7 +138,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Clear any existing tooltips.
      */
-    const clearTip = () => ttGroup.innerHTML = '';
+    const clearTip = () => clearChildren(ttGroup);
 
     /**
      * Normalize the number 'n' between min and max, returns a number [0-1]
@@ -208,6 +208,16 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     const dd2psy = (db, dp) => {
         const psy = psychrolib.CalcPsychrometricsFromTDewPoint(db, dp, atm);
         return new Psy(db, psy[2], psy[1], dp, psy[0]);
+    };
+
+    /**
+     * Remove all children from a node.
+     */
+    const clearChildren = (node) => {
+        let x;
+        while (x = node.firstChild) {
+            node.removeChild(x);
+        }
     };
 
     // Create a new SVG group for shaded regions.
@@ -348,10 +358,8 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
      * Delete all data in the graph.
      */
     this.clearData = () => {
-        let x;
-        while (x = ptGroup.firstChild) {
-            ptGroup.removeChild(x);
-        }
+        clearChildren(ptGroup);
+        clearChildren(lineGroup);
         lastPoint = undefined;
         dispatch();
     };
@@ -559,7 +567,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
          * Delete all regions.
          */
         this.clearAll = () => {
-            regGroup.innerHTML = '';
+            clearChildren(regGroup);
             dispatch();
         };
         Object.freeze(this);
