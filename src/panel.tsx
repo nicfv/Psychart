@@ -12,6 +12,7 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const isLightTheme = useTheme().isLight,
     formatted = format(data);
   console.log(data, formatted);
-  state.initPsyChart(width, height, options, isLightTheme, formatted);
+  state.initPsyChart(width, height, options, isLightTheme);
+  state.plot(formatted);
   return <Container child={state.getElement()} />;
 };

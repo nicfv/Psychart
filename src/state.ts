@@ -7,6 +7,7 @@ class State {
   height: number;
   options: PsyOptions;
   isLightTheme: boolean;
+  data: { [index: string]: { [index: string]: number } };
 
   constructor() {
     this.ps = null;
@@ -25,6 +26,7 @@ class State {
       relHumType: 'p',
     };
     this.isLightTheme = false;
+    this.data = {};
   }
 
   // Compare options `a` and `b` and return true if they are the same.
@@ -43,13 +45,17 @@ class State {
     );
   }
 
-  initPsyChart(
-    width: number,
-    height: number,
-    options: PsyOptions,
-    isLightTheme: boolean,
-    data: { [index: string]: { [index: string]: number } }
-  ) {
+  // Return the full series name that corresponds to the selected field name.
+  getInternalSeriesName = (name: string) =>
+    [
+      ...new Set(
+        Object.keys(this.data)
+          .map((key) => Object.keys(this.data[key]))
+          .flat()
+      ),
+    ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name);
+
+  initPsyChart(width: number, height: number, options: PsyOptions, isLightTheme: boolean) {
     if (
       this.width !== width ||
       this.height !== height ||
@@ -71,16 +77,31 @@ class State {
         this.isLightTheme ? '#222' : '#CCD'
       );
     }
+    // Clear data to trigger a re-plot
+    this.data = {};
+  }
+
+  plot(data: { [index: string]: { [index: string]: number } }) {
+    const oldKeys = Object.keys(this.data),
+      newKeys = Object.keys(data),
+      lastOldKey = oldKeys[oldKeys.length - 1],
+      lastNewKey = newKeys[newKeys.length - 1];
+    if (lastOldKey === lastNewKey) {
+      // Final timestamps are the same.
+      return;
+    }
+    this.data = data;
+    let dbSeries = this.getInternalSeriesName(this.options.dryBulb),
+      rhSeries = this.getInternalSeriesName(this.options.relHum);
+    if (!dbSeries) {
+      throw 'No series called ' + this.options.dryBulb;
+    }
+    if (!rhSeries) {
+      throw 'No series called ' + this.options.relHum;
+    }
     this.ps.clearData();
     for (let t in data) {
-      this.ps.plotDbRh(
-        data[t][this.options.dryBulb + '::Value'],
-        data[t][this.options.relHum + '::Value'],
-        t,
-        '#03c',
-        5,
-        1
-      );
+      this.ps.plotDbRh(data[t][dbSeries], data[t][rhSeries], t, '#03c', 5, 1);
     }
   }
 
