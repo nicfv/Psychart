@@ -13,4 +13,5 @@ export interface PsyOptions {
   dewPoint: string;
   relHum: string;
   relHumType: RelHumType;
+  regions: string[];
 }

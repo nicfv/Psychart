@@ -52,13 +52,64 @@ export function State(
         throw 'No series called ' + options.dewPoint;
       }
       for (let t in data) {
-        ps.plotDbWb(data[t][dbSeries], data[t][dpSeries], t, '#03c', 5, 1);
+        ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', 5, 1);
       }
       break;
     }
     default: {
       throw 'Measurement type ' + options.measurements + ' unsupported.';
     }
+  }
+  // **** Render ASHRAE regions **** //
+  const SI = options.unitSystem === 'SI';
+  if (options.regions.includes('A4')) {
+    ps.newRegion('#013');
+    ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
+    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 45 : CtoF(45), 0.08);
+    ps.regionDbDp(SI ? 45 : CtoF(45), SI ? 27 : CtoF(27));
+    ps.regionDbRh(SI ? 29 : CtoF(29), 0.9);
+    ps.regionDbRh(SI ? 5 : CtoF(5), 0.9);
+    ps.buildRegion();
+  }
+  if (options.regions.includes('A3')) {
+    ps.newRegion('#126');
+    ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
+    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 40 : CtoF(40), 0.08);
+    ps.regionDbDp(SI ? 40 : CtoF(40), SI ? 27 : CtoF(27));
+    ps.regionDbRh(SI ? 30 : CtoF(30), 0.85);
+    ps.regionDbRh(SI ? 5 : CtoF(5), 0.85);
+    ps.buildRegion();
+  }
+  if (options.regions.includes('A2')) {
+    ps.newRegion('#249');
+    ps.regionDbDp(SI ? 10 : CtoF(10), SI ? -12 : CtoF(-12));
+    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 35 : CtoF(35), 0.08);
+    ps.regionDbDp(SI ? 35 : CtoF(35), SI ? 27 : CtoF(27));
+    ps.regionDbRh(SI ? 31 : CtoF(31), 0.8);
+    ps.regionDbRh(SI ? 10 : CtoF(10), 0.8);
+    ps.buildRegion();
+  }
+  if (options.regions.includes('A1')) {
+    ps.newRegion('#36b');
+    ps.regionDbDp(SI ? 15 : CtoF(15), SI ? -12 : CtoF(-12));
+    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 32 : CtoF(32), 0.08);
+    ps.regionDbDp(SI ? 32 : CtoF(32), SI ? 27 : CtoF(27));
+    ps.regionDbRh(SI ? 31 : CtoF(31), 0.8);
+    ps.regionDbRh(SI ? 15 : CtoF(15), 0.8);
+    ps.buildRegion();
+  }
+  if (options.regions.includes('A0')) {
+    ps.newRegion('#49f');
+    ps.regionDbDp(SI ? 18 : CtoF(18), SI ? -9 : CtoF(-9));
+    ps.regionDbDp(SI ? 27 : CtoF(27), SI ? -9 : CtoF(-9));
+    ps.regionDbDp(SI ? 27 : CtoF(27), SI ? 15 : CtoF(15));
+    ps.regionDbRh(SI ? 23 : CtoF(23), 0.6);
+    ps.regionDbRh(SI ? 18 : CtoF(18), 0.6);
+    ps.buildRegion();
   }
   return ps.el();
 }
@@ -72,3 +123,9 @@ const getInternalSeriesName = (name: string, data: { [index: string]: { [index: 
         .flat()
     ),
   ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name);
+
+// Convert from Celsius to Fahrenheit
+const CtoF = (C: number) => (9 / 5) * C + 32;
+
+// // Convert from Fahrenheit to Celsius
+// const FtoC = (F) => (5 / 9) * (F - 32);

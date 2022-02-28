@@ -56,6 +56,42 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         integer: true,
       },
     })
+    .addMultiSelect({
+      path: 'regions',
+      name: 'ASHRAE Comfort Regions',
+      description: 'Select which ASHRAE comfort regions to display.',
+      category: ['Meta Information'],
+      settings: {
+        allowCustomValue: false,
+        options: [
+          {
+            label: 'Recommended',
+            value: 'A0',
+            description: 'The "recommended" ASHRAE comfort zone.',
+          },
+          {
+            label: 'A1',
+            value: 'A1',
+            description: 'The A1 ASHRAE comfort zone.',
+          },
+          {
+            label: 'A2',
+            value: 'A2',
+            description: 'The A2 ASHRAE comfort zone.',
+          },
+          {
+            label: 'A3',
+            value: 'A3',
+            description: 'The A3 ASHRAE comfort zone.',
+          },
+          {
+            label: 'A4',
+            value: 'A4',
+            description: 'The A4 ASHRAE comfort zone.',
+          },
+        ],
+      },
+    })
     .addRadio({
       path: 'measurements',
       name: 'Measurements',
