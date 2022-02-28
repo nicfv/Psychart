@@ -1,7 +1,7 @@
 import { Psychart } from 'psychart';
 import { PsyOptions } from 'types';
 
-class State {
+export class State {
   ps: any;
   width: number;
   height: number;
@@ -109,5 +109,3 @@ class State {
     return this.ps.el();
   }
 }
-
-export var state = new State();
