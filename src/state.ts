@@ -63,7 +63,7 @@ export function State(
   // **** Render ASHRAE regions **** //
   const SI = options.unitSystem === 'SI';
   if (options.regions.includes('A4')) {
-    ps.newRegion(isLightTheme ? '#ace' : '#246');
+    ps.newRegion(isLightTheme ? '#cde' : '#123');
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
     ps.regionDbRh(SI ? 45 : CtoF(45), 0.08);
@@ -73,7 +73,7 @@ export function State(
     ps.buildRegion();
   }
   if (options.regions.includes('A3')) {
-    ps.newRegion(isLightTheme ? '#8ac' : '#468');
+    ps.newRegion(isLightTheme ? '#bcd' : '#234');
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
     ps.regionDbRh(SI ? 40 : CtoF(40), 0.08);
@@ -83,7 +83,7 @@ export function State(
     ps.buildRegion();
   }
   if (options.regions.includes('A2')) {
-    ps.newRegion(isLightTheme ? '#68a' : '#68a');
+    ps.newRegion(isLightTheme ? '#abc' : '#345');
     ps.regionDbDp(SI ? 10 : CtoF(10), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
     ps.regionDbRh(SI ? 35 : CtoF(35), 0.08);
@@ -93,7 +93,7 @@ export function State(
     ps.buildRegion();
   }
   if (options.regions.includes('A1')) {
-    ps.newRegion(isLightTheme ? '#468' : '#8ac');
+    ps.newRegion(isLightTheme ? '#9ab' : '#456');
     ps.regionDbDp(SI ? 15 : CtoF(15), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
     ps.regionDbRh(SI ? 32 : CtoF(32), 0.08);
@@ -103,7 +103,7 @@ export function State(
     ps.buildRegion();
   }
   if (options.regions.includes('A0')) {
-    ps.newRegion(isLightTheme ? '#246' : '#ace');
+    ps.newRegion(isLightTheme ? '#89a' : '#567');
     ps.regionDbDp(SI ? 18 : CtoF(18), SI ? -9 : CtoF(-9));
     ps.regionDbDp(SI ? 27 : CtoF(27), SI ? -9 : CtoF(-9));
     ps.regionDbDp(SI ? 27 : CtoF(27), SI ? 15 : CtoF(15));
