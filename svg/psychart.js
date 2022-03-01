@@ -257,7 +257,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         }
         dbLine.addPoint(upper);
         // Add a label for the constant dry bulb line
-        Label(dr2xy(db, 0), Anchor.N, db + tempUnit, true);
+        Label(dr2xy(db, 0), Anchor.N, db + tempUnit, true, 'Dry Bulb');
     }
 
     // Draw constant dew point horizontal lines.
@@ -273,7 +273,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         // The right point is at the maximum dry bulb temperature
         dpLine.addPoint(dd2xy(db_max, dp));
         // Add a label for the constant dew point line
-        Label(dd2xy(db_max, dp), Anchor.W, dp + tempUnit, true);
+        Label(dd2xy(db_max, dp), Anchor.W, dp + tempUnit, true, 'Dew Point');
     }
 
     // Draw constant wet bulb diagonal lines.
@@ -284,7 +284,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             wbLine.addPoint(dw2xy(db, wb));
         }
         // Add a label on the saturation line
-        Label(dd2xy(wb, wb), Anchor.SE, wb + tempUnit, true);
+        Label(dd2xy(wb, wb), Anchor.SE, wb + tempUnit, true, 'Wet Bulb');
     }
 
     // Draw constant relative humidity lines.
@@ -298,14 +298,14 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             if (pt.y < padding) {
                 pt = new Point(pt.x, padding);
                 rhLine.addPoint(pt);
-                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%', true);
+                Label(pt, Anchor.S, (rh === 0 || rh === 100) ? '' : rh + '%', true, 'Relative Humidity');
                 drawLabel = false;
                 break;
             }
             rhLine.addPoint(pt);
         }
         if (drawLabel) {
-            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%', true);
+            Label(dr2xy(db_max, rh / 100), Anchor.NE, (rh === 0 || rh === 100) ? '' : rh + '%', true, 'Relative Humidity');
         }
     }
 
@@ -586,9 +586,9 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Define a method to write a label.
      */
-    function Label(pt, anchor, text, append) {
+    function Label(pt, anchor, text, append, title = '') {
         // Perform some error checking.
-        Validate('onsb', arguments);
+        Validate('onsbs', arguments);
         if (!(pt instanceof Point)) {
             throw 'Incorrect parameter types in Label.';
         }
@@ -603,6 +603,11 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         labelElement.setAttribute('text-anchor', 'middle');
         labelElement.setAttribute('dominant-baseline', 'middle');
         labelElement.textContent = text;
+        // Optionally include a tooltip.
+        if (!!title) {
+            labelElement.onmouseover = () => Tooltip(pt.x, pt.y, '#888', title, true);
+            labelElement.onmouseleave = clearTip;
+        }
 
         if (append) {
             txtGroup.appendChild(labelElement);
@@ -686,7 +691,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         // Generate the array of label elements.
         const lines = text.split('\n');
         for (let i in lines) {
-            labelElements.push(Label(new Point(0, i * fontSize), Anchor.NW, lines[i], false));
+            labelElements.push(Label(new Point(0, i * fontSize), Anchor.NW, lines[i], false, ''));
         }
 
         // Append the tooltip element to the label group and append the background to the element
