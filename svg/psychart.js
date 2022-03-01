@@ -327,7 +327,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Create a new region.
      */
-    this.newRegion = (color) => !(region instanceof Region) && (region = new Region(color));
+    this.newRegion = (name = '', color = '#00f') => !(region instanceof Region) && (region = new Region(name, color));
 
     /**
      * Add a corner to the region defined by a dry bulb and relative humidity.
@@ -499,8 +499,8 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
     /**
      * Define a method to plot a shaded region.
      */
-    function Region(color) {
-        Validate('s', arguments);
+    function Region(name, color) {
+        Validate('ss', arguments);
 
         let d = 'M', first = undefined, state = undefined;
 
@@ -552,15 +552,25 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
          * Draw the region.
          */
         this.build = () => {
-            // Close the path.
-            this.nextPsy(first);
-            // Define a path element for the shaded region.
-            const regElement = document.createElementNS(NS, 'path');
-            regElement.setAttribute('fill', color);
-            regElement.setAttribute('stroke', 'none');
-            regElement.setAttribute('d', d + ' z');
-            regGroup.appendChild(regElement);
-            dispatch();
+            if (first instanceof Psy) {
+                // Close the path.
+                this.nextPsy(first);
+                // Define a path element for the shaded region.
+                const regElement = document.createElementNS(NS, 'path');
+                regElement.setAttribute('fill', color);
+                regElement.setAttribute('stroke', 'none');
+                regElement.setAttribute('d', d + ' z');
+                regGroup.appendChild(regElement);
+                if (!!name) {
+                    // Show a tooltip on mouse hover.
+                    let pt = dd2xy(first.db, first.dp);
+                    regElement.onmouseover = () => Tooltip(pt.x, pt.y, color, name, true);
+                    // Clear tooltips on mouse leave.
+                    regElement.onmouseleave = clearTip;
+                }
+                // Dispatch an event to show that the chart was updated.
+                dispatch();
+            }
         };
 
         /**

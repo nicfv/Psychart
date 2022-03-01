@@ -26,7 +26,7 @@ const generateRandomData = (n) => {
             ps.plotDbRh(ranDb, ranRh, i + ' sec', 'rgb(' + i + ', ' + (255 - i) + ', ' + i + ')', 5, 1);
         }
         const minDb = ran(30, 50), maxDb = ran(60, 110), minRh = ran(0.0, 0.4), maxRh = ran(0.6, 1.0);
-        ps.newRegion('#0f6');
+        ps.newRegion('A1\nASHRAE comfort zone', '#0f6');
         ps.regionDbRh(minDb, minRh);
         ps.regionDbRh(maxDb, minRh);
         ps.regionDbRh(maxDb, maxRh);
