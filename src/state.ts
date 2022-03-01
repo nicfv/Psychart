@@ -19,6 +19,11 @@ export function State(
     isLightTheme ? '#DDD' : '#333',
     isLightTheme ? '#222' : '#CCD'
   );
+  // **** Obtain minimum and maximum numeric timestamps **** //
+  const numericTimestamps = Object.keys(data).map((t) => data[t]['time']),
+    minTime = Math.min(...numericTimestamps),
+    maxTime = Math.max(...numericTimestamps);
+  console.log(minTime, maxTime);
   // **** Plot data based on measurement type **** //
   const dbSeries = getInternalSeriesName(options.dryBulb, data);
   if (!dbSeries) {
