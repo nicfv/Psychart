@@ -26,48 +26,44 @@ export function State(
   console.log(minTime, maxTime);
   // **** Plot data based on measurement type **** //
   const dbSeries = getInternalSeriesName(options.dryBulb, data);
-  if (!dbSeries) {
-    throw 'No series called ' + options.dryBulb;
-  }
-  switch (options.measurements) {
-    case 'dbwb': {
-      const wbSeries = getInternalSeriesName(options.wetBulb, data);
-      if (!wbSeries) {
-        throw 'No series called ' + options.wetBulb;
+  if (!!dbSeries) {
+    switch (options.measurements) {
+      case 'dbwb': {
+        const wbSeries = getInternalSeriesName(options.wetBulb, data);
+        if (!!wbSeries) {
+          for (let t in data) {
+            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, '#03c', 5, 1);
+          }
+        }
+        break;
       }
-      for (let t in data) {
-        ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, '#03c', 5, 1);
+      case 'dbrh': {
+        const rhSeries = getInternalSeriesName(options.relHum, data),
+          d = options.relHumType === 'p' ? 100 : 1;
+        if (!!rhSeries) {
+          for (let t in data) {
+            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, '#03c', 5, 1);
+          }
+        }
+        break;
       }
-      break;
-    }
-    case 'dbrh': {
-      const rhSeries = getInternalSeriesName(options.relHum, data),
-        d = options.relHumType === 'p' ? 100 : 1;
-      if (!rhSeries) {
-        throw 'No series called ' + options.relHum;
+      case 'dbdp': {
+        const dpSeries = getInternalSeriesName(options.dewPoint, data);
+        if (!!dpSeries) {
+          for (let t in data) {
+            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', 5, 1);
+          }
+        }
+        break;
       }
-      for (let t in data) {
-        ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, '#03c', 5, 1);
+      default: {
+        throw new Error('Measurement type ' + options.measurements + ' unsupported.');
       }
-      break;
-    }
-    case 'dbdp': {
-      const dpSeries = getInternalSeriesName(options.dewPoint, data);
-      if (!dpSeries) {
-        throw 'No series called ' + options.dewPoint;
-      }
-      for (let t in data) {
-        ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', 5, 1);
-      }
-      break;
-    }
-    default: {
-      throw 'Measurement type ' + options.measurements + ' unsupported.';
     }
   }
   // **** Render ASHRAE regions **** //
   const SI = options.unitSystem === 'SI';
-  if (options.regions.includes('A4')) {
+  if (options.regions?.includes('A4')) {
     ps.newRegion('A4\nASHRAE comfort zone', isLightTheme ? '#cde' : '#123');
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
@@ -77,7 +73,7 @@ export function State(
     ps.regionDbRh(SI ? 5 : CtoF(5), 0.9);
     ps.buildRegion();
   }
-  if (options.regions.includes('A3')) {
+  if (options.regions?.includes('A3')) {
     ps.newRegion('A3\nASHRAE comfort zone', isLightTheme ? '#bcd' : '#234');
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
@@ -87,7 +83,7 @@ export function State(
     ps.regionDbRh(SI ? 5 : CtoF(5), 0.85);
     ps.buildRegion();
   }
-  if (options.regions.includes('A2')) {
+  if (options.regions?.includes('A2')) {
     ps.newRegion('A2\nASHRAE comfort zone', isLightTheme ? '#abc' : '#345');
     ps.regionDbDp(SI ? 10 : CtoF(10), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
@@ -97,7 +93,7 @@ export function State(
     ps.regionDbRh(SI ? 10 : CtoF(10), 0.8);
     ps.buildRegion();
   }
-  if (options.regions.includes('A1')) {
+  if (options.regions?.includes('A1')) {
     ps.newRegion('A1\nASHRAE comfort zone', isLightTheme ? '#9ab' : '#456');
     ps.regionDbDp(SI ? 15 : CtoF(15), SI ? -12 : CtoF(-12));
     ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
@@ -107,7 +103,7 @@ export function State(
     ps.regionDbRh(SI ? 15 : CtoF(15), 0.8);
     ps.buildRegion();
   }
-  if (options.regions.includes('A0')) {
+  if (options.regions?.includes('A0')) {
     ps.newRegion('Recommended ASHRAE conditions', isLightTheme ? '#89a' : '#567');
     ps.regionDbDp(SI ? 18 : CtoF(18), SI ? -9 : CtoF(-9));
     ps.regionDbDp(SI ? 27 : CtoF(27), SI ? -9 : CtoF(-9));
