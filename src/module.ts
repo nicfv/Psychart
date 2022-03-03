@@ -9,7 +9,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Unit System',
       description: 'Select a unit system.',
       defaultValue: 'IP',
-      category: ['Meta Information'],
+      category: ['Chart options'],
       settings: {
         options: [
           {
@@ -24,11 +24,22 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       },
     })
     .addNumberInput({
+      path: 'altitude',
+      name: 'Altitude',
+      description: 'Enter the altitude from sea level in feet or meters.',
+      defaultValue: 0,
+      category: ['Chart options'],
+      settings: {
+        step: 1,
+        integer: true,
+      },
+    })
+    .addNumberInput({
       path: 'dbMin',
       name: 'Minimum Dry Bulb Temperature',
       description: 'Enter the minimum dry bulb temperature to display, or the lower x-bound.',
       defaultValue: 20,
-      category: ['Meta Information'],
+      category: ['Chart options'],
       settings: {
         step: 10,
         integer: true,
@@ -39,7 +50,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Maximum Dry Bulb Temperature',
       description: 'Enter the maximum dry bulb temperature to display, or the upper x-bound.',
       defaultValue: 120,
-      category: ['Meta Information'],
+      category: ['Chart options'],
       settings: {
         step: 10,
         integer: true,
@@ -50,7 +61,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Maximum Dew Point Temperature',
       description: 'Enter the maximum dew point temperature to display, or the upper y-bound.',
       defaultValue: 90,
-      category: ['Meta Information'],
+      category: ['Chart options'],
       settings: {
         step: 10,
         integer: true,
@@ -60,7 +71,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'regions',
       name: 'ASHRAE Comfort Regions',
       description: 'Select which ASHRAE comfort regions to display.',
-      category: ['Meta Information'],
+      category: ['Chart options'],
       settings: {
         allowCustomValue: false,
         options: [
@@ -97,7 +108,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Measurements',
       description: 'Select which series are being measured.',
       defaultValue: 'dbwb',
-      category: ['Query Information'],
+      category: ['Query options'],
       settings: {
         options: [
           {
@@ -119,7 +130,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'dryBulb',
       name: 'Dry Bulb Series',
       description: 'Select a series that measures the dry bulb temperature.',
-      category: ['Query Information'],
+      category: ['Query options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -129,7 +140,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'wetBulb',
       name: 'Wet Bulb Series',
       description: 'Select a series that measures the wet bulb temperature.',
-      category: ['Query Information'],
+      category: ['Query options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -140,7 +151,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'dewPoint',
       name: 'Dew Point Series',
       description: 'Select a series that measures the dew point temperature.',
-      category: ['Query Information'],
+      category: ['Query options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -151,7 +162,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'relHum',
       name: 'Relative Humidity Series',
       description: 'Select a series that measures the relative humidity.',
-      category: ['Query Information'],
+      category: ['Query options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -162,7 +173,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'relHumType',
       name: 'Relative Humidity Type',
       description: 'Choose how relative humidity is actively being measured.',
-      category: ['Query Information'],
+      category: ['Query options'],
       defaultValue: 'p',
       settings: {
         options: [

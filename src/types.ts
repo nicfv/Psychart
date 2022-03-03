@@ -4,6 +4,7 @@ type RelHumType = 'p' | 'f';
 
 export interface PsyOptions {
   unitSystem: UnitSystem;
+  altitude: number;
   dbMin: number;
   dbMax: number;
   dpMax: number;

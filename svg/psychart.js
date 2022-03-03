@@ -3,7 +3,7 @@
 /**
  * Generate a psychrometric chart as an svg element.
  */
-function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, textColor) {
+function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor, textColor) {
     /**
      * Validate parameter types.
      * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
@@ -52,7 +52,7 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
             }
         }
     }
-    Validate('nnnnnnss', arguments);
+    Validate('nnbnnnnss', arguments);
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
@@ -63,10 +63,10 @@ function Psychart(width, height, unitSystem, db_min, db_max, dp_max, lineColor, 
         // Import the functionality of Psychrolib.js.
         psychrolib = new Psychrometrics();
     // Set the unit system.
-    psychrolib.SetUnitSystem(unitSystem);
+    psychrolib.SetUnitSystem(SI ? psychrolib.SI : psychrolib.IP);
     const
-        // Atmospheric pressure at altitude 0 [ft or m]
-        atm = psychrolib.GetStandardAtmPressure(0),
+        // Atmospheric pressure at altitude [ft or m]
+        atm = psychrolib.GetStandardAtmPressure(altitude),
         // Humidity ratio [grains of water per mass of dry air]
         hr_min = 0,
         // Humidity ratio [grains of water per mass of dry air]

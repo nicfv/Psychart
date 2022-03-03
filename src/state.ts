@@ -8,14 +8,17 @@ export function State(
   isLightTheme: boolean,
   data: { [index: string]: { [index: string]: number } }
 ) {
+  // **** Determine the unit system **** //
+  const SI = options.unitSystem === 'SI';
   // **** Generate new Psychart **** //
   const ps = new Psychart(
     width,
     height,
-    options.unitSystem === 'IP' ? 1 : 2,
+    SI,
     options.dbMin,
     options.dbMax,
     options.dpMax,
+    options.altitude,
     isLightTheme ? '#DDD' : '#333',
     isLightTheme ? '#222' : '#CCD'
   );
@@ -62,7 +65,6 @@ export function State(
     }
   }
   // **** Render ASHRAE regions **** //
-  const SI = options.unitSystem === 'SI';
   if (options.regions?.includes('A4')) {
     ps.newRegion('A4\nASHRAE comfort zone', isLightTheme ? '#cde' : '#123');
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
