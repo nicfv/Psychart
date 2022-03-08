@@ -228,12 +228,18 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           {
             value: 'v',
             label: 'Viridis',
-            imgUrl:
-              'https://aws1.discourse-cdn.com/business7/uploads/grafana/original/2X/e/ef5308cc58c9e5a13187b5012eb99f406928462f.png',
           },
           {
-            value: 'hc',
-            label: 'Hot-Cold',
+            value: 'i',
+            label: 'Inferno',
+          },
+          {
+            value: 'm',
+            label: 'Magma',
+          },
+          {
+            value: 'p',
+            label: 'Plasma',
           },
         ],
       },

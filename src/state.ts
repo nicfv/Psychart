@@ -1,5 +1,6 @@
 import { Psychart } from 'psychart';
 import { PsyOptions } from 'types';
+import { CtoF, translate2 } from 'helper';
 
 export function State(
   width: number,
@@ -35,7 +36,8 @@ export function State(
         const wbSeries = getInternalSeriesName(options.wetBulb, data);
         if (!!wbSeries) {
           for (let t in data) {
-            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, '#03c', options.ptr, options.line);
+            const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
+            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line);
           }
         }
         break;
@@ -45,7 +47,8 @@ export function State(
           d = options.relHumType === 'p' ? 100 : 1;
         if (!!rhSeries) {
           for (let t in data) {
-            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, '#03c', options.ptr, options.line);
+            const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
+            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line);
           }
         }
         break;
@@ -54,7 +57,8 @@ export function State(
         const dpSeries = getInternalSeriesName(options.dewPoint, data);
         if (!!dpSeries) {
           for (let t in data) {
-            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', options.ptr, options.line);
+            const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
+            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line);
           }
         }
         break;
@@ -127,8 +131,48 @@ const getInternalSeriesName = (name: string, data: { [index: string]: { [index: 
     ),
   ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name);
 
-// Convert from Celsius to Fahrenheit
-const CtoF = (C: number) => (9 / 5) * C + 32;
-
-// // Convert from Fahrenheit to Celsius
-// const FtoC = (F) => (5 / 9) * (F - 32);
+const GetColor = (t: number, minTime: number, maxTime: number, gradient: string) => {
+  let r: number[], g: number[], b: number[];
+  switch (gradient) {
+    case 'v': {
+      // viridis
+      r = [68, 59, 33, 94, 253];
+      g = [1, 82, 145, 201, 231];
+      b = [84, 139, 140, 98, 137];
+      break;
+    }
+    case 'i': {
+      // inferno
+      r = [0, 87, 188, 249, 252];
+      g = [0, 16, 55, 142, 255];
+      b = [4, 110, 84, 9, 164];
+      break;
+    }
+    case 'm': {
+      // magma
+      r = [0, 81, 183, 252, 252];
+      g = [0, 18, 55, 187, 253];
+      b = [4, 124, 121, 97, 191];
+      break;
+    }
+    case 'p': {
+      // plasma
+      r = [13, 126, 204, 248, 240];
+      g = [8, 3, 71, 149, 249];
+      b = [135, 168, 120, 64, 33];
+      break;
+    }
+    default: {
+      throw new Error('Unsupported gradient type ' + gradient + '.');
+    }
+  }
+  return (
+    'rgb(' +
+    translate2(t, minTime, maxTime, r) +
+    ',' +
+    translate2(t, minTime, maxTime, g) +
+    ',' +
+    translate2(t, minTime, maxTime, b) +
+    ')'
+  );
+};
