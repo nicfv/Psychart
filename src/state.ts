@@ -35,7 +35,7 @@ export function State(
         const wbSeries = getInternalSeriesName(options.wetBulb, data);
         if (!!wbSeries) {
           for (let t in data) {
-            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, '#03c', 5, 1);
+            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, '#03c', options.ptr, options.line);
           }
         }
         break;
@@ -45,7 +45,7 @@ export function State(
           d = options.relHumType === 'p' ? 100 : 1;
         if (!!rhSeries) {
           for (let t in data) {
-            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, '#03c', 5, 1);
+            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, '#03c', options.ptr, options.line);
           }
         }
         break;
@@ -54,7 +54,7 @@ export function State(
         const dpSeries = getInternalSeriesName(options.dewPoint, data);
         if (!!dpSeries) {
           for (let t in data) {
-            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', 5, 1);
+            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, '#03c', options.ptr, options.line);
           }
         }
         break;

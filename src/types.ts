@@ -1,6 +1,7 @@
 type UnitSystem = 'IP' | 'SI';
 type MeasurementType = 'dbwb' | 'dbrh' | 'dbdp';
 type RelHumType = 'p' | 'f';
+type Gradient = 'v' | 'hc';
 
 export interface PsyOptions {
   unitSystem: UnitSystem;
@@ -15,4 +16,7 @@ export interface PsyOptions {
   relHum: string;
   relHumType: RelHumType;
   regions: string[];
+  ptr: number;
+  line: number;
+  gradient: Gradient;
 }

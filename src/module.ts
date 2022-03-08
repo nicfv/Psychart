@@ -11,6 +11,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       defaultValue: 'IP',
       category: ['Chart options'],
       settings: {
+        allowCustomValue: false,
         options: [
           {
             value: 'IP',
@@ -103,13 +104,14 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         ],
       },
     })
-    .addRadio({
+    .addSelect({
       path: 'measurements',
       name: 'Measurements',
       description: 'Select which series are being measured.',
       defaultValue: 'dbwb',
       category: ['Query options'],
       settings: {
+        allowCustomValue: false,
         options: [
           {
             value: 'dbwb',
@@ -176,6 +178,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       category: ['Query options'],
       defaultValue: 'p',
       settings: {
+        allowCustomValue: false,
         options: [
           {
             value: 'p',
@@ -188,5 +191,51 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         ],
       },
       showIf: (x) => x.measurements === 'dbrh',
+    })
+    .addSliderInput({
+      path: 'ptr',
+      name: 'Point Size',
+      description: 'Enter the point radius, in pixels.',
+      defaultValue: 5,
+      category: ['Display options'],
+      settings: {
+        min: 1,
+        max: 10,
+        step: 1,
+      },
+    })
+    .addSliderInput({
+      path: 'line',
+      name: 'Show Line',
+      description: 'Connect data points with a line?',
+      defaultValue: 1,
+      category: ['Display options'],
+      settings: {
+        min: 0,
+        max: 1,
+        step: 1,
+      },
+    })
+    .addSelect({
+      path: 'gradient',
+      name: 'Gradient',
+      description: 'The series color gradient.',
+      category: ['Display options'],
+      defaultValue: 'v',
+      settings: {
+        allowCustomValue: false,
+        options: [
+          {
+            value: 'v',
+            label: 'Viridis',
+            imgUrl:
+              'https://aws1.discourse-cdn.com/business7/uploads/grafana/original/2X/e/ef5308cc58c9e5a13187b5012eb99f406928462f.png',
+          },
+          {
+            value: 'hc',
+            label: 'Hot-Cold',
+          },
+        ],
+      },
     });
 });
