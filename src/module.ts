@@ -2,6 +2,8 @@ import { PanelPlugin } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
+import aqua from './Resources/aqua.png';
+
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
     .addRadio({
@@ -228,6 +230,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           {
             value: 'v',
             label: 'Viridis',
+            imgUrl: aqua,
           },
           {
             value: 'i',
