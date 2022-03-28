@@ -2,7 +2,10 @@ import { PanelPlugin } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
-import aqua from './Resources/aqua.png';
+import inferno from './Resources/inferno.png';
+import magma from './Resources/magma.png';
+import plasma from './Resources/plasma.png';
+import viridis from './Resources/viridis.png';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
@@ -218,7 +221,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         step: 1,
       },
     })
-    .addSelect({
+    .addRadio({
       path: 'gradient',
       name: 'Gradient',
       description: 'The series color gradient.',
@@ -230,19 +233,22 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           {
             value: 'v',
             label: 'Viridis',
-            imgUrl: aqua,
+            imgUrl: viridis,
           },
           {
             value: 'i',
             label: 'Inferno',
+            imgUrl: inferno,
           },
           {
             value: 'm',
             label: 'Magma',
+            imgUrl: magma,
           },
           {
             value: 'p',
             label: 'Plasma',
+            imgUrl: plasma,
           },
         ],
       },
