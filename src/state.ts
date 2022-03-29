@@ -38,6 +38,8 @@ export function State(
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line);
           }
+        } else if (!!options.wetBulb) {
+          throw new Error('Dry bulb series "' + options.wetBulb + '" not found.');
         }
         break;
       }
@@ -49,6 +51,8 @@ export function State(
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line);
           }
+        } else if (!!options.relHum) {
+          throw new Error('Relative humidity series "' + options.relHum + '" not found.');
         }
         break;
       }
@@ -59,6 +63,8 @@ export function State(
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line);
           }
+        } else if (options.dewPoint) {
+          throw new Error('Dew point series "' + options.dewPoint + '" not found.');
         }
         break;
       }
@@ -66,6 +72,8 @@ export function State(
         throw new Error('Measurement type ' + options.measurements + ' unsupported.');
       }
     }
+  } else if (!!options.dryBulb) {
+    throw new Error('Dry bulb series "' + options.dryBulb + '" not found.');
   }
   // **** Render ASHRAE regions **** //
   if (options.regions?.includes('A4')) {
@@ -122,13 +130,15 @@ export function State(
 
 // Return the full series name that corresponds to the selected field name.
 const getInternalSeriesName = (name: string, data: { [index: string]: { [index: string]: number } }) =>
-  [
-    ...new Set(
-      Object.keys(data)
-        .map((key) => Object.keys(data[key]))
-        .flat()
-    ),
-  ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name);
+  !!name
+    ? [
+        ...new Set(
+          Object.keys(data)
+            .map((key) => Object.keys(data[key]))
+            .flat()
+        ),
+      ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name)
+    : undefined;
 
 const GetColor = (t: number, minTime: number, maxTime: number, gradient: string) => {
   let r: number[], g: number[], b: number[];
