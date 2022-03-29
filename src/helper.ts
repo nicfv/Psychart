@@ -11,8 +11,8 @@ export const expand2 = (x: number, arr: number[]) => {
   } else if (x >= 1) {
     return arr[arr.length - 1];
   }
-  const N = arr.length, // number of buckets
-    s = 1 / N, //size of each bucket
+  const N = arr.length - 1, // number of buckets
+    s = 1 / N, // size of each bucket
     n = Math.floor(x / s), // bucket number
     a = s * n, // bucket min index
     b = s * (n + 1), // bucket max index
