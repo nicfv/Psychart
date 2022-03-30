@@ -54,13 +54,15 @@ if [[ "${HELP}" == true ]] ; then
 fi
 
 if [[ "${PSY}" == true ]] ; then
-  IN1='./svg/psychrolib.js'
-  IN2='./svg/psychart.js'
+  IN1='./svg/w3color.js'
+  IN2='./svg/psychrolib.js'
+  IN3='./svg/psychart.js'
   OUT='./src/psychart.js'
   EXT='.bk'
   MIN='.min'
   cp -v "${IN1}" "${OUT}"
   cat "${IN2}" >> "${OUT}"
+  cat "${IN3}" >> "${OUT}"
   sed -i"${EXT}" 's/function Psychart/export function Psychart/g' "${OUT}"
   sed -i"${EXT}" -E "s/(Validate\(.*\);)/\/\/\1/g" "${OUT}"
   sed -i"${EXT}" -E "s/(['\"]use strict['\"];)/\/\/\1/g" "${OUT}"

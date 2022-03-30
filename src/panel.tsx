@@ -14,9 +14,8 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     return <Container child={State(width, height, options, isLightTheme, format(data))} />;
   } catch (ex) {
     return (
-      <div>
-        <h1 style={{ color: 'red', textAlign: 'center' }}>{ex.name}</h1>
-        <h2>{ex.message}</h2>
+      <div className="panel-empty">
+        <p>{ex.name + ': ' + ex.message}</p>
       </div>
     );
   }
