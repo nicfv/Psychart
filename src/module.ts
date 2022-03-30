@@ -82,29 +82,34 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         allowCustomValue: false,
         options: [
           {
-            label: 'Recommended',
-            value: 'A0',
-            description: 'The "recommended" ASHRAE comfort zone.',
+            label: 'Recommended (High)',
+            value: 'A0.hi',
+            description: 'The "recommended" ASHRAE comfort zone for conditions with high pollutants.',
+          },
+          {
+            label: 'Recommended (Low)',
+            value: 'A0.lo',
+            description: 'The "recommended" ASHRAE comfort zone for conditions with low pollutants.',
           },
           {
             label: 'A1',
             value: 'A1',
-            description: 'The A1 ASHRAE comfort zone.',
+            description: 'The A1 ASHRAE comfort zone. Typically a data center with mission-critical operations.',
           },
           {
             label: 'A2',
             value: 'A2',
-            description: 'The A2 ASHRAE comfort zone.',
+            description: 'The A2 ASHRAE comfort zone. Typically an IT space with strict environmental requirements.',
           },
           {
             label: 'A3',
             value: 'A3',
-            description: 'The A3 ASHRAE comfort zone.',
+            description: 'The A3 ASHRAE comfort zone. Typically an IT space with normal environmental requirements.',
           },
           {
             label: 'A4',
             value: 'A4',
-            description: 'The A4 ASHRAE comfort zone.',
+            description: 'The A4 ASHRAE comfort zone. Typically an IT space with low environmental requirements.',
           },
         ],
       },

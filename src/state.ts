@@ -77,52 +77,67 @@ export function State(
   }
   // **** Render ASHRAE regions **** //
   if (options.regions?.includes('A4')) {
-    ps.newRegion('A4\nASHRAE comfort zone', isLightTheme ? '#cde' : '#123');
+    ps.newRegion('A4\nASHRAE comfort zone', isLightTheme ? GetRegionColor(80) : GetRegionColor(20));
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
-    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 22.5 : CtoF(22.5), 0.08);
     ps.regionDbRh(SI ? 45 : CtoF(45), 0.08);
-    ps.regionDbDp(SI ? 45 : CtoF(45), SI ? 27 : CtoF(27));
-    ps.regionDbRh(SI ? 29 : CtoF(29), 0.9);
+    ps.regionDbDp(SI ? 45 : CtoF(45), SI ? 24 : CtoF(24));
+    ps.regionDbRh(SI ? 25.8 : CtoF(25.8), 0.9);
     ps.regionDbRh(SI ? 5 : CtoF(5), 0.9);
     ps.buildRegion();
   }
   if (options.regions?.includes('A3')) {
-    ps.newRegion('A3\nASHRAE comfort zone', isLightTheme ? '#bcd' : '#234');
+    ps.newRegion('A3\nASHRAE comfort zone', isLightTheme ? GetRegionColor(70) : GetRegionColor(30));
     ps.regionDbDp(SI ? 5 : CtoF(5), SI ? -12 : CtoF(-12));
-    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 22.5 : CtoF(22.5), 0.08);
     ps.regionDbRh(SI ? 40 : CtoF(40), 0.08);
-    ps.regionDbDp(SI ? 40 : CtoF(40), SI ? 27 : CtoF(27));
-    ps.regionDbRh(SI ? 30 : CtoF(30), 0.85);
+    ps.regionDbDp(SI ? 40 : CtoF(40), SI ? 24 : CtoF(24));
+    ps.regionDbRh(SI ? 26.7 : CtoF(26.7), 0.85);
     ps.regionDbRh(SI ? 5 : CtoF(5), 0.85);
     ps.buildRegion();
   }
   if (options.regions?.includes('A2')) {
-    ps.newRegion('A2\nASHRAE comfort zone', isLightTheme ? '#abc' : '#345');
+    ps.newRegion('A2\nASHRAE comfort zone', isLightTheme ? GetRegionColor(60) : GetRegionColor(40));
     ps.regionDbDp(SI ? 10 : CtoF(10), SI ? -12 : CtoF(-12));
-    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 22.5 : CtoF(22.5), 0.08);
     ps.regionDbRh(SI ? 35 : CtoF(35), 0.08);
-    ps.regionDbDp(SI ? 35 : CtoF(35), SI ? 27 : CtoF(27));
-    ps.regionDbRh(SI ? 31 : CtoF(31), 0.8);
+    ps.regionDbDp(SI ? 35 : CtoF(35), SI ? 21 : CtoF(21));
+    ps.regionDbRh(SI ? 24.7 : CtoF(24.7), 0.8);
     ps.regionDbRh(SI ? 10 : CtoF(10), 0.8);
     ps.buildRegion();
   }
   if (options.regions?.includes('A1')) {
-    ps.newRegion('A1\nASHRAE comfort zone', isLightTheme ? '#9ab' : '#456');
+    ps.newRegion('A1\nASHRAE comfort zone', isLightTheme ? GetRegionColor(50) : GetRegionColor(50));
     ps.regionDbDp(SI ? 15 : CtoF(15), SI ? -12 : CtoF(-12));
-    ps.regionDbRh(SI ? 22 : CtoF(22), 0.08);
+    ps.regionDbRh(SI ? 22.5 : CtoF(22.5), 0.08);
     ps.regionDbRh(SI ? 32 : CtoF(32), 0.08);
-    ps.regionDbDp(SI ? 32 : CtoF(32), SI ? 27 : CtoF(27));
-    ps.regionDbRh(SI ? 31 : CtoF(31), 0.8);
+    ps.regionDbDp(SI ? 32 : CtoF(32), SI ? 17 : CtoF(17));
+    ps.regionDbRh(SI ? 20.6 : CtoF(20.6), 0.8);
     ps.regionDbRh(SI ? 15 : CtoF(15), 0.8);
     ps.buildRegion();
   }
-  if (options.regions?.includes('A0')) {
-    ps.newRegion('Recommended ASHRAE conditions', isLightTheme ? '#89a' : '#567');
+  if (options.regions?.includes('A0.lo')) {
+    ps.newRegion(
+      'Recommended ASHRAE conditions\nfor low levels of pollutants',
+      isLightTheme ? GetRegionColor(40) : GetRegionColor(60)
+    );
     ps.regionDbDp(SI ? 18 : CtoF(18), SI ? -9 : CtoF(-9));
     ps.regionDbDp(SI ? 27 : CtoF(27), SI ? -9 : CtoF(-9));
     ps.regionDbDp(SI ? 27 : CtoF(27), SI ? 15 : CtoF(15));
-    ps.regionDbRh(SI ? 23 : CtoF(23), 0.6);
-    ps.regionDbRh(SI ? 18 : CtoF(18), 0.6);
+    ps.regionDbRh(SI ? 20.7 : CtoF(20.7), 0.7);
+    ps.regionDbRh(SI ? 18 : CtoF(18), 0.7);
+    ps.buildRegion();
+  }
+  if (options.regions?.includes('A0.hi')) {
+    ps.newRegion(
+      'Recommended ASHRAE conditions\nfor high levels of pollutants',
+      isLightTheme ? GetRegionColor(30) : GetRegionColor(70)
+    );
+    ps.regionDbDp(SI ? 18 : CtoF(18), SI ? -9 : CtoF(-9));
+    ps.regionDbDp(SI ? 27 : CtoF(27), SI ? -9 : CtoF(-9));
+    ps.regionDbDp(SI ? 27 : CtoF(27), SI ? 15 : CtoF(15));
+    ps.regionDbRh(SI ? 26.2 : CtoF(26.2), 0.5);
+    ps.regionDbRh(SI ? 18 : CtoF(18), 0.5);
     ps.buildRegion();
   }
   return ps.el();
@@ -185,3 +200,5 @@ const GetColor = (t: number, minTime: number, maxTime: number, gradient: string)
     ')'
   );
 };
+
+const GetRegionColor = (l: number) => 'hsl(260, 20%, ' + l + '%)';

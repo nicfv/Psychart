@@ -533,6 +533,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
                                 addPoint(dr2xy(db, state.rh));
                             }
                         }
+                        addPoint(dr2xy(psy.db, psy.rh));
                     } else {
                         // Iso dry bulb, wet bulb, or dew point (straight line)
                         addPoint(dd2xy(psy.db, psy.dp));
