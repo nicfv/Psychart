@@ -32,3 +32,6 @@ export const CtoF = (C: number) => (9 / 5) * C + 32;
 
 // Convert from Fahrenheit to Celsius
 export const FtoC = (F: number) => (5 / 9) * (F - 32);
+
+// Determine if the value is numeric or not.
+export const isNumber = (x: any) => typeof x === 'number';

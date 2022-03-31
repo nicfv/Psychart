@@ -1,6 +1,6 @@
 import { Psychart } from 'psychart';
 import { PsyOptions } from 'types';
-import { CtoF, translate2 } from 'helper';
+import { CtoF, translate2, isNumber } from 'helper';
 
 export function State(
   width: number,
@@ -36,7 +36,9 @@ export function State(
         if (!!wbSeries) {
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
-            ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line);
+            if (isNumber(data[t][dbSeries]) && isNumber(data[t][wbSeries])) {
+              ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line);
+            }
           }
         } else if (!!options.wetBulb) {
           throw new Error('Dry bulb series "' + options.wetBulb + '" not found.');
@@ -49,7 +51,9 @@ export function State(
         if (!!rhSeries) {
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
-            ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line);
+            if (isNumber(data[t][dbSeries]) && isNumber(data[t][rhSeries])) {
+              ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line);
+            }
           }
         } else if (!!options.relHum) {
           throw new Error('Relative humidity series "' + options.relHum + '" not found.');
@@ -61,7 +65,9 @@ export function State(
         if (!!dpSeries) {
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
-            ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line);
+            if (isNumber(data[t][dbSeries]) && isNumber(data[t][dpSeries])) {
+              ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line);
+            }
           }
         } else if (options.dewPoint) {
           throw new Error('Dew point series "' + options.dewPoint + '" not found.');
