@@ -10,7 +10,9 @@
       "url": "nersc.gov"
     },
     "keywords": [
-      "air"
+      "air",
+      "temperature",
+      "humidity"
     ],
     "logos": {
       "small": "img/logo.svg",
@@ -19,11 +21,15 @@
     "links": [
       {
         "name": "Website",
-        "url": "https://github.com/grafana/grafana-starter-panel"
+        "url": "https://nicfv.github.io/Psychart"
+      },
+      {
+        "name": "GitHub",
+        "url": "https://github.com/nicfv/Psychart"
       },
       {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+        "url": "https://github.com/nicfv/Psychart/blob/main/LICENSE"
       }
     ],
     "screenshots": [],

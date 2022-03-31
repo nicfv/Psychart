@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-GRAFANA_API_KEY='eyJrIjoiNzkzY2MzY2QwY2I2YmU0MGE2MjJlYzg2MmFhMzM0NjA0ZmQ3MzZlMyIsIm4iOiJwc3ljaHJvbWV0cmljLWNoYXJ0IiwiaWQiOjUzODIzNH0='
+KEY_FILE='grafana-api-key.txt'
+GRAFANA_API_KEY="$(cat $KEY_FILE)"
 
 YARN_ARG='dev'
 GRAFANA_ARG='restart'
@@ -25,7 +26,7 @@ for ARG in "${@}" ; do
   elif [[ "${ARG}" == -p ]] ; then
     PSY=true
   elif [[ "${ARG}" == -o ]] ; then
-    open './svg/index.html'
+    open './docs/index.html'
   elif [[ "${ARG}" == -A ]] ; then
     clear
     echo 'Building plugin in development mode.'
@@ -54,9 +55,9 @@ if [[ "${HELP}" == true ]] ; then
 fi
 
 if [[ "${PSY}" == true ]] ; then
-  IN1='./svg/w3color.js'
-  IN2='./svg/psychrolib.js'
-  IN3='./svg/psychart.js'
+  IN1='./docs/w3color.js'
+  IN2='./docs/psychrolib.js'
+  IN3='./docs/psychart.js'
   OUT='./src/psychart.js'
   EXT='.bk'
   MIN='.min'
