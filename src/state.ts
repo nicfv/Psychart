@@ -37,7 +37,7 @@ export function State(
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             if (isNumber(data[t][dbSeries]) && isNumber(data[t][wbSeries])) {
-              ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line);
+              ps.plotDbWb(data[t][dbSeries], data[t][wbSeries], t, color, options.ptr, options.line ? 1 : 0);
             }
           }
         } else if (!!options.wetBulb) {
@@ -52,7 +52,7 @@ export function State(
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             if (isNumber(data[t][dbSeries]) && isNumber(data[t][rhSeries])) {
-              ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line);
+              ps.plotDbRh(data[t][dbSeries], data[t][rhSeries] / d, t, color, options.ptr, options.line ? 1 : 0);
             }
           }
         } else if (!!options.relHum) {
@@ -66,7 +66,7 @@ export function State(
           for (let t in data) {
             const color: string = GetColor(data[t]['time'], minTime, maxTime, options.gradient);
             if (isNumber(data[t][dbSeries]) && isNumber(data[t][dpSeries])) {
-              ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line);
+              ps.plotDbDp(data[t][dbSeries], data[t][dpSeries], t, color, options.ptr, options.line ? 1 : 0);
             }
           }
         } else if (options.dewPoint) {

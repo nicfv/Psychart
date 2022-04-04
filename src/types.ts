@@ -17,6 +17,6 @@ export interface PsyOptions {
   relHumType: RelHumType;
   regions: string[];
   ptr: number;
-  line: number;
+  line: boolean;
   gradient: Gradient;
 }

@@ -214,17 +214,12 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         step: 1,
       },
     })
-    .addSliderInput({
+    .addBooleanSwitch({
       path: 'line',
       name: 'Show Line',
       description: 'Connect data points with a line?',
-      defaultValue: 1,
+      defaultValue: true,
       category: ['Display options'],
-      settings: {
-        min: 0,
-        max: 1,
-        step: 1,
-      },
     })
     .addRadio({
       path: 'gradient',
