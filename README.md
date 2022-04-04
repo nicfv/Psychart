@@ -48,7 +48,7 @@ Psychart is capable of plotting 1 time series per panel for which two numeric ti
 
 It is important to note that one or two queries may be necessary depending on the data structure. One single query may be sufficient to return the two fields needed to fix the state. Other times, one query will be needed to obtain the dry bulb field and another for relative humidity field, for example.
 
-### Display Options
+### Display options
 
 This section changes the visual appearance of data within the chart.
 
@@ -64,8 +64,8 @@ Importantly, if there is missing data in one field, for example if dry bulb temp
 
 ## Screenshots
 
-![screenshot](src/img/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/nicfv/Psychart/main/src/img/screenshot.png)
 
 ## License
 
-Psychart is distributed under the [Apache 2.0 License](LICENSE).
+Psychart is distributed under the [Apache 2.0 License](https://github.com/nicfv/Psychart/blob/main/LICENSE).
