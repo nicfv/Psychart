@@ -2,10 +2,10 @@ import { PanelPlugin } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
-import inferno from './Resources/inferno.png';
-import magma from './Resources/magma.png';
-import plasma from './Resources/plasma.png';
-import viridis from './Resources/viridis.png';
+import inferno from './img/inferno.png';
+import magma from './img/magma.png';
+import plasma from './img/plasma.png';
+import viridis from './img/viridis.png';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
@@ -119,7 +119,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Measurements',
       description: 'Select which series are being measured.',
       defaultValue: 'dbwb',
-      category: ['Query options'],
+      category: ['Data options'],
       settings: {
         allowCustomValue: false,
         options: [
@@ -142,7 +142,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'dryBulb',
       name: 'Dry Bulb Series',
       description: 'Select a series that measures the dry bulb temperature.',
-      category: ['Query options'],
+      category: ['Data options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -152,7 +152,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'wetBulb',
       name: 'Wet Bulb Series',
       description: 'Select a series that measures the wet bulb temperature.',
-      category: ['Query options'],
+      category: ['Data options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -163,7 +163,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'dewPoint',
       name: 'Dew Point Series',
       description: 'Select a series that measures the dew point temperature.',
-      category: ['Query options'],
+      category: ['Data options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -174,7 +174,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'relHum',
       name: 'Relative Humidity Series',
       description: 'Select a series that measures the relative humidity.',
-      category: ['Query options'],
+      category: ['Data options'],
       settings: {
         filter: (f) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
@@ -185,7 +185,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       path: 'relHumType',
       name: 'Relative Humidity Type',
       description: 'Choose how relative humidity is actively being measured.',
-      category: ['Query options'],
+      category: ['Data options'],
       defaultValue: 'p',
       settings: {
         allowCustomValue: false,
