@@ -72,6 +72,7 @@ if [[ "${PSY}" == true ]] ; then
   curl -X POST -s --data-urlencode "input@${OUT}" https://www.toptal.com/developers/javascript-minifier/raw > "${OUT}${MIN}"
   cp -v "${OUT}${MIN}" "${OUT}"
   rm -v "${OUT}${MIN}"
+  cp -v "./docs/logo.svg" "./src/img/logo.svg"
 fi
 
 if [[ "${INSTALL}" == true ]] ; then

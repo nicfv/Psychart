@@ -626,7 +626,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, advanced,
         labelElement.textContent = text;
         // Optionally include a tooltip.
         if (!!title) {
-            labelElement.onmouseover = () => Tooltip(pt.x, pt.y, '#888', title, true);
+            labelElement.onmouseover = () => Tooltip(pt.x, pt.y, textColor, title, true);
             labelElement.onmouseleave = clearTip;
         }
 
