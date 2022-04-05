@@ -19,4 +19,5 @@ export interface PsyOptions {
   ptr: number;
   line: boolean;
   gradient: Gradient;
+  advanced: boolean;
 }

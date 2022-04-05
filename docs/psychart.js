@@ -3,7 +3,7 @@
 /**
  * Generate a psychrometric chart as an svg element.
  */
-function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor, textColor) {
+function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, advanced, lineColor, textColor) {
     /**
      * Validate parameter types.
      * @param {string} types A string of characters `ibfnosyu*` that represent the parameters.
@@ -52,7 +52,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
             }
         }
     }
-    Validate('nnbnnnnss', arguments);
+    Validate('nnbnnnnbss', arguments);
     const
         // Define the SVG namespace.
         NS = 'http://www.w3.org/2000/svg',
@@ -76,7 +76,11 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
         // The padding, in px, of the chart
         padding = 30,
         // The temperature unit to display
-        tempUnit = '\u00B0' + (psychrolib.isIP() ? 'F' : 'C');
+        tempUnit = '\u00B0' + (psychrolib.isIP() ? 'F' : 'C'),
+        hrUnit = (psychrolib.isIP() ? 'lbw/lba' : 'kgw/kga'),
+        vpUnit = (psychrolib.isIP() ? 'Psi' : 'Pa'),
+        hUnit = (psychrolib.isIP() ? 'Btu/lb' : 'J/kg'),
+        vUnit = (psychrolib.isIP() ? 'ft\u00B3/lb' : 'm\u00B3/kg');
 
     /**
      * Label anchor enum type.
@@ -191,7 +195,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
      */
     const dr2psy = (db, rh) => {
         const psy = psychrolib.CalcPsychrometricsFromRelHum(db, rh, atm);
-        return new Psy(db, rh, psy[1], psy[2], psy[0]);
+        return new Psy(db, rh, psy[1], psy[2], psy[0], psy[3], psy[4], psy[5]);
     };
 
     /**
@@ -199,7 +203,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
      */
     const dw2psy = (db, wb) => {
         const psy = psychrolib.CalcPsychrometricsFromTWetBulb(db, wb, atm);
-        return new Psy(db, psy[2], wb, psy[1], psy[0]);
+        return new Psy(db, psy[2], wb, psy[1], psy[0], psy[3], psy[4], psy[5]);
     };
 
     /**
@@ -207,7 +211,7 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
      */
     const dd2psy = (db, dp) => {
         const psy = psychrolib.CalcPsychrometricsFromTDewPoint(db, dp, atm);
-        return new Psy(db, psy[2], psy[1], dp, psy[0]);
+        return new Psy(db, psy[2], psy[1], dp, psy[0], psy[3], psy[4], psy[5]);
     };
 
     /**
@@ -386,10 +390,10 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
     }
 
     /**
-     * Represents a single air condition using 5 states.
+     * Represents a single air condition using several states.
      */
-    function Psy(db, rh, wb, dp, hr) {
-        Validate('nnnnn', arguments);
+    function Psy(db, rh, wb, dp, hr, vp, h, v) {
+        Validate('nnnnnnnn', arguments);
         /**
          * Dry Bulb
          */
@@ -410,6 +414,18 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
          * Humidity Ratio
          */
         this.hr = hr;
+        /**
+         * Vapor Pressure
+         */
+        this.vp = vp;
+        /**
+         * Moist Air Enthalpy
+         */
+        this.h = h;
+        /**
+         * Moist Air Volume
+         */
+        this.v = v;
         Object.freeze(this);
     }
 
@@ -484,7 +500,11 @@ function Psychart(width, height, SI, db_min, db_max, dp_max, altitude, lineColor
             round(psy.db, 1) + tempUnit + ' Dry Bulb\n' +
             round(psy.rh * 100) + '% Rel. Hum.\n' +
             round(psy.wb, 1) + tempUnit + ' Wet Bulb\n' +
-            round(psy.dp, 1) + tempUnit + ' Dew Point';
+            round(psy.dp, 1) + tempUnit + ' Dew Point' + (advanced ? '\n' +
+                round(psy.hr, 2) + ' ' + hrUnit + ' Hum. Ratio\n' +
+                round(psy.vp, 1) + ' ' + vpUnit + ' Vap. Press.\n' +
+                round(psy.h, 1) + ' ' + hUnit + ' Enthalpy\n' +
+                round(psy.v, 2) + ' ' + vUnit + ' Volume' : '');
 
         // Set the behavior when the user interacts with this point
         ptElement.onmouseover = () => Tooltip(c.x, c.y, color, tooltipString, true);

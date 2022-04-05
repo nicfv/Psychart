@@ -252,5 +252,12 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           },
         ],
       },
+    })
+    .addBooleanSwitch({
+      path: 'advanced',
+      name: 'Show Advanced State Variables',
+      description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
+      defaultValue: false,
+      category: ['Display options'],
     });
 });

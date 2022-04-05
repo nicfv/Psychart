@@ -20,6 +20,7 @@ export function State(
     options.dbMax,
     options.dpMax,
     options.altitude,
+    options.advanced,
     isLightTheme ? '#DDD' : '#333',
     isLightTheme ? '#222' : '#CCD'
   );

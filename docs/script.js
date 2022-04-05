@@ -5,7 +5,7 @@ var ps;
 window.onload = () => {
     const width = 800, height = 600;
     const container = document.getElementById('svg-container');
-    ps = new Psychart(width, height, false, 20, 120, 90, 0, '#DDD', '#222');
+    ps = new Psychart(width, height, false, 20, 120, 90, 0, true, '#DDD', '#222');
     container.appendChild(ps.el());
     ps.el().addEventListener('updatePsychart', function () {
         // container.innerHTML = ps.el().outerHTML;
