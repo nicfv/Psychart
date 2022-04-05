@@ -5,10 +5,11 @@ var ps;
 window.onload = () => {
     const width = 800, height = 600;
     const container = document.getElementById('svg-container');
-    ps = new Psychart(width, height, false, 20, 120, 90, 0, true, '#DDD', '#222');
+    ps = new Psychart(width, height, false, 20, 120, 90, 0, true,
+        isDarkTheme() ? '#333' : '#DDD',
+        isDarkTheme() ? '#CCD' : '#222');
     container.appendChild(ps.el());
     ps.el().addEventListener('updatePsychart', function () {
-        // container.innerHTML = ps.el().outerHTML;
         console.log('Updated!');
     }, false);
     console.log('Loaded script!');
@@ -34,3 +35,5 @@ const generateRandomData = (n) => {
         ps.buildRegion();
     }
 };
+
+const isDarkTheme = () => window.matchMedia("(prefers-color-scheme: dark)").matches;

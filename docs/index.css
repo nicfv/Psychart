@@ -1,0 +1,22 @@
+@import url('https://necolas.github.io/normalize.css/8.0.1/normalize.css');
+
+body {
+    background-color: white;
+}
+
+div#svg-container {
+    margin: 1em auto;
+    border: 0.1em solid rgba(128, 128, 128, 0.25);
+    padding: 0.5em;
+    border-radius: 0.25em;
+    background-color: rgba(128, 128, 128, 0.05);
+    max-width: 800px;
+}
+
+@media (prefers-color-scheme: dark) {
+    /* dark theme */
+
+    body {
+        background-color: black;
+    }
+}
