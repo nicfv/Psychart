@@ -103,5 +103,7 @@ if [[ "${GRAFANA}" == true ]] ; then
 fi
 
 if [[ "${ZIP}" == true ]] ; then
-  zip -vXr 'psychart.zip' 'dist'
+  cp -rv 'dist' 'ventura-psychrometric-panel'
+  zip -vXr 'psychart.zip' 'ventura-psychrometric-panel'
+  rm -rv 'ventura-psychrometric-panel'
 fi
