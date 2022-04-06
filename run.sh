@@ -11,6 +11,7 @@ BUILD=false
 INSTALL=false
 GRAFANA=false
 PSY=false
+ZIP=false
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
@@ -33,13 +34,22 @@ for ARG in "${@}" ; do
     BUILD=true
     GRAFANA=true
     PSY=true
+  elif [[ "${ARG}" == -z ]] ; then
+    ZIP=true
+  elif [[ "${ARG}" == -Z ]] ; then
+    clear
+    echo 'Building and zipping the plugin.'
+    BUILD=true
+    YARN_ARG='build'
+    PSY=true
+    ZIP=true
   else
     echo "Unknown switch ${ARG}. Use ${0} -h for help."
   fi
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-b=<mode>] [-g=<mode>] [-p] [-o] [-A]"
+  echo "Usage: ${0} [-h] [-i] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -b: Build and sign the plugin.'
@@ -51,7 +61,9 @@ if [[ "${HELP}" == true ]] ; then
   echo '      - "stop" = Shut down'
   echo '  -p: Publish the current psychart file.'
   echo '  -o: Open the svg generator in a web browser.'
+  echo '  -z: Zip the current build files into psychart.zip.'
   echo "  -A: Clears the terminal and executes the command ${0} -p -b=dev -g=restart"
+  echo "  -Z: Clears the terminal and executes the command ${0} -p -b=build -z"
 fi
 
 if [[ "${PSY}" == true ]] ; then
@@ -77,6 +89,7 @@ fi
 
 if [[ "${INSTALL}" == true ]] ; then
   npm install
+  yarn install --pure-lockfile
 fi
 
 if [[ "${BUILD}" == true ]] ; then
@@ -87,4 +100,8 @@ fi
 
 if [[ "${GRAFANA}" == true ]] ; then
   brew services "${GRAFANA_ARG}" grafana
+fi
+
+if [[ "${ZIP}" == true ]] ; then
+  zip -vXr 'psychart.zip' 'dist'
 fi

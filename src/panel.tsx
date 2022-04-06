@@ -12,7 +12,7 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const isLightTheme = useTheme().isLight;
   try {
     return <Container child={State(width, height, options, isLightTheme, format(data))} />;
-  } catch (ex) {
+  } catch (ex: any) {
     return (
       <div className="panel-empty">
         <p>{ex.name + ': ' + ex.message}</p>
