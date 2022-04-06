@@ -103,7 +103,8 @@ if [[ "${GRAFANA}" == true ]] ; then
 fi
 
 if [[ "${ZIP}" == true ]] ; then
-  cp -rv 'dist' 'ventura-psychrometric-panel'
-  zip -vXr 'psychart.zip' 'ventura-psychrometric-panel'
-  rm -rv 'ventura-psychrometric-panel'
+  PLUGIN_ID='ventura-psychrometric-panel'
+  cp -rv 'dist' "${PLUGIN_ID}"
+  zip -vXr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
+  rm -rv "${PLUGIN_ID}"
 fi
