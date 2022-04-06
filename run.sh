@@ -95,7 +95,7 @@ fi
 if [[ "${BUILD}" == true ]] ; then
   yarn "${YARN_ARG}"
   export GRAFANA_API_KEY
-  npx @grafana/toolkit plugin:sign --rootUrls http://localhost:3000
+  npx @grafana/toolkit plugin:sign --rootUrls http://localhost:3000 https://grafana-dev.nersc.gov/
 fi
 
 if [[ "${GRAFANA}" == true ]] ; then
