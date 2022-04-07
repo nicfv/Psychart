@@ -66,6 +66,8 @@ Psychart matches up values with similar timestamps. For a dry bulb & relative hu
 
 Importantly, if there is missing data in one field, for example if dry bulb temperature has not been reporting for the last 5 minutes, no new states are calculated, and no new data is plotted in Psychart for the last 5 minutes to avoid the display of inaccurate data.
 
+Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series or reducing the point radius.
+
 ## Screenshots
 
 ![screenshot](https://raw.githubusercontent.com/nicfv/Psychart/main/src/img/screenshot.png)
