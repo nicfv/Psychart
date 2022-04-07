@@ -2,9 +2,26 @@
 
 body {
     background-color: white;
+    font-family: sans-serif;
 }
 
-div#svg-container {
+form {
+    color: black;
+}
+
+form input {
+    margin: 0.25em;
+}
+
+form input[type=button] {
+    float: right;
+}
+
+form h2, form h3 {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+div {
     margin: 1em auto;
     border: 0.1em solid rgba(128, 128, 128, 0.25);
     padding: 0.5em;
@@ -19,4 +36,16 @@ div#svg-container {
     body {
         background-color: black;
     }
+
+    form {
+        color: white;
+    }
+}
+
+.clear {
+    clear: both;
+    visibility: hidden;
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
