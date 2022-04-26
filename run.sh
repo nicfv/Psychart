@@ -107,4 +107,5 @@ if [[ "${ZIP}" == true ]] ; then
   cp -rv 'dist' "${PLUGIN_ID}"
   zip -vXr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
   rm -rv "${PLUGIN_ID}"
+  md5 "${PLUGIN_ID}.zip"
 fi

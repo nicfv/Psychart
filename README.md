@@ -75,4 +75,6 @@ _A working example of Psychart with randomized data._
 
 ## License
 
-Psychart is distributed under the [Apache 2.0 License](https://github.com/nicfv/Psychart/blob/main/LICENSE).
+Psychart is distributed under a [modified BSD License](https://github.com/nicfv/Psychart/blob/main/LICENSE).
+
+[Copyright Notice](https://github.com/nicfv/Psychart/blob/main/LEGAL)
