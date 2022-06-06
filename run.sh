@@ -118,12 +118,15 @@ if [[ "${ZIP}" == true ]] ; then
 fi
 
 if [[ "${PUBLISH}" == true ]] ; then
-  EXT='.bk'
-  PACKAGE_JSON='package.json'
-  sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
-  rm -v "${PACKAGE_JSON}${EXT}"
-  git tag -a "v${VERSION}" -m "${VERSION}" && {
-    git push origin "v${VERSION}"
-    git push github "v${VERSION}"
-  }
+  if git status | grep -q clean ; then
+    EXT='.bk'
+    PACKAGE_JSON='package.json'
+    REMOTE_ORIGIN='github'
+    sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
+    rm -v "${PACKAGE_JSON}${EXT}"
+    git add "${PACKAGE_JSON}" && git commit -m "v${VERSION}"
+    git tag -a "v${VERSION}" -m "${VERSION}" && git push "${REMOTE_ORIGIN}" "v${VERSION}"
+  else
+    echo 'Some changes not committed. Commit or discard them first before publishing.'
+  fi
 fi
