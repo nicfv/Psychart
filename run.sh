@@ -81,7 +81,7 @@ if [[ "${PSY}" == true ]] ; then
   sed -i"${EXT}" -E "s/(['\"]use strict['\"];)/\/\/\1/g" "${OUT}"
   sed -i"${EXT}" -E "s/(Object.freeze\(.*\);)/\/\/\1/g" "${OUT}"
   rm -v "${OUT}${EXT}"
-  curl -X POST -s --data-urlencode "input@${OUT}" https://www.toptal.com/developers/javascript-minifier/raw > "${OUT}${MIN}"
+  curl -X POST -s --data-urlencode "input@${OUT}" "https://www.toptal.com/developers/javascript-minifier/api/raw" > "${OUT}${MIN}"
   cp -v "${OUT}${MIN}" "${OUT}"
   rm -v "${OUT}${MIN}"
   cp -v "./docs/logo.svg" "./src/img/logo.svg"
@@ -95,7 +95,7 @@ fi
 if [[ "${BUILD}" == true ]] ; then
   yarn "${YARN_ARG}"
   export GRAFANA_API_KEY
-  npx @grafana/toolkit plugin:sign --rootUrls http://localhost:3000 https://grafana-dev.nersc.gov/
+  npx @grafana/toolkit plugin:sign
 fi
 
 if [[ "${GRAFANA}" == true ]] ; then

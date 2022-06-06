@@ -33,3 +33,4 @@ e2e-results/
 package-lock.json
 .DS_Store
 grafana-api-key.txt
+docs/icon.svg

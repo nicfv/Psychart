@@ -21,7 +21,7 @@ export function format(data: PanelData): { [index: string]: { [index: string]: n
           .forEach((numberField) => {
             formatted[time] = formatted[time] || {};
             formatted[time]['time'] = t;
-            formatted[time][frame.name + '::' + numberField.name] = numberField.values.get(i);
+            formatted[time][frame.name + ' ' + numberField.name] = numberField.values.get(i);
           });
       });
   });
