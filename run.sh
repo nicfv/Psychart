@@ -5,6 +5,7 @@ GRAFANA_API_KEY="$(cat $KEY_FILE)"
 
 YARN_ARG='dev'
 GRAFANA_ARG='restart'
+VERSION='1.0.0'
 
 HELP=false
 BUILD=false
@@ -12,6 +13,7 @@ INSTALL=false
 GRAFANA=false
 PSY=false
 ZIP=false
+PUBLISH=false
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
@@ -43,13 +45,17 @@ for ARG in "${@}" ; do
     YARN_ARG='build'
     PSY=true
     ZIP=true
+  elif [[ "${ARG}" =~ -P=([0-9]+\.[0-9]+\.[0-9]+) ]] ; then
+    VERSION="${BASH_REMATCH[1]}"
+    echo "Publishing with version ${VERSION}."
+    PUBLISH=true
   else
     echo "Unknown switch ${ARG}. Use ${0} -h for help."
   fi
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z]"
+  echo "Usage: ${0} [-h] [-i] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z] [-P=#.#.#]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -b: Build and sign the plugin.'
@@ -64,6 +70,7 @@ if [[ "${HELP}" == true ]] ; then
   echo '  -z: Zip the current build files into psychart.zip.'
   echo "  -A: Clears the terminal and executes the command ${0} -p -b=dev -g=restart"
   echo "  -Z: Clears the terminal and executes the command ${0} -p -b=build -z"
+  echo "  -P: Publish the plugin to Grafana. Needs a version number."
 fi
 
 if [[ "${PSY}" == true ]] ; then
@@ -108,4 +115,15 @@ if [[ "${ZIP}" == true ]] ; then
   zip -vXr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
   rm -rv "${PLUGIN_ID}"
   md5 "${PLUGIN_ID}.zip"
+fi
+
+if [[ "${PUBLISH}" == true ]] ; then
+  EXT='.bk'
+  PACKAGE_JSON='package.json'
+  sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
+  rm -v "${PACKAGE_JSON}${EXT}"
+  git tag -a "v${VERSION}" -m "${VERSION}" && {
+    git push origin "v${VERSION}"
+    git push github "v${VERSION}"
+  }
 fi
