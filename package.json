@@ -1,6 +1,6 @@
 {
   "name": "ventura-psychrometric-chart",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "View air conditions on a psychrometric chart.",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
