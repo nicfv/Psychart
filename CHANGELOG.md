@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+First public release in Grafana. [Click here](https://grafana.com/grafana/plugins/ventura-psychrometric-panel/) to visit the plugin's page.
+
+- Updated badges
+- Updated screenshots
+- Other small fixes in `README`
+
 ## 1.0.2
 
 Pre-release with a few minor non-code updates.

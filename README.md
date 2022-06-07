@@ -1,10 +1,10 @@
 # Psychart
 
-## A Psychrometric Chart for Monitoring Data Center Health
+### _A Psychrometric Chart for Monitoring Data Center Health_
 
 [![Size](https://img.shields.io/github/repo-size/nicfv/Psychart)](https://github.com/nicfv/Psychart)
-[![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-chart%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-chart)
-[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-chart%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-chart)
+[![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
+[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 
 View air conditions on a psychrometric chart.
 
@@ -70,13 +70,8 @@ Importantly, if there is missing data in one field, for example if dry bulb temp
 
 Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series or reducing the point radius.
 
-## Screenshots
-
-![screenshot](https://raw.githubusercontent.com/nicfv/Psychart/main/src/img/screenshot.png)
-_A working example of Psychart with randomized data._
-
 ## License
 
-Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://github.com/nicfv/Psychart/blob/main/LICENSE). Plugin ID: `ventura-psychrometric-chart`
+Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://github.com/nicfv/Psychart/blob/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
 
 [Copyright Notice](https://github.com/nicfv/Psychart/blob/main/LEGAL)

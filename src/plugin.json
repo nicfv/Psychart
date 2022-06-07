@@ -34,8 +34,24 @@
     ],
     "screenshots": [
       {
-        "name": "screenshot",
-        "path": "img/screenshot.png"
+        "name": "HVAC use case: Air handler supply temperatures.",
+        "path": "img/screenshot_ahu.png"
+      },
+      {
+        "name": "IT use case: Inlet conditions of an air-cooled compute cabinet.",
+        "path": "img/screenshot_cabinet.png"
+      },
+      {
+        "name": "Meteorological use case: Long-term outdoor air conditions.",
+        "path": "img/screenshot_out.png"
+      },
+      {
+        "name": "General use case: Psychart as a thermodynamic calculator.",
+        "path": "img/screenshot_calc.png"
+      },
+      {
+        "name": "Random data, for illustrative purposes on customizing the appearance.",
+        "path": "img/screenshot_rand.png"
       }
     ],
     "version": "%VERSION%",
