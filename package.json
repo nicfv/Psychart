@@ -1,5 +1,5 @@
 {
-  "name": "ventura-psychrometric-chart",
+  "name": "ventura-psychrometric-panel",
   "version": "1.1.0",
   "description": "View air conditions on a psychrometric chart.",
   "scripts": {
