@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.1
+
+Minor updates in packaging.
+
+- Fixed instances of incorrect package name.
+- Updated website URL
+- Added plugin download URL
+
 ## 1.1.0
 
 First public release in Grafana. [Click here](https://grafana.com/grafana/plugins/ventura-psychrometric-panel/) to visit the plugin's page.
