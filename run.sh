@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 KEY_FILE='grafana-api-key.txt'
-GRAFANA_API_KEY="$(cat $KEY_FILE)"
+GRAFANA_API_KEY="$(cat ${KEY_FILE} || touch ${KEY_FILE})"
 
 YARN_ARG='dev'
 GRAFANA_ARG='restart'
@@ -95,7 +95,8 @@ if [[ "${PSY}" == true ]] ; then
 fi
 
 if [[ "${INSTALL}" == true ]] ; then
-  npm install
+  # npm install
+  # npm i @grafana/toolkit
   yarn install --pure-lockfile
 fi
 
