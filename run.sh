@@ -8,6 +8,7 @@ GRAFANA_ARG='restart'
 VERSION='1.0.0'
 
 HELP=false
+CLEAN=false
 BUILD=false
 INSTALL=false
 GRAFANA=false
@@ -20,6 +21,8 @@ for ARG in "${@}" ; do
     HELP=true
   elif [[ "${ARG}" == -i ]] ; then
     INSTALL=true
+  elif [[ "${ARG}" == -c ]] ; then
+    CLEAN=true
   elif [[ "${ARG}" =~ -b=(.*) ]] ; then
     YARN_ARG="${BASH_REMATCH[1]}"
     BUILD=true
@@ -55,9 +58,10 @@ for ARG in "${@}" ; do
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z] [-P=#.#.#]"
+  echo "Usage: ${0} [-h] [-i] [-c] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z] [-P=#.#.#]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
+  echo '  -c: Clean build files.'
   echo '  -b: Build and sign the plugin.'
   echo '      - "dev" = Development mode'
   echo '      - "build" = Release mode'
@@ -95,8 +99,11 @@ if [[ "${PSY}" == true ]] ; then
 fi
 
 if [[ "${INSTALL}" == true ]] ; then
-  npm install
-  yarn install --pure-lockfile
+  yarn install
+fi
+
+if [[ "${CLEAN}" == true ]] ; then
+  rm -r node_modules dist yarn.lock && echo 'Removed dependencies and build files.'
 fi
 
 if [[ "${BUILD}" == true ]] ; then
