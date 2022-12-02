@@ -73,6 +73,6 @@ Psychart works best both visually and practically when observing a narrow span o
 
 ## License
 
-Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://github.com/nicfv/Psychart/blob/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
+Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
 
 [Copyright Notice](https://github.com/nicfv/Psychart/blob/main/LEGAL)
