@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 KEY_FILE='grafana-api-key.txt'
-GRAFANA_API_KEY="$(cat $KEY_FILE)"
+GRAFANA_API_KEY="$(cat ${KEY_FILE} || touch ${KEY_FILE})"
 
 YARN_ARG='dev'
 GRAFANA_ARG='restart'
