@@ -25,6 +25,8 @@ artifacts/
 work/
 ci/
 e2e-results/
+**/cypress/videos
+**/cypress/report.json 
 
 # Editors
 .idea
@@ -34,3 +36,5 @@ package-lock.json
 .DS_Store
 grafana-api-key.txt
 docs/icon.svg
+yarn.lock
+.eslintcache

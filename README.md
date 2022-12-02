@@ -3,6 +3,7 @@
 ### _A Psychrometric Chart for Monitoring Data Center Health_
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/nicfv/Psychart/Release)](https://github.com/nicfv/Psychart)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/nicfv/Psychart/Latest%20Grafana%20API%20compatibility%20check?label=compatibility)
 [![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 [![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 
@@ -72,6 +73,6 @@ Psychart works best both visually and practically when observing a narrow span o
 
 ## License
 
-Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://github.com/nicfv/Psychart/blob/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
+Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
 
 [Copyright Notice](https://github.com/nicfv/Psychart/blob/main/LEGAL)

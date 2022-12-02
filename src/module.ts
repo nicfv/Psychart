@@ -1,4 +1,4 @@
-import { PanelPlugin } from '@grafana/data';
+import { PanelPlugin, Field } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
@@ -144,7 +144,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       description: 'Select a series that measures the dry bulb temperature.',
       category: ['Data options'],
       settings: {
-        filter: (f) => f.type === 'number',
+        filter: (f: Field) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
       },
     })
@@ -154,7 +154,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       description: 'Select a series that measures the wet bulb temperature.',
       category: ['Data options'],
       settings: {
-        filter: (f) => f.type === 'number',
+        filter: (f: Field) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
       },
       showIf: (x) => x.measurements === 'dbwb',
@@ -165,7 +165,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       description: 'Select a series that measures the dew point temperature.',
       category: ['Data options'],
       settings: {
-        filter: (f) => f.type === 'number',
+        filter: (f: Field) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
       },
       showIf: (x) => x.measurements === 'dbdp',
@@ -176,7 +176,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       description: 'Select a series that measures the relative humidity.',
       category: ['Data options'],
       settings: {
-        filter: (f) => f.type === 'number',
+        filter: (f: Field) => f.type === 'number',
         noFieldsMessage: 'No valid fields found',
       },
       showIf: (x) => x.measurements === 'dbrh',
