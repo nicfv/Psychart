@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0
+
+- Use the new Grafana plugin builder from
+    ```sh
+    npx @grafana/create-plugin
+    ```
+- Added additional workflows for compatibility and testing the build
+
 ## 1.1.1
 
 Minor updates in packaging.
