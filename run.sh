@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-YARN_ARG='dev'
-GRAFANA_ARG='restart'
-VERSION='1.0.0'
+VERSION=''
 
 HELP=false
-CLEAN=false
-BUILD=false
 INSTALL=false
-GRAFANA=false
+CLEAN=false
+EXEC=false
 PSY=false
-PUBLISH=false
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
@@ -19,48 +15,28 @@ for ARG in "${@}" ; do
     INSTALL=true
   elif [[ "${ARG}" == -c ]] ; then
     CLEAN=true
-  elif [[ "${ARG}" =~ -b=(.*) ]] ; then
-    YARN_ARG="${BASH_REMATCH[1]}"
-    BUILD=true
-  elif [[ "${ARG}" =~ -g=(.*) ]] ; then
-    GRAFANA_ARG="${BASH_REMATCH[1]}"
-    GRAFANA=true
-  elif [[ "${ARG}" == -p ]] ; then
-    PSY=true
   elif [[ "${ARG}" == -o ]] ; then
     open './docs/index.html'
-  elif [[ "${ARG}" == -A ]] ; then
+  elif [[ "${ARG}" == -x ]] ; then
     clear
-    echo 'Building plugin in development mode.'
-    YARN_ARG='build'
-    BUILD=true
-    GRAFANA=true
     PSY=true
+    EXEC=true
   elif [[ "${ARG}" =~ -P=([0-9]+\.[0-9]+\.[0-9]+) ]] ; then
     VERSION="${BASH_REMATCH[1]}"
     echo "Publishing with version ${VERSION}."
-    PUBLISH=true
   else
     echo "Unknown switch ${ARG}. Use ${0} -h for help."
   fi
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-c] [-b=<mode>] [-g=<mode>] [-p] [-o] [-A] [-P=#.#.#]"
+  echo "Usage: ${0} [-h] [-i] [-c] [-o] [-x] [-P=#.#.#]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -c: Clean build files.'
-  echo '  -b: Build the plugin without signing it.'
-  echo '      - "dev" = Development mode'
-  echo '      - "build" = Release mode'
-  echo '  -g: Run, restart, or stop the local Grafana instance.'
-  echo '      - "start" = Start up'
-  echo '      - "restart" = Start or restart'
-  echo '      - "stop" = Shut down'
-  echo '  -p: Publish the current psychart file.'
   echo '  -o: Open the svg generator in a web browser.'
-  echo "  -A: Clears the terminal and executes the command ${0} -p -b=dev -g=restart"
-  echo '  -P: Publish the plugin to Grafana. Needs a version number.'
+  echo '  -x: Clears the terminal, rebuilds the plugin, and restarts Grafana.'
+  echo '  -P: Publish the plugin to Grafana. Requires a version number.'
 fi
 
 if [[ "${PSY}" == true ]] ; then
@@ -92,15 +68,12 @@ if [[ "${CLEAN}" == true ]] ; then
   rm -r node_modules dist yarn.lock && echo 'Removed dependencies and build files.'
 fi
 
-if [[ "${BUILD}" == true ]] ; then
-  yarn "${YARN_ARG}"
+if [[ "${EXEC}" == true ]] ; then
+  yarn build
+  brew services restart grafana
 fi
 
-if [[ "${GRAFANA}" == true ]] ; then
-  brew services "${GRAFANA_ARG}" grafana
-fi
-
-if [[ "${PUBLISH}" == true ]] ; then
+if [[ "${VERSION}" ]] ; then
   if git status | grep -q clean ; then
     EXT='.bk'
     PACKAGE_JSON='package.json'
