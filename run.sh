@@ -104,7 +104,7 @@ if [[ "${PUBLISH}" == true ]] ; then
   if git status | grep -q clean ; then
     EXT='.bk'
     PACKAGE_JSON='package.json'
-    REMOTE_ORIGIN='github'
+    REMOTE_ORIGIN='origin'
     sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
     rm -v "${PACKAGE_JSON}${EXT}"
     git add "${PACKAGE_JSON}" && git commit -m "v${VERSION}"
