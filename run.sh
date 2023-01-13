@@ -60,7 +60,7 @@ if [[ "${HELP}" == true ]] ; then
   echo '  -p: Publish the current psychart file.'
   echo '  -o: Open the svg generator in a web browser.'
   echo "  -A: Clears the terminal and executes the command ${0} -p -b=dev -g=restart"
-  echo '  -P: Publish the plugin to Grafana. Needs a version number. Pattern: "#.#.#"'
+  echo '  -P: Publish the plugin to Grafana. Needs a version number.'
 fi
 
 if [[ "${PSY}" == true ]] ; then
