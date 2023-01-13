@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.1
+
+- Fixed broken badges in `README.md`
+- Fixed link to copyright notice in `README.md`
+- Removed references to plugin signing
+- Minor improvements to build pipeline
+
 ## 2.0.0
 
 - Use the new Grafana plugin builder from
