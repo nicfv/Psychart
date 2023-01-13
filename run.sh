@@ -80,7 +80,7 @@ if [[ "${VERSION}" ]] ; then
     REMOTE_ORIGIN='origin'
     sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
     rm -v "${PACKAGE_JSON}${EXT}"
-    git add "${PACKAGE_JSON}" && git commit -m "v${VERSION}"
+    git add "${PACKAGE_JSON}" && git commit -m "v${VERSION}" && git push
     git tag -a "v${VERSION}" -m "${VERSION}" && git push "${REMOTE_ORIGIN}" "v${VERSION}"
   else
     echo 'Some changes not committed. Commit or discard them first before publishing.'
