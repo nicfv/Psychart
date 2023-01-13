@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-KEY_FILE='grafana-api-key.txt'
-GRAFANA_API_KEY="$(cat ${KEY_FILE} || touch ${KEY_FILE})"
-
 YARN_ARG='dev'
 GRAFANA_ARG='restart'
 VERSION='1.0.0'
@@ -13,7 +10,6 @@ BUILD=false
 INSTALL=false
 GRAFANA=false
 PSY=false
-ZIP=false
 PUBLISH=false
 
 for ARG in "${@}" ; do
@@ -36,18 +32,10 @@ for ARG in "${@}" ; do
   elif [[ "${ARG}" == -A ]] ; then
     clear
     echo 'Building plugin in development mode.'
+    YARN_ARG='build'
     BUILD=true
     GRAFANA=true
     PSY=true
-  elif [[ "${ARG}" == -z ]] ; then
-    ZIP=true
-  elif [[ "${ARG}" == -Z ]] ; then
-    clear
-    echo 'Building and zipping the plugin.'
-    BUILD=true
-    YARN_ARG='build'
-    PSY=true
-    ZIP=true
   elif [[ "${ARG}" =~ -P=([0-9]+\.[0-9]+\.[0-9]+) ]] ; then
     VERSION="${BASH_REMATCH[1]}"
     echo "Publishing with version ${VERSION}."
@@ -58,11 +46,11 @@ for ARG in "${@}" ; do
 done
 
 if [[ "${HELP}" == true ]] ; then
-  echo "Usage: ${0} [-h] [-i] [-c] [-b=<mode>] [-g=<mode>] [-p] [-o] [-z] [-A] [-Z] [-P=#.#.#]"
+  echo "Usage: ${0} [-h] [-i] [-c] [-b=<mode>] [-g=<mode>] [-p] [-o] [-A] [-P=#.#.#]"
   echo '  -h: Show this help message.'
   echo '  -i: (Re)install node packages.'
   echo '  -c: Clean build files.'
-  echo '  -b: Build and sign the plugin.'
+  echo '  -b: Build the plugin without signing it.'
   echo '      - "dev" = Development mode'
   echo '      - "build" = Release mode'
   echo '  -g: Run, restart, or stop the local Grafana instance.'
@@ -71,10 +59,8 @@ if [[ "${HELP}" == true ]] ; then
   echo '      - "stop" = Shut down'
   echo '  -p: Publish the current psychart file.'
   echo '  -o: Open the svg generator in a web browser.'
-  echo '  -z: Zip the current build files into psychart.zip.'
   echo "  -A: Clears the terminal and executes the command ${0} -p -b=dev -g=restart"
-  echo "  -Z: Clears the terminal and executes the command ${0} -p -b=build -z"
-  echo "  -P: Publish the plugin to Grafana. Needs a version number."
+  echo '  -P: Publish the plugin to Grafana. Needs a version number. Pattern: "#.#.#"'
 fi
 
 if [[ "${PSY}" == true ]] ; then
@@ -108,20 +94,10 @@ fi
 
 if [[ "${BUILD}" == true ]] ; then
   yarn "${YARN_ARG}"
-  export GRAFANA_API_KEY
-  npx @grafana/toolkit plugin:sign
 fi
 
 if [[ "${GRAFANA}" == true ]] ; then
   brew services "${GRAFANA_ARG}" grafana
-fi
-
-if [[ "${ZIP}" == true ]] ; then
-  PLUGIN_ID='ventura-psychrometric-panel'
-  cp -rv 'dist' "${PLUGIN_ID}"
-  zip -vXr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
-  rm -rv "${PLUGIN_ID}"
-  md5 "${PLUGIN_ID}.zip"
 fi
 
 if [[ "${PUBLISH}" == true ]] ; then
