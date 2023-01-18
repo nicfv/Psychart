@@ -1,6 +1,6 @@
 {
   "name": "ventura-psychrometric-panel",
-  "version": "2.0.2",
+  "version": "2.0.1",
   "description": "View air conditions on a psychrometric chart.",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
@@ -12,9 +12,11 @@
     "lint:fix": "yarn lint --fix",
     "e2e": "yarn cypress install && yarn grafana-e2e run",
     "e2e:update": "yarn cypress install && yarn grafana-e2e run --update-screenshots",
-    "server": "docker-compose up --build"
+    "server": "docker-compose up --build",
+    "sign": "npx @grafana/toolkit plugin:sign"
   },
   "author": "Nicolas Ventura",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@grafana/e2e": "9.2.5",
