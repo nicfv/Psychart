@@ -118,6 +118,7 @@ jobs:
 
       - name: Lint plugin
         run: |
+          cat config.yaml
           git clone https://github.com/grafana/plugin-validator
           pushd ./plugin-validator/pkg/cmd/plugincheck2
           go install

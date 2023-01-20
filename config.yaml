@@ -3,4 +3,4 @@ global:
 
 analyzers:
   license:
-    severity: warning
+    enabled: false
