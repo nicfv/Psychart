@@ -1,6 +1,0 @@
-global:
-  enabled: true
-
-analyzers:
-  license:
-    enabled: false

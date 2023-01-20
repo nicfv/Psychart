@@ -93,7 +93,7 @@ function Psychrometrics() {
   // Systems of units (IP or SI)
   var PSYCHROLIB_UNITS = undefined;
 
-  // Psychrolib tolerance value
+  // Floating-point tolerance value
   var PSYCHROLIB_TOLERANCE = undefined;
 
   this.IP = 1;
