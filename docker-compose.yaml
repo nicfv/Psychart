@@ -2,7 +2,7 @@ version: '3.0'
 
 services:
   grafana:
-    container_name: 'ventura-psychrometricchart-panel'
+    container_name: 'ventura-psychart-panel'
     build:
       context: ./.config
       args:
@@ -10,5 +10,5 @@ services:
     ports:
       - 3000:3000/tcp
     volumes:
-      - ./dist:/var/lib/grafana/plugins/ventura-psychrometricchart-panel
+      - ./dist:/var/lib/grafana/plugins/ventura-psychart-panel
       - ./provisioning:/etc/grafana/provisioning

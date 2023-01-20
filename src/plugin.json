@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Psychrometric Chart",
+  "name": "Psychart",
   "id": "ventura-psychrometric-panel",
   "info": {
     "description": "View air conditions on a psychrometric chart.",
@@ -62,7 +62,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=7.0.0",
+    "grafanaDependency": ">=9.2.5",
     "plugins": []
   }
 }
