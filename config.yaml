@@ -1,0 +1,7 @@
+global:
+  enabled: true
+  severity: error
+
+analyzers:
+  license:
+    severity: warning
