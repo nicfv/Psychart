@@ -104,9 +104,9 @@ jobs:
           go install
           popd
           echo 'Disabling analyzer to check license.'
-          echo 'analyzers:' >> ./plugin-validator/config/defauly.yaml
-          echo '  license:' >> ./plugin-validator/config/defauly.yaml
-          echo '    enabled: false' >> ./plugin-validator/config/defauly.yaml
+          echo 'analyzers:' >> ./plugin-validator/config/default.yaml
+          echo '  license:' >> ./plugin-validator/config/default.yaml
+          echo '    enabled: false' >> ./plugin-validator/config/default.yaml
           plugincheck2 -config ./plugin-validator/config/default.yaml ${{ steps.metadata.outputs.archive }}
 
       - name: Create Github release
