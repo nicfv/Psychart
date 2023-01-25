@@ -1,6 +1,6 @@
-import { Psychart } from 'psychart';
-import { PsyOptions } from 'types';
-import { CtoF, translate2, isNumber } from 'helper';
+import { Psychart } from './psychart';
+import { PsyOptions } from './types';
+import { CtoF, translate2, isNumber } from './helper';
 
 export function State(
   width: number,
@@ -152,14 +152,11 @@ export function State(
 
 // Return the full series name that corresponds to the selected field name.
 const getInternalSeriesName = (name: string, data: { [index: string]: { [index: string]: number } }) =>
-  !!name
-    ? [
-        ...new Set(
-          Object.keys(data)
-            .map((key) => Object.keys(data[key]))
-            .flat()
-        ),
-      ].find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name)
+  !!name ? Array.from(new Set(
+    Object.keys(data)
+      .map((key) => Object.keys(data[key]))
+      .flat()
+  )).find((x) => x.substring(0, name.length) === name || x.substring(x.length - name.length) === name)
     : undefined;
 
 const GetColor = (t: number, minTime: number, maxTime: number, gradient: string) => {

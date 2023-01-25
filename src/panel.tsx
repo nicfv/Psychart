@@ -1,15 +1,15 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
-import { useTheme } from '@grafana/ui';
-import { PsyOptions } from 'types';
-import { State } from 'state';
-import { Container } from 'container';
-import { format } from 'formatter';
+import { useTheme2 } from '@grafana/ui';
+import { PsyOptions } from './types';
+import { State } from './state';
+import { Container } from './container';
+import { format } from './formatter';
 
-interface Props extends PanelProps<PsyOptions> {}
+interface Props extends PanelProps<PsyOptions> { }
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const isLightTheme = useTheme().isLight;
+  const isLightTheme = useTheme2().isLight;
   try {
     return <Container child={State(width, height, options, isLightTheme, format(data))} />;
   } catch (ex: any) {

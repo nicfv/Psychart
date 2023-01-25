@@ -2,10 +2,10 @@ import { PanelPlugin, Field } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
-import inferno from './img/inferno.png';
-import magma from './img/magma.png';
-import plasma from './img/plasma.png';
-import viridis from './img/viridis.png';
+const inferno = 'public/plugins/ventura-psychrometric-panel/img/inferno.png',
+  magma = 'public/plugins/ventura-psychrometric-panel/img/magma.png',
+  plasma = 'public/plugins/ventura-psychrometric-panel/img/plasma.png',
+  viridis = 'public/plugins/ventura-psychrometric-panel/img/viridis.png';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
