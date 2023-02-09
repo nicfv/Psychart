@@ -1,12 +1,9 @@
 {
-  "name": "psychart",
-  "version": "2.0.1",
   "scripts": {
-    "build": "tsc ; cp -r src/plugin.json src/img dist/",
+    "build": "tsc && cp -r src/plugin.json src/img dist/",
     "sign": "npx --yes @grafana/sign-plugin"
   },
   "dependencies": {
-    "typescript": "latest",
     "@grafana/data": "latest",
     "@grafana/ui": "latest",
     "@types/lodash": "latest",
