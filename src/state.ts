@@ -196,11 +196,11 @@ const GetColor = (t: number, minTime: number, maxTime: number, gradient: string)
   }
   return (
     'rgb(' +
-    JMath.translate2(t, minTime, maxTime, r) +
+    // JMath.translate2(t, minTime, maxTime, r) +
     ',' +
-    JMath.translate2(t, minTime, maxTime, g) +
+    // JMath.translate2(t, minTime, maxTime, g) +
     ',' +
-    JMath.translate2(t, minTime, maxTime, b) +
+    // JMath.translate2(t, minTime, maxTime, b) +
     ')'
   );
 };

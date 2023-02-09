@@ -41,7 +41,7 @@ export class PsyState {
     /**
      * Standard Atmospheric Air Pressure
      */
-    private readonly atm: number;
+    readonly atm: number;
     /**
      * Initialize a new psychrometric state.
      */
