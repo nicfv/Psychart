@@ -1,7 +1,7 @@
-type UnitSystem = 'IP' | 'SI';
-type MeasurementType = 'dbwb' | 'dbrh' | 'dbdp';
-type RelHumType = 'p' | 'f';
-type Gradient = 'v' | 'i' | 'm' | 'p';
+export type UnitSystem = 'IP' | 'SI';
+export type MeasurementType = 'dbwb' | 'dbrh' | 'dbdp';
+export type RelHumType = 'p' | 'f';
+export type Gradient = 'v' | 'i' | 'm' | 'p';
 
 export interface PsyOptions {
   unitSystem: UnitSystem;

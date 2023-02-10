@@ -1,6 +1,7 @@
 import { Point } from './point';
 import { JMath } from './jmath';
 import * as Psychrolib from './psychrolib';
+import { UnitSystem } from './types';
 
 /**
  * Represents a single air condition using several states.
@@ -45,7 +46,7 @@ export class PsyState {
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(state: { db: number, rh?: number, wb?: number, dp?: number }, unitSystem: 'IP' | 'SI', altitude: number) {
+    constructor(state: { db: number, rh?: number, wb?: number, dp?: number }, unitSystem: UnitSystem, altitude: number) {
         Psychrolib.SetUnitSystem(unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
         this.atm = Psychrolib.GetStandardAtmPressure(altitude);
         if (typeof state.rh === 'number') {
