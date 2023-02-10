@@ -1,7 +1,7 @@
 import { Point } from './point';
 import { JMath } from './jmath';
 import * as Psychrolib from './psychrolib';
-import { UnitSystem } from './types';
+import { ChartOptions, Datum, Layout } from './types';
 
 /**
  * Represents a single air condition using several states.
@@ -46,9 +46,9 @@ export class PsyState {
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(state: { db: number, rh?: number, wb?: number, dp?: number }, unitSystem: UnitSystem, altitude: number) {
-        Psychrolib.SetUnitSystem(unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
-        this.atm = Psychrolib.GetStandardAtmPressure(altitude);
+    constructor(state: Datum, chartOpts: ChartOptions) {
+        Psychrolib.SetUnitSystem(chartOpts.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
+        this.atm = Psychrolib.GetStandardAtmPressure(chartOpts.altitude);
         if (typeof state.rh === 'number') {
             const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.rh, this.atm);
             this.db = state.db;
@@ -86,10 +86,11 @@ export class PsyState {
     /**
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
-    toXY(width: number, height: number, padding: number, db_min: number, db_max: number, hr_min: number, hr_max: number): Point {
+    toXY(layout: Layout, chartOpts: ChartOptions): Point {
+        const HR_MAX = Psychrolib.GetHumRatioFromTDewPoint(chartOpts.dpMax, this.atm);
         return new Point(
-            JMath.translate(this.db, db_min, db_max, padding, width - padding),
-            height - JMath.translate(this.hr, hr_min, hr_max, padding, height - padding)
+            JMath.clamp(JMath.translate(this.db, chartOpts.dbMin, chartOpts.dbMax, layout.padding, layout.size.x - layout.padding), layout.padding, layout.size.x - layout.padding),
+            JMath.clamp(layout.size.y - JMath.translate(this.hr, 0, HR_MAX, layout.padding, layout.size.y - layout.padding), layout.padding, layout.size.y - layout.padding)
         );
     }
 }

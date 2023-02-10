@@ -7,6 +7,8 @@ const inferno = 'public/plugins/ventura-psychrometric-panel/img/inferno.png',
   plasma = 'public/plugins/ventura-psychrometric-panel/img/plasma.png',
   viridis = 'public/plugins/ventura-psychrometric-panel/img/viridis.png';
 
+// TODO: update the paths
+
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
     .addRadio({
