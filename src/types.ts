@@ -129,7 +129,7 @@ export interface DisplayOptions {
     /**
      * Determines whether or not to connect points with a line.
      */
-    line: boolean;
+    lineWidth: number;
     /**
      * Determines the color gradient for time series plots.
      */

@@ -1,7 +1,7 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { ChartOptions, Layout, PsyOptions, StyleOptions } from './types';
+import { ChartOptions, DisplayOptions, Layout, PsyOptions, StyleOptions } from './types';
 // import { State } from './state';
 import { Container } from './container';
 import { format } from './formatter';
@@ -25,7 +25,16 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     config.lineColor = new Color(255, 0, 0);
     config.major = 10;
     config.resolution = 0.5;
-    return <Container child={new Psychart(layout, chartOpts, config).getElement()} />;
+    const displayOpts = {} as DisplayOptions;
+    displayOpts.advanced = true;
+    displayOpts.gradient = 'viridis';
+    displayOpts.lineWidth = 1;
+    displayOpts.pointRadius = 5;
+    const psychart = new Psychart(layout, chartOpts, config);
+    psychart.plot({ db: 60, dp: 40 }, displayOpts);
+    psychart.plot({ db: 70, wb: 50 }, displayOpts);
+    psychart.plot({ db: 80, rh: .3 }, displayOpts);
+    return <Container child={psychart.getElement()} />;
     // return <Container child={State(width, height, options, isLightTheme, format(data))} />;
   } catch (ex: any) {
     console.error(ex); // TODO: remove (testing only)

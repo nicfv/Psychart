@@ -1,6 +1,7 @@
 import { Color } from './color';
+import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { ChartOptions, Layout, Point, StyleOptions } from './types';
+import { ChartOptions, Datum, DisplayOptions, Layout, Point, StyleOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -43,6 +44,43 @@ export class Psychart {
      */
     private readonly style = {} as StyleOptions;
     /**
+     * Gradient source: https://waldyrious.net/viridis-palette-generator/
+     */
+    private readonly gradients = {
+        viridis: [
+            new Color(253, 231, 37),
+            new Color(94, 201, 98),
+            new Color(33, 145, 140),
+            new Color(59, 82, 139),
+            new Color(68, 1, 84),
+        ],
+        inferno: [
+            new Color(252, 255, 164),
+            new Color(249, 142, 9),
+            new Color(188, 55, 84),
+            new Color(87, 16, 110),
+            new Color(0, 0, 4),
+        ],
+        magma: [
+            new Color(252, 253, 191),
+            new Color(252, 137, 97),
+            new Color(183, 55, 121),
+            new Color(81, 18, 124),
+            new Color(0, 0, 4),
+        ],
+        plasma: [
+            new Color(240, 249, 33),
+            new Color(248, 149, 64),
+            new Color(204, 71, 120),
+            new Color(126, 3, 168),
+            new Color(13, 8, 135),
+        ],
+    };
+    /**
+     * The last state plotted on Psychart.
+     */
+    private lastState: PsyState;
+    /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
     constructor(newLayout: Layout, newChartOptions: ChartOptions, newStyleOptions: StyleOptions) {
@@ -71,7 +109,7 @@ export class Psychart {
             // The upper point is on the saturation line (rh = 100%)
             data.push(new PsyState({ db: db, rh: 1 }, this.chartOpts));
             // Draw the axis and the label
-            this.drawLine(data, this.style.lineColor, 1.0);
+            this.drawAxis(data);
             this.drawLabel(db + this.units.temp, data[0], TextAnchor.N, 'Dry Bulb');
         }
         // Draw constant dew point horizontal lines.
@@ -82,7 +120,7 @@ export class Psychart {
             // The right point is at the maximum dry bulb temperature
             data.push(new PsyState({ db: this.chartOpts.dbMax, dp: dp }, this.chartOpts));
             // Draw the axis and the label
-            this.drawLine(data, this.style.lineColor, 1.0);
+            this.drawAxis(data);
             this.drawLabel(dp + this.units.temp, data[1], TextAnchor.W, 'Dew Point');
         }
         // Draw constant wet bulb diagonal lines.
@@ -93,7 +131,7 @@ export class Psychart {
                 data.push(new PsyState({ db: db, wb: wb }, this.chartOpts));
             }
             // Draw the axis and the label
-            this.drawLine(data, this.style.lineColor, 1.0);
+            this.drawAxis(data);
             this.drawLabel(wb + this.units.temp, data[0], TextAnchor.SE, 'Wet Bulb');
         }
         // Draw constant relative humidity lines.
@@ -110,7 +148,7 @@ export class Psychart {
                 }
             }
             // Draw the axis and the label
-            this.drawLine(data, this.style.lineColor, 1.0);
+            this.drawAxis(data);
             if (rh > 0 && rh < 100) {
                 this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
             }
@@ -119,9 +157,14 @@ export class Psychart {
     /**
      * Draw an axis line given an array of psychrometric states.
      */
-    private drawLine(data: PsyState[], color: Color, weight: number): void {
+    private drawAxis(data: PsyState[]): void {
+        this.g.axes.appendChild(this.createLine(data, this.style.lineColor, 1.0));
+    }
+    /**
+     * Create a line to append onto a parent element.
+     */
+    private createLine(data: PsyState[], color: Color, weight: number): SVGPathElement {
         const line = document.createElementNS(NS, 'path');
-        this.g.axes.appendChild(line);
         line.setAttribute('fill', 'none');
         line.setAttribute('stroke', color.toString());
         line.setAttribute('stroke-width', weight + 'px');
@@ -131,6 +174,7 @@ export class Psychart {
             const point = psy.toXY(this.layout, this.chartOpts);
             return point.x + ',' + point.y;
         }).join(' '));
+        return line;
     }
     /**
      * Draw an axis label.
@@ -144,7 +188,7 @@ export class Psychart {
         }
     }
     /**
-     * Create a label and append it onto the `parent` element.
+     * Create a label to append onto a parent element.
      */
     private createLabel(text: string, location: Point, color: Color, anchor: TextAnchor): SVGTextElement {
         const label = document.createElementNS(NS, 'text');
@@ -269,6 +313,44 @@ export class Psychart {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
+    }
+    /**
+     * Plot one psychrometric state onto the psychrometric chart.
+     */
+    plot(state: Datum, displayOpts: DisplayOptions, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
+        const currentState = new PsyState(state, this.chartOpts),
+            location = currentState.toXY(this.layout, this.chartOpts);
+        // Compute the current color to plot
+        const normalized = JMath.normalize(time, startTime, endTime),
+            color = Color.gradient(normalized, this.gradients[displayOpts.gradient]);
+        // Determine whether to connect the states with a line
+        if (!!this.lastState && displayOpts.lineWidth > 0) {
+            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, displayOpts.lineWidth));
+        }
+        this.lastState = currentState;
+        // Define a 0-length path element and assign its attributes.
+        const point = document.createElementNS(NS, 'path');
+        point.setAttribute('fill', 'none');
+        point.setAttribute('stroke', color.toString());
+        point.setAttribute('stroke-width', displayOpts.pointRadius + 'px');
+        point.setAttribute('stroke-linecap', 'round');
+        point.setAttribute('vector-effect', 'non-scaling-stroke');
+        point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
+        this.g.points.appendChild(point);
+        // Generate the text to display on mouse hover.
+        const tooltipString = new Date(time).toLocaleString() + '\n' +
+            JMath.round(currentState.db, 1) + this.units.temp + ' Dry Bulb\n' +
+            JMath.round(currentState.rh * 100) + '% Rel. Hum.\n' +
+            JMath.round(currentState.wb, 1) + this.units.temp + ' Wet Bulb\n' +
+            JMath.round(currentState.dp, 1) + this.units.temp + ' Dew Point' +
+            (displayOpts.advanced ? '\n' +
+                JMath.round(currentState.hr, 2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
+                JMath.round(currentState.vp, 1) + ' ' + this.units.vp + ' Vap. Press.\n' +
+                JMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
+                JMath.round(currentState.v, 2) + ' ' + this.units.v + ' Volume' : '');
+        // Set the behavior when the user interacts with this point
+        point.addEventListener('mouseover', () => this.drawTooltip(tooltipString, location, color));
+        point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
      * Return the SVG element to append on the parent.
