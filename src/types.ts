@@ -1,5 +1,18 @@
 import { Color } from './color';
-import { Point } from './point';
+
+/**
+ * Represents an `(x,y)` cartesian coordinate pair.
+ */
+export interface Point {
+    /**
+     * The x-coordinate (horizontal)
+     */
+    x: number;
+    /**
+     * The y-coordinate (vertical)
+     */
+    y: number;
+}
 
 export interface Layout {
     /**

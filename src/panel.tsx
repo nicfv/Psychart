@@ -7,7 +7,6 @@ import { Container } from './container';
 import { format } from './formatter';
 import { PsyState } from './psystate';
 import { Psychart } from './psychart';
-import { Point } from './point';
 import { Color } from './color';
 
 interface Props extends PanelProps<PsyOptions> { }
@@ -18,7 +17,7 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     // return <pre>{JSON.stringify(new PsyState({ db: 80, dp: 70 }, 'IP', 0))}</pre>;
     const layout = {} as Layout;
     layout.padding = 30;
-    layout.size = new Point(width, height);
+    layout.size = { x: width, y: height };
     const chartOpts = options as ChartOptions,
       config = {} as StyleOptions;
     config.fontColor = new Color(255, 255, 255);
