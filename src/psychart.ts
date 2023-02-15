@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { ChartOptions, Datum, DisplayOptions, Layout, Point, StyleOptions } from './types';
+import { ChartOptions, Datum, DisplayOptions, Layout, Point, Region, StyleOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -77,6 +77,75 @@ export class Psychart {
         ],
     };
     /**
+     * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
+     */
+    private readonly regions: { [index: string]: Region } = {
+        dca4: {
+            tooltip: 'Data center A4\nASHRAE comfort zone',
+            data: [
+                { db: 5, dp: -12 },
+                { db: 22.5, rh: 0.08 },
+                { db: 45.0, rh: 0.08 },
+                { db: 45.0, dp: 24 },
+                { db: 25.8, rh: 0.90 },
+                { db: 5, rh: 0.90 },
+            ],
+        },
+        dca3: {
+            tooltip: 'Data center A3\nASHRAE comfort zone',
+            data: [
+                { db: 5, dp: -12 },
+                { db: 22.5, rh: 0.08 },
+                { db: 40.0, rh: 0.08 },
+                { db: 40.0, dp: 24 },
+                { db: 26.7, rh: 0.85 },
+                { db: 5, rh: 0.85 },
+            ],
+        },
+        dca2: {
+            tooltip: 'Data center A2\nASHRAE comfort zone',
+            data: [
+                { db: 10.0, dp: -12 },
+                { db: 22.5, rh: 0.08 },
+                { db: 35.0, rh: 0.08 },
+                { db: 35.0, dp: 21 },
+                { db: 24.7, rh: 0.80 },
+                { db: 10.0, rh: 0.80 },
+            ],
+        },
+        dca1: {
+            tooltip: 'Data center A1\nASHRAE comfort zone',
+            data: [
+                { db: 15.0, dp: -12 },
+                { db: 22.5, rh: 0.08 },
+                { db: 32.0, rh: 0.08 },
+                { db: 32.0, dp: 17 },
+                { db: 20.6, rh: 0.80 },
+                { db: 15.0, rh: 0.80 },
+            ],
+        },
+        dclo: {
+            tooltip: 'Recommended ASHRAE data center\nconditions for low levels of pollutants',
+            data: [
+                { db: 18.0, dp: -9 },
+                { db: 27.0, dp: -9 },
+                { db: 27.0, dp: 15 },
+                { db: 20.7, rh: 0.70 },
+                { db: 18.0, rh: 0.70 },
+            ],
+        },
+        dchi: {
+            tooltip: 'Recommended ASHRAE data center\nconditions for high levels of pollutants',
+            data: [
+                { db: 18.0, dp: -9 },
+                { db: 27.0, dp: -9 },
+                { db: 27.0, dp: 15 },
+                { db: 26.2, rh: 0.50 },
+                { db: 18.0, rh: 0.50 },
+            ],
+        },
+    };
+    /**
      * The last state plotted on Psychart.
      */
     private lastState: PsyState;
@@ -96,6 +165,19 @@ export class Psychart {
         this.units.vp = (this.chartOpts.unitSystem === 'IP' ? 'Psi' : 'Pa');
         this.units.h = (this.chartOpts.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
         this.units.v = (this.chartOpts.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
+        // Convert regions to the IP unit system if applicable
+        if (this.chartOpts.unitSystem === 'IP') {
+            for (let region in this.regions) {
+                this.regions[region].data.forEach(datum => {
+                    datum.db = JMath.CtoF(datum.db);
+                    if ('wb' in datum) {
+                        datum.wb = JMath.CtoF(datum.wb);
+                    } else if ('dp' in datum) {
+                        datum.dp = JMath.CtoF(datum.dp);
+                    }
+                });
+            }
+        }
         // Create new SVG groups, and append all the
         // layers into the chart.
         for (let groupName in this.g) {
@@ -362,15 +444,13 @@ export class Psychart {
             if ('rh' in lastDatum && 'rh' in currentDatum && JMath.approx(lastDatum.rh, currentDatum.rh)) {
                 const range = Math.abs(currentDatum.db - lastDatum.db);
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
-                for (let i = 0; i <= range; i += this.style.resolution) {
+                for (let i = 0; i < range; i += this.style.resolution) {
                     const db = JMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
                     data.push(new PsyState({ db: db, rh: lastDatum.rh }, this.chartOpts));
                 }
             }
             // Assume iso-dry bulb, wet bulb, or dew point (straight line)
-            else {
-                data.push(new PsyState(currentDatum, this.chartOpts));
-            }
+            data.push(new PsyState(currentDatum, this.chartOpts));
         }
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
@@ -382,6 +462,12 @@ export class Psychart {
             region.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), color));
             region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
+    }
+    /**
+     * Draw predefined regions on Psychart.
+     */
+    drawRegions(regionIds: string[], gradient: [Color, Color]): void {
+        regionIds.forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / regionIds.length, gradient), this.regions[id].tooltip));
     }
     /**
      * Clear all plotted data from Psychart.

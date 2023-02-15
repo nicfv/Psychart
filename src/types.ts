@@ -51,6 +51,17 @@ export interface Datum {
     dp?: number;
 }
 
+export interface Region {
+    /**
+     * The text to display on mouse hover
+     */
+    tooltip: string;
+    /**
+     * The data that represents the boundary of this region
+     */
+    data: Datum[];
+}
+
 export interface StyleOptions {
     /**
      * The font color.
@@ -148,20 +159,5 @@ export interface DisplayOptions {
 }
 
 export interface PsyOptions extends ChartOptions, DataOptions, DisplayOptions {
-    // unitSystem: UnitSystem;
-    // altitude: number;
-    // dbMin: number;
-    // dbMax: number;
-    // dpMax: number;
-    // measurements: MeasurementType;
-    // dryBulb: string;
-    // wetBulb: string;
-    // dewPoint: string;
-    // relHum: string;
-    // relHumType: RelHumType;
     regions: string[];
-    // ptr: number;
-    // line: boolean;
-    // gradient: Gradient;
-    // advanced: boolean;
 }
