@@ -1,6 +1,6 @@
 import { JMath } from './jmath';
 import * as Psychrolib from './psychrolib';
-import { ChartOptions, Datum, Layout, Point } from './types';
+import { PsyOptions, Datum, Layout, Point } from './types';
 
 /**
  * Represents a single air condition using several states.
@@ -41,15 +41,50 @@ export class PsyState {
     /**
      * Standard Atmospheric Air Pressure
      */
-    readonly atm: number;
+    private static atm: number;
+    /**
+     * Minimum Dry Bulb
+     */
+    private static dbMin: number;
+    /**
+     * Maximum Dry Bulb
+     */
+    private static dbMax: number;
+    /**
+     * Maximum Humidity Ratio
+     */
+    private static hrMax: number;
+    /**
+     * Psychart panel width
+     */
+    private static width: number;
+    /**
+     * Psychart panel height
+     */
+    private static height: number;
+    /**
+     * Psychart panel padding
+     */
+    private static padding: number;
+    /**
+     * Compute a first-time initialization of psychrolib.
+     */
+    static initialize(layout: Layout, config: PsyOptions): void {
+        PsyState.width = layout.size.x;
+        PsyState.height = layout.size.y;
+        PsyState.padding = layout.padding;
+        Psychrolib.SetUnitSystem(config.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
+        PsyState.atm = Psychrolib.GetStandardAtmPressure(config.altitude);
+        PsyState.dbMin = config.dbMin;
+        PsyState.dbMax = config.dbMax;
+        PsyState.hrMax = Psychrolib.GetHumRatioFromTDewPoint(config.dpMax, PsyState.atm);
+    }
     /**
      * Initialize a new psychrometric state.
      */
-    constructor(state: Datum, chartOpts: ChartOptions) {
-        Psychrolib.SetUnitSystem(chartOpts.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
-        this.atm = Psychrolib.GetStandardAtmPressure(chartOpts.altitude);
+    constructor(state: Datum) {
         if (typeof state.rh === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.rh, this.atm);
+            const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.rh, PsyState.atm);
             this.db = state.db;
             this.rh = state.rh;
             this.wb = PSY_CALC[1];
@@ -60,7 +95,7 @@ export class PsyState {
             this.v = PSY_CALC[5];
         }
         else if (typeof state.wb === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.wb, this.atm);
+            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.wb, PsyState.atm);
             this.db = state.db;
             this.rh = PSY_CALC[2];
             this.wb = state.wb;
@@ -71,7 +106,7 @@ export class PsyState {
             this.v = PSY_CALC[5];
         }
         else if (typeof state.dp === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.dp, this.atm);
+            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.dp, PsyState.atm);
             this.db = state.db;
             this.rh = PSY_CALC[2];
             this.wb = PSY_CALC[1];
@@ -85,10 +120,10 @@ export class PsyState {
     /**
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
-    toXY(layout: Layout, chartOpts: ChartOptions): Point {
-        const HR_MAX = Psychrolib.GetHumRatioFromTDewPoint(chartOpts.dpMax, this.atm);
+    toXY(): Point {
         return new Point(
-            JMath.clamp(JMath.translate(this.db, chartOpts.dbMin, chartOpts.dbMax, layout.padding, layout.size.x - layout.padding), layout.padding, layout.size.x - layout.padding),
-            JMath.clamp(layout.size.y - JMath.translate(this.hr, 0, HR_MAX, layout.padding, layout.size.y - layout.padding), layout.padding, layout.size.y - layout.padding));
+            JMath.clamp(JMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
+            JMath.clamp(PsyState.height - JMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+        );
     }
 }

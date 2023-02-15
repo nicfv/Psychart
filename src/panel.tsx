@@ -1,7 +1,7 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { ChartOptions, DisplayOptions, Layout, PsyOptions, StyleOptions } from './types';
+import { Layout, Point, PsyOptions, StyleOptions } from './types';
 // import { State } from './state';
 import { Container } from './container';
 import { format } from './formatter';
@@ -14,23 +14,15 @@ interface Props extends PanelProps<PsyOptions> { }
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const isLightTheme = useTheme2().isLight;
   try {
-    // return <pre>{JSON.stringify(new PsyState({ db: 80, dp: 70 }, 'IP', 0))}</pre>;
-    const layout = {} as Layout;
-    layout.padding = 30;
-    layout.size = { x: width, y: height };
-    const chartOpts = options as ChartOptions,
-      config = {} as StyleOptions;
-    config.fontColor = new Color(255, 255, 255);
-    config.fontSize = 12;
-    config.lineColor = new Color(255, 0, 0);
-    config.major = 10;
-    config.resolution = 0.5;
-    const displayOpts = {} as DisplayOptions;
-    displayOpts.advanced = true;
-    displayOpts.gradient = 'viridis';
-    displayOpts.lineWidth = 1;
-    displayOpts.pointRadius = 5;
-    const psychart = new Psychart(layout, chartOpts, config);
+    const layout = { padding: 30, size: new Point(width, height) } as Layout,
+      style = {
+        fontColor: isLightTheme ? new Color(32, 32, 32) : new Color(208, 208, 208),
+        lineColor: isLightTheme ? new Color(224, 224, 224) : new Color(48, 48, 48),
+        fontSize: 12,
+        resolution: 0.5,
+        major: 10,
+      } as StyleOptions,
+      psychart = new Psychart(layout, options, style);
     // psychart.plot({ db: 60, dp: 40 }, displayOpts);
     // psychart.plot({ db: 70, wb: 50 }, displayOpts);
     // psychart.plot({ db: 80, rh: .3 }, displayOpts);

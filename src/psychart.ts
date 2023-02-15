@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { ChartOptions, Datum, DisplayOptions, Layout, Point, Region, StyleOptions } from './types';
+import { PsyOptions, Datum, Layout, Point, Region, StyleOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -38,9 +38,9 @@ export class Psychart {
     /**
      * Configuration options for Psychart.
      */
-    private readonly chartOpts = {} as ChartOptions;
+    private readonly config = {} as PsyOptions;
     /**
-     * Configuration options for Psychart.
+     * Styling options for Psychart.
      */
     private readonly style = {} as StyleOptions;
     /**
@@ -152,21 +152,23 @@ export class Psychart {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(newLayout: Layout, newChartOptions: ChartOptions, newStyleOptions: StyleOptions) {
+    constructor(layout: Layout, config: PsyOptions, style: StyleOptions) {
         // Set internal variables.
-        this.layout = newLayout;
-        this.chartOpts = newChartOptions;
-        this.style = newStyleOptions;
+        this.layout = layout;
+        this.config = config;
+        this.style = style;
+        // Compute a first-time initialization of psychrolib
+        PsyState.initialize(layout, config);
         // Set the chart's viewport size.
         this.base.setAttribute('viewBox', '0 0 ' + this.layout.size.x + ' ' + this.layout.size.y);
         // Sets the displayed units based on the unit system.
-        this.units.temp = '\u00B0' + (this.chartOpts.unitSystem === 'IP' ? 'F' : 'C');
-        this.units.hr = (this.chartOpts.unitSystem === 'IP' ? 'lbw/lba' : 'kgw/kga');
-        this.units.vp = (this.chartOpts.unitSystem === 'IP' ? 'Psi' : 'Pa');
-        this.units.h = (this.chartOpts.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
-        this.units.v = (this.chartOpts.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
+        this.units.temp = '\u00B0' + (this.config.unitSystem === 'IP' ? 'F' : 'C');
+        this.units.hr = (this.config.unitSystem === 'IP' ? 'lbw/lba' : 'kgw/kga');
+        this.units.vp = (this.config.unitSystem === 'IP' ? 'Psi' : 'Pa');
+        this.units.h = (this.config.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
+        this.units.v = (this.config.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
         // Convert regions to the IP unit system if applicable
-        if (this.chartOpts.unitSystem === 'IP') {
+        if (this.config.unitSystem === 'IP') {
             for (let region in this.regions) {
                 this.regions[region].data.forEach(datum => {
                     datum.db = JMath.CtoF(datum.db);
@@ -184,33 +186,33 @@ export class Psychart {
             this.base.appendChild(this.g[groupName]);
         }
         // Draw constant dry bulb vertical lines.
-        for (let db = this.chartOpts.dbMin; db <= this.chartOpts.dbMax; db += this.style.major) {
+        for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major) {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
-            data.push(new PsyState({ db: db, rh: 0 }, this.chartOpts));
+            data.push(new PsyState({ db: db, rh: 0 }));
             // The upper point is on the saturation line (rh = 100%)
-            data.push(new PsyState({ db: db, rh: 1 }, this.chartOpts));
+            data.push(new PsyState({ db: db, rh: 1 }));
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(db + this.units.temp, data[0], TextAnchor.N, 'Dry Bulb');
         }
         // Draw constant dew point horizontal lines.
-        for (let dp = 0; dp <= this.chartOpts.dpMax; dp += this.style.major) {
+        for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
             const data: PsyState[] = [];
             // The left point is on the saturation line (db = dp)
-            data.push(new PsyState({ db: dp, dp: dp }, this.chartOpts));
+            data.push(new PsyState({ db: dp, dp: dp }));
             // The right point is at the maximum dry bulb temperature
-            data.push(new PsyState({ db: this.chartOpts.dbMax, dp: dp }, this.chartOpts));
+            data.push(new PsyState({ db: this.config.dbMax, dp: dp }));
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(dp + this.units.temp, data[1], TextAnchor.W, 'Dew Point');
         }
         // Draw constant wet bulb diagonal lines.
-        for (let wb = this.chartOpts.dbMin; wb <= this.chartOpts.dpMax; wb += this.style.major) {
+        for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major) {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
-            for (let db = wb; db <= this.chartOpts.dbMax; db += this.style.resolution) {
-                data.push(new PsyState({ db: db, wb: wb }, this.chartOpts));
+            for (let db = wb; db <= this.config.dbMax; db += this.style.resolution) {
+                data.push(new PsyState({ db: db, wb: wb }));
             }
             // Draw the axis and the label
             this.drawAxis(data);
@@ -221,10 +223,10 @@ export class Psychart {
             const data: PsyState[] = [];
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
-            for (let db = this.chartOpts.dbMin; db <= this.chartOpts.dbMax; db += this.style.resolution) {
-                data.push(new PsyState({ db: db, rh: rh / 100 }, this.chartOpts));
+            for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.resolution) {
+                data.push(new PsyState({ db: db, rh: rh / 100 }));
                 // Stop drawing when the line surpasses the bounds of the chart
-                if (data[data.length - 1].dp >= this.chartOpts.dpMax) {
+                if (data[data.length - 1].dp >= this.config.dpMax) {
                     preferredAnchor = TextAnchor.S;
                     break;
                 }
@@ -252,14 +254,14 @@ export class Psychart {
         line.setAttribute('stroke-width', weight + 'px');
         line.setAttribute('vector-effect', 'non-scaling-stroke');
         // Convert the array of psychrometric states into an array of (x,y) points.
-        line.setAttribute('d', 'M ' + data.map(psy => psy.toXY(this.layout, this.chartOpts).toString()).join(' '));
+        line.setAttribute('d', 'M ' + data.map(psy => psy.toXY().toString()).join(' '));
         return line;
     }
     /**
      * Draw an axis label.
      */
     private drawLabel(text: string, location: PsyState, anchor: TextAnchor, tooltip?: string): void {
-        const label = this.createLabel(text, location.toXY(this.layout, this.chartOpts), this.style.fontColor, anchor);
+        const label = this.createLabel(text, location.toXY(), this.style.fontColor, anchor);
         this.g.text.appendChild(label);
         if (!!tooltip) {
             label.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), this.style.fontColor));
@@ -396,22 +398,22 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    plot(state: Datum, displayOpts: DisplayOptions, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
-        const currentState = new PsyState(state, this.chartOpts),
-            location = currentState.toXY(this.layout, this.chartOpts);
+    plot(state: Datum, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
+        const currentState = new PsyState(state),
+            location = currentState.toXY();
         // Compute the current color to plot
         const normalized = JMath.normalize(time, startTime, endTime),
-            color = Color.gradient(normalized, this.gradients[displayOpts.gradient]);
+            color = Color.gradient(normalized, this.gradients[this.config.gradient]);
         // Determine whether to connect the states with a line
-        if (!!this.lastState && displayOpts.lineWidth > 0) {
-            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, displayOpts.lineWidth));
+        if (!!this.lastState && this.config.lineWidth > 0) {
+            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, this.config.lineWidth));
         }
         this.lastState = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
         point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', displayOpts.pointRadius + 'px');
+        point.setAttribute('stroke-width', this.config.pointRadius + 'px');
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
@@ -422,7 +424,7 @@ export class Psychart {
             JMath.round(currentState.rh * 100) + '% Rel. Hum.\n' +
             JMath.round(currentState.wb, 1) + this.units.temp + ' Wet Bulb\n' +
             JMath.round(currentState.dp, 1) + this.units.temp + ' Dew Point' +
-            (displayOpts.advanced ? '\n' +
+            (this.config.advanced ? '\n' +
                 JMath.round(currentState.hr, 2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 JMath.round(currentState.vp, 1) + ' ' + this.units.vp + ' Vap. Press.\n' +
                 JMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
@@ -436,7 +438,7 @@ export class Psychart {
      */
     drawRegion(states: Datum[], color: Color, tooltip?: string): void {
         // Add the first state to the data set
-        const data: PsyState[] = [new PsyState(states[0], this.chartOpts)];
+        const data: PsyState[] = [new PsyState(states[0])];
         for (let i = 1; i < states.length; i++) {
             const lastDatum = states[i - 1],
                 currentDatum = states[i];
@@ -446,16 +448,16 @@ export class Psychart {
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
                 for (let i = 0; i < range; i += this.style.resolution) {
                     const db = JMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
-                    data.push(new PsyState({ db: db, rh: lastDatum.rh }, this.chartOpts));
+                    data.push(new PsyState({ db: db, rh: lastDatum.rh }));
                 }
             }
             // Assume iso-dry bulb, wet bulb, or dew point (straight line)
-            data.push(new PsyState(currentDatum, this.chartOpts));
+            data.push(new PsyState(currentDatum));
         }
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        region.setAttribute('d', 'M ' + data.map(psy => psy.toXY(this.layout, this.chartOpts).toString()).join(' ') + ' z');
+        region.setAttribute('d', 'M ' + data.map(psy => psy.toXY().toString()).join(' ') + ' z');
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {

@@ -83,13 +83,9 @@ export interface StyleOptions {
      * The major axis interval.
      */
     major: number;
-    /**
-     * The minor axis interval. (Optional)
-     */
-    minor?: number;
 }
 
-export interface ChartOptions {
+export interface PsyOptions {
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
@@ -110,9 +106,10 @@ export interface ChartOptions {
      * The maximum value on the dew point axis.
      */
     dpMax: number;
-}
-
-export interface DataOptions {
+    /**
+     * Render pre-defined shaded regions.
+     */
+    regions: string[];
     /**
      * The type of measurements that were taken.
      */
@@ -137,9 +134,6 @@ export interface DataOptions {
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
     relHumType: 'percent' | 'float';
-}
-
-export interface DisplayOptions {
     /**
      * The point radius, in pixels.
      */
@@ -156,8 +150,4 @@ export interface DisplayOptions {
      * Defines whether or not to show advanced state variables.
      */
     advanced: boolean;
-}
-
-export interface PsyOptions extends ChartOptions, DataOptions, DisplayOptions {
-    regions: string[];
 }
