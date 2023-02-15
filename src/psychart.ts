@@ -180,7 +180,7 @@ export class Psychart {
         const label = this.createLabel(text, location.toXY(this.layout, this.chartOpts), this.style.fontColor, anchor);
         this.g.text.appendChild(label);
         if (!!tooltip) {
-            label.addEventListener('mouseover', () => this.drawTooltip(tooltip, location.toXY(this.layout, this.chartOpts), this.style.fontColor));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), this.style.fontColor));
             label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
     }
@@ -346,7 +346,7 @@ export class Psychart {
                 JMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
                 JMath.round(currentState.v, 2) + ' ' + this.units.v + ' Volume' : '');
         // Set the behavior when the user interacts with this point
-        point.addEventListener('mouseover', () => this.drawTooltip(tooltipString, location, color));
+        point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, new Point(e.offsetX, e.offsetY), color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
@@ -377,10 +377,24 @@ export class Psychart {
         region.setAttribute('fill', color.toString());
         region.setAttribute('d', 'M ' + data.map(psy => psy.toXY(this.layout, this.chartOpts).toString()).join(' ') + ' z');
         this.g.regions.appendChild(region);
+        // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
-            region.addEventListener('mouseover', () => this.drawTooltip(tooltip, data[0].toXY(this.layout, this.chartOpts), color));
+            region.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), color));
             region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
+    }
+    /**
+     * Clear all plotted data from Psychart.
+     */
+    clearData(): void {
+        this.clearChildren(this.g.points);
+        this.clearChildren(this.g.trends);
+    }
+    /**
+     * Clear all rendered regions from Psychart.
+     */
+    clearRegions(): void {
+        this.clearChildren(this.g.regions);
     }
     /**
      * Return the SVG element to append on the parent.
