@@ -22,7 +22,7 @@ export class Color {
      * white, depending on the current color.
      */
     getContrastingColor(): Color {
-        if (this.red + this.green + this.blue > 255 * 1.5) {
+        if (this.red + this.green * 1.5 + this.blue * 0.5 > 255 * 1.5) {
             return new Color(0, 0, 0);
         } else {
             return new Color(255, 255, 255);

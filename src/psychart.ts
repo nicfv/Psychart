@@ -170,10 +170,7 @@ export class Psychart {
         line.setAttribute('stroke-width', weight + 'px');
         line.setAttribute('vector-effect', 'non-scaling-stroke');
         // Convert the array of psychrometric states into an array of (x,y) points.
-        line.setAttribute('d', 'M ' + data.map(psy => {
-            const point = psy.toXY(this.layout, this.chartOpts);
-            return point.x + ',' + point.y;
-        }).join(' '));
+        line.setAttribute('d', 'M ' + data.map(psy => psy.toXY(this.layout, this.chartOpts).toString()).join(' '));
         return line;
     }
     /**
@@ -276,7 +273,7 @@ export class Psychart {
             padding = 10,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
-        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.style.fontSize }, color.getContrastingColor(), TextAnchor.NW)));
+        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, new Point(0, i * this.style.fontSize), color.getContrastingColor(), TextAnchor.NW)));
         // Append the elements onto the window
         tooltipBase.appendChild(background);
         labelElements.forEach(element => tooltipBase.appendChild(element));
@@ -353,9 +350,42 @@ export class Psychart {
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
+     * Draw a shaded region on Psychart.
+     */
+    drawRegion(states: Datum[], color: Color, tooltip?: string): void {
+        // Add the first state to the data set
+        const data: PsyState[] = [new PsyState(states[0], this.chartOpts)];
+        for (let i = 1; i < states.length; i++) {
+            const lastDatum = states[i - 1],
+                currentDatum = states[i];
+            // Check if iso-relative humidity (curved line)
+            if ('rh' in lastDatum && 'rh' in currentDatum && JMath.approx(lastDatum.rh, currentDatum.rh)) {
+                const range = Math.abs(currentDatum.db - lastDatum.db);
+                // Calculate several psychrometric states with a dry bulb step of `resolution`
+                for (let i = 0; i <= range; i += this.style.resolution) {
+                    const db = JMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
+                    data.push(new PsyState({ db: db, rh: lastDatum.rh }, this.chartOpts));
+                }
+            }
+            // Assume iso-dry bulb, wet bulb, or dew point (straight line)
+            else {
+                data.push(new PsyState(currentDatum, this.chartOpts));
+            }
+        }
+        // Create the SVG element to render the shaded region
+        const region = document.createElementNS(NS, 'path');
+        region.setAttribute('fill', color.toString());
+        region.setAttribute('d', 'M ' + data.map(psy => psy.toXY(this.layout, this.chartOpts).toString()).join(' ') + ' z');
+        this.g.regions.appendChild(region);
+        if (!!tooltip) {
+            region.addEventListener('mouseover', () => this.drawTooltip(tooltip, data[0].toXY(this.layout, this.chartOpts), color));
+            region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
+        }
+    }
+    /**
      * Return the SVG element to append on the parent.
      */
-    getElement() {
+    getElement(): SVGElement {
         return this.base;
     }
 }

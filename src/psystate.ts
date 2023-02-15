@@ -87,9 +87,8 @@ export class PsyState {
      */
     toXY(layout: Layout, chartOpts: ChartOptions): Point {
         const HR_MAX = Psychrolib.GetHumRatioFromTDewPoint(chartOpts.dpMax, this.atm);
-        return {
-            x: JMath.clamp(JMath.translate(this.db, chartOpts.dbMin, chartOpts.dbMax, layout.padding, layout.size.x - layout.padding), layout.padding, layout.size.x - layout.padding),
-            y: JMath.clamp(layout.size.y - JMath.translate(this.hr, 0, HR_MAX, layout.padding, layout.size.y - layout.padding), layout.padding, layout.size.y - layout.padding)
-        };
+        return new Point(
+            JMath.clamp(JMath.translate(this.db, chartOpts.dbMin, chartOpts.dbMax, layout.padding, layout.size.x - layout.padding), layout.padding, layout.size.x - layout.padding),
+            JMath.clamp(layout.size.y - JMath.translate(this.hr, 0, HR_MAX, layout.padding, layout.size.y - layout.padding), layout.padding, layout.size.y - layout.padding));
     }
 }
