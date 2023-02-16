@@ -237,6 +237,8 @@ export class Psychart {
                 this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
             }
         }
+        // Draw any regions, if applicable
+        this.config.regions.forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / this.config.regions.length, [new Color(10, 30, 60), new Color(220, 220, 255)]), this.regions[id].tooltip));
     }
     /**
      * Draw an axis line given an array of psychrometric states.
@@ -464,12 +466,6 @@ export class Psychart {
             region.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), color));
             region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
-    }
-    /**
-     * Draw predefined regions on Psychart.
-     */
-    drawRegions(regionIds: string[], gradient: [Color, Color]): void {
-        regionIds.forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / regionIds.length, gradient), this.regions[id].tooltip));
     }
     /**
      * Clear all plotted data from Psychart.

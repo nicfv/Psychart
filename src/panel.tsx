@@ -32,7 +32,7 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
     //   { db: 80, dp: 60 },
     //   { db: 75, dp: 60 },
     // ], new Color(0, 255, 80, 50), 'Testing!\nhello!');
-    psychart.drawRegions(['dca4', 'dca3', 'dca2', 'dca1', 'dclo', 'dchi'], [new Color(255, 255, 0), new Color(0, 0, 255)]);
+    // psychart.drawRegions(options., [new Color(255, 255, 0), new Color(0, 0, 255)]);
     return <Container child={psychart.getElement()} />;
     // return <Container child={State(width, height, options, isLightTheme, format(data))} />;
   } catch (ex: any) {
