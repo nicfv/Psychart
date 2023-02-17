@@ -64,6 +64,10 @@ export interface Region {
 
 export interface StyleOptions {
     /**
+     * Determines whether or not the user is using a dark theme.
+     */
+    darkTheme: boolean;
+    /**
      * The font color.
      */
     fontColor: Color;

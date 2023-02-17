@@ -46,7 +46,7 @@ export class Psychart {
     /**
      * Gradient source: https://waldyrious.net/viridis-palette-generator/
      */
-    private readonly gradients = {
+    private readonly gradients: { [index: string]: Color[] } = {
         viridis: [
             new Color(253, 231, 37),
             new Color(94, 201, 98),
@@ -75,12 +75,17 @@ export class Psychart {
             new Color(126, 3, 168),
             new Color(13, 8, 135),
         ],
+        blue: [
+            new Color(193, 231, 255),
+            new Color(105, 150, 179),
+            new Color(0, 76, 109),
+        ],
     };
     /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      */
     private readonly regions: { [index: string]: Region } = {
-        dca4: {
+        dc4: {
             tooltip: 'Data center A4\nASHRAE comfort zone',
             data: [
                 { db: 5, dp: -12 },
@@ -91,7 +96,7 @@ export class Psychart {
                 { db: 5, rh: 0.90 },
             ],
         },
-        dca3: {
+        dc3: {
             tooltip: 'Data center A3\nASHRAE comfort zone',
             data: [
                 { db: 5, dp: -12 },
@@ -102,7 +107,7 @@ export class Psychart {
                 { db: 5, rh: 0.85 },
             ],
         },
-        dca2: {
+        dc2: {
             tooltip: 'Data center A2\nASHRAE comfort zone',
             data: [
                 { db: 10.0, dp: -12 },
@@ -113,7 +118,7 @@ export class Psychart {
                 { db: 10.0, rh: 0.80 },
             ],
         },
-        dca1: {
+        dc1: {
             tooltip: 'Data center A1\nASHRAE comfort zone',
             data: [
                 { db: 15.0, dp: -12 },
@@ -124,7 +129,7 @@ export class Psychart {
                 { db: 15.0, rh: 0.80 },
             ],
         },
-        dclo: {
+        dc02: {
             tooltip: 'Recommended ASHRAE data center\nconditions for low levels of pollutants',
             data: [
                 { db: 18.0, dp: -9 },
@@ -134,7 +139,7 @@ export class Psychart {
                 { db: 18.0, rh: 0.70 },
             ],
         },
-        dchi: {
+        dc01: {
             tooltip: 'Recommended ASHRAE data center\nconditions for high levels of pollutants',
             data: [
                 { db: 18.0, dp: -9 },
@@ -237,8 +242,11 @@ export class Psychart {
                 this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
             }
         }
-        // Draw any regions, if applicable
-        this.config.regions.forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / this.config.regions.length, [new Color(10, 30, 60), new Color(220, 220, 255)]), this.regions[id].tooltip));
+        // Draw any regions, if applicable (sort in reverse alphabetical order)
+        if (this.style.darkTheme) {
+            this.gradients.blue.reverse();
+        }
+        this.config.regions.sort().reverse().forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / this.config.regions.length, this.gradients.blue), this.regions[id].tooltip));
     }
     /**
      * Draw an axis line given an array of psychrometric states.

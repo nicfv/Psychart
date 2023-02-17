@@ -16,6 +16,7 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   try {
     const layout = { padding: 30, size: new Point(width, height) } as Layout,
       style = {
+        darkTheme: !isLightTheme,
         fontColor: isLightTheme ? new Color(32, 32, 32) : new Color(208, 208, 208),
         lineColor: isLightTheme ? new Color(224, 224, 224) : new Color(48, 48, 48),
         fontSize: 12,
