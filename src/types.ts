@@ -1,9 +1,6 @@
 import { Color } from './color';
 
-/**
- * Represents an `(x,y)` cartesian coordinate pair.
- */
-export class Point {
+export interface Point {
     /**
      * The x-coordinate (horizontal)
      */
@@ -12,13 +9,6 @@ export class Point {
      * The y-coordinate (vertical)
      */
     y: number;
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-    }
-    toString(): string {
-        return this.x + ',' + this.y;
-    }
 }
 
 export interface Layout {

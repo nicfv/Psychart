@@ -249,6 +249,15 @@ export class Psychart {
         this.config.regions.sort().reverse().forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / this.config.regions.length, this.gradients.blue), this.regions[id].tooltip));
     }
     /**
+     * Generate SVG path data from an array of psychrometric states.
+     */
+    private setPathData(path: SVGPathElement, psystates: PsyState[], closePath: boolean): void {
+        path.setAttribute('d', 'M ' + psystates.map(psy => {
+            const xy = psy.toXY();
+            return xy.x + ',' + xy.y;
+        }).join(' ') + (closePath ? ' z' : ''));
+    }
+    /**
      * Draw an axis line given an array of psychrometric states.
      */
     private drawAxis(data: PsyState[]): void {
@@ -264,7 +273,7 @@ export class Psychart {
         line.setAttribute('stroke-width', weight + 'px');
         line.setAttribute('vector-effect', 'non-scaling-stroke');
         // Convert the array of psychrometric states into an array of (x,y) points.
-        line.setAttribute('d', 'M ' + data.map(psy => psy.toXY().toString()).join(' '));
+        this.setPathData(line, data, false);
         return line;
     }
     /**
@@ -274,7 +283,7 @@ export class Psychart {
         const label = this.createLabel(text, location.toXY(), this.style.fontColor, anchor);
         this.g.text.appendChild(label);
         if (!!tooltip) {
-            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), this.style.fontColor));
+            label.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, this.style.fontColor));
             label.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
     }
@@ -367,7 +376,7 @@ export class Psychart {
             padding = 10,
             background = document.createElementNS(NS, 'rect');
         // Generate an array of SVGTextElement containing each line of this tooltip
-        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, new Point(0, i * this.style.fontSize), color.getContrastingColor(), TextAnchor.NW)));
+        text.split('\n').forEach((line, i) => labelElements.push(this.createLabel(line, { x: 0, y: i * this.style.fontSize }, color.getContrastingColor(), TextAnchor.NW)));
         // Append the elements onto the window
         tooltipBase.appendChild(background);
         labelElements.forEach(element => tooltipBase.appendChild(element));
@@ -440,7 +449,7 @@ export class Psychart {
                 JMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
                 JMath.round(currentState.v, 2) + ' ' + this.units.v + ' Volume' : '');
         // Set the behavior when the user interacts with this point
-        point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, new Point(e.offsetX, e.offsetY), color));
+        point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
     }
     /**
@@ -467,11 +476,11 @@ export class Psychart {
         // Create the SVG element to render the shaded region
         const region = document.createElementNS(NS, 'path');
         region.setAttribute('fill', color.toString());
-        region.setAttribute('d', 'M ' + data.map(psy => psy.toXY().toString()).join(' ') + ' z');
+        this.setPathData(region, data, true);
         this.g.regions.appendChild(region);
         // Optionally render a tooltip on mouse hover
         if (!!tooltip) {
-            region.addEventListener('mouseover', e => this.drawTooltip(tooltip, new Point(e.offsetX, e.offsetY), color));
+            region.addEventListener('mouseover', e => this.drawTooltip(tooltip, { x: e.offsetX, y: e.offsetY }, color));
             region.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
         }
     }

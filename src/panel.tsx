@@ -14,7 +14,7 @@ interface Props extends PanelProps<PsyOptions> { }
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const isLightTheme = useTheme2().isLight;
   try {
-    const layout = { padding: 30, size: new Point(width, height) } as Layout,
+    const layout = { padding: 30, size: { x: width, y: height } } as Layout,
       style = {
         darkTheme: !isLightTheme,
         fontColor: isLightTheme ? new Color(32, 32, 32) : new Color(208, 208, 208),

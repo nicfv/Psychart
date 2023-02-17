@@ -121,9 +121,9 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     toXY(): Point {
-        return new Point(
-            JMath.clamp(JMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
-            JMath.clamp(PsyState.height - JMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
-        );
+        return {
+            x: JMath.clamp(JMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
+            y: JMath.clamp(PsyState.height - JMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+        };
     }
 }
