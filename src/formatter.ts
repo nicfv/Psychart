@@ -8,20 +8,19 @@ import { PanelData } from '@grafana/data';
  * @returns A formatted object of panel data.
  * `{ timestamp : { field : value, ... }, ... }`
  */
-export function format(data: PanelData): { [index: string]: { [index: string]: number } } {
-  const formatted: { [index: string]: { [index: string]: number } } = {};
+export function format(data: PanelData): { [index: number]: { [index: string]: number } } {
+  const formatted: { [index: number]: { [index: string]: number } } = {};
   data.series.forEach((frame) => {
     frame.fields
       .find((field) => field.type === 'time')
       ?.values.toArray()
       .forEach((t: number, i: number) => {
-        const time = new Date(t).toLocaleString();
         frame.fields
           .filter((field) => field.type === 'number')
           .forEach((numberField) => {
-            formatted[time] = formatted[time] || {};
-            formatted[time]['time'] = t;
-            formatted[time][frame.name + ' ' + numberField.name] = numberField.values.get(i);
+            formatted[t] = formatted[t] || {};
+            formatted[t][frame.name] = numberField.values.get(i);
+            // formatted[t][frame.name + ' ' + numberField.name] = numberField.values.get(i);
           });
       });
   });

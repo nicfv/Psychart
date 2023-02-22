@@ -23,7 +23,29 @@ export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
         resolution: 0.5,
         major: 10,
       } as StyleOptions,
-      psychart = new Psychart(layout, options, style);
+      psychart = new Psychart(layout, options, style),
+      formatted = format(data),
+      startTime = data.timeRange.from.unix() * 1e3,
+      endTime = data.timeRange.to.unix() * 1e3;
+    for (let t in formatted) {
+      switch (options.measurements) {
+        case ('dbwb'): {
+          psychart.plot({ db: formatted[t][options.dryBulb], wb: formatted[t][options.wetBulb] }, +t, startTime, endTime);
+          break;
+        }
+        case ('dbrh'): {
+          psychart.plot({ db: formatted[t][options.dryBulb], rh: formatted[t][options.relHum] }, +t, startTime, endTime);
+          break;
+        }
+        case ('dbdp'): {
+          psychart.plot({ db: formatted[t][options.dryBulb], dp: formatted[t][options.dewPoint] }, +t, startTime, endTime);
+          break;
+        }
+        default: {
+          throw new Error('Invalid measurement type.');
+        }
+      }
+    }
     // psychart.plot({ db: 60, dp: 40 }, displayOpts);
     // psychart.plot({ db: 70, wb: 50 }, displayOpts);
     // psychart.plot({ db: 80, rh: .3 }, displayOpts);
