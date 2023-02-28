@@ -208,7 +208,7 @@ export class Psychart {
     /**
      * The last state plotted on Psychart.
      */
-    private lastState: PsyState;
+    private lastState?: PsyState;
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
@@ -232,9 +232,9 @@ export class Psychart {
             for (let region in this.regions) {
                 this.regions[region].data.forEach(datum => {
                     datum.db = JMath.CtoF(datum.db);
-                    if ('wb' in datum) {
+                    if (typeof datum.wb === 'number') {
                         datum.wb = JMath.CtoF(datum.wb);
-                    } else if ('dp' in datum) {
+                    } else if (typeof datum.dp === 'number') {
                         datum.dp = JMath.CtoF(datum.dp);
                     }
                 });
@@ -242,9 +242,7 @@ export class Psychart {
         }
         // Create new SVG groups, and append all the
         // layers into the chart.
-        for (let groupName in this.g) {
-            this.base.appendChild(this.g[groupName]);
-        }
+        Object.values(this.g).forEach(group => this.base.appendChild(group));
         // Draw constant dry bulb vertical lines.
         for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major) {
             const data: PsyState[] = [];
@@ -519,7 +517,7 @@ export class Psychart {
             const lastDatum = states[i - 1],
                 currentDatum = states[i];
             // Check if iso-relative humidity (curved line)
-            if ('rh' in lastDatum && 'rh' in currentDatum && JMath.approx(lastDatum.rh, currentDatum.rh)) {
+            if (typeof lastDatum.rh === 'number' && typeof currentDatum.rh === 'number' && JMath.approx(lastDatum.rh, currentDatum.rh)) {
                 const range = Math.abs(currentDatum.db - lastDatum.db);
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
                 for (let i = 0; i < range; i += this.style.resolution) {

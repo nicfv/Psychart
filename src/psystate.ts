@@ -1,6 +1,6 @@
 import { JMath } from './jmath';
-import * as Psychrolib from './psychrolib';
 import { PsyOptions, Datum, Layout, Point } from './types';
+const Psychrolib = require('psychrolib');
 
 /**
  * Represents a single air condition using several states.
@@ -13,31 +13,31 @@ export class PsyState {
     /**
      * Relative Humidity
      */
-    readonly rh: number;
+    readonly rh: number = 0;
     /**
      * Wet Bulb
      */
-    readonly wb: number;
+    readonly wb: number = 0;
     /**
      * Dew Point
      */
-    readonly dp: number;
+    readonly dp: number = 0;
     /**
      * Humidity Ratio
      */
-    readonly hr: number;
+    readonly hr: number = 0;
     /**
      * Vapor Pressure
      */
-    readonly vp: number;
+    readonly vp: number = 0;
     /**
      * Moist Air Enthalpy
      */
-    readonly h: number;
+    readonly h: number = 0;
     /**
      * Moist Air Volume
      */
-    readonly v: number;
+    readonly v: number = 0;
     /**
      * Standard Atmospheric Air Pressure
      */
@@ -83,9 +83,9 @@ export class PsyState {
      * Initialize a new psychrometric state.
      */
     constructor(state: Datum) {
+        this.db = state.db;
         if (typeof state.rh === 'number') {
             const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.rh, PsyState.atm);
-            this.db = state.db;
             this.rh = state.rh;
             this.wb = PSY_CALC[1];
             this.dp = PSY_CALC[2];
@@ -96,7 +96,6 @@ export class PsyState {
         }
         else if (typeof state.wb === 'number') {
             const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.wb, PsyState.atm);
-            this.db = state.db;
             this.rh = PSY_CALC[2];
             this.wb = state.wb;
             this.dp = PSY_CALC[1];
@@ -107,7 +106,6 @@ export class PsyState {
         }
         else if (typeof state.dp === 'number') {
             const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.dp, PsyState.atm);
-            this.db = state.db;
             this.rh = PSY_CALC[2];
             this.wb = PSY_CALC[1];
             this.dp = state.dp;

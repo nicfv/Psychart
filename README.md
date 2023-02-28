@@ -1,78 +1,116 @@
-# Psychart
+# Grafana panel plugin template
 
-### _A Psychrometric Chart for Monitoring Data Center Health_
+This template is a starting point for building a panel plugin for Grafana.
 
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/ci.yml)](https://github.com/nicfv/Psychart)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/is-compatible.yml?label=compatibility)
-[![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
-[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
+## What are Grafana panel plugins?
 
-View air conditions on a psychrometric chart.
+Panel plugins allow you to add new types of visualizations to your dashboard, such as maps, clocks, pie charts, lists, and more.
 
-## What is a psychrometric chart?
-
-Psychrometric charts are charts adopted by [ASHRAE](https://www.ashrae.org/) that plot various thermodynamic properties of air-vapor mixtures. These charts are particularly useful in HVAC applications. The following properties describe what's called a _state_ of air. **Two** properties are needed to fix the state of air, which means that two properties are needed in order to calculate every other property. The following 4 properties are plotted by Psychart by default:
-
-- Dry Bulb
-  - The temperature of air using a dry thermometer.
-- Wet Bulb
-  - Wet bulb temperature can be practically explained by the temperature of a surface where water is evaporating.
-- Dew Point
-  - Water will condense from the air at or below this temperature.
-- Relative Humidity
-  - A ratio of vapor pressure in the air to the saturation vapor pressure. 0%rh indicates absolutely dry air, and 100%rh indicates saturated air.
-
-Psychart also has the capability to derive the following state variables, which are optionally displayed using the _Show Advanced State Variables_ switch in [Display options](#display-options).
-
-- Vapor Pressure
-  - The partial pressure of water in the vapor-air mixture.
-- Humidity Ratio
-  - Weight of water vapor per weight of dry air.
-- Enthalpy
-  - In thermodynamics, refers to the total heat content of the vapor-air mixture.
-- Specific Volume
-  - Amount of volume taken up by one unit of mass of the vapor-air mixture.
+Use panel plugins when you want to do things like visualize data returned by data source queries, navigate between dashboards, or control external systems (such as smart home devices).
 
 ## Getting started
 
-This section will go over the options in the panel editor.
+### Frontend
 
-### Panel options
+1. Install dependencies
 
-This is the default panel options for all Grafana panels which gives the user access to the panel title and description and other UI effects.
+   ```bash
+   yarn install
+   ```
 
-### Chart options
+2. Build plugin in development mode and run in watch mode
 
-These options affect how the chart itself is displayed.
+   ```bash
+   yarn dev
+   ```
 
-Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, and optionally display ASHRAE comfort regions. These comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality.
+3. Build plugin in production mode
 
-### Data options
+   ```bash
+   yarn build
+   ```
 
-These options help process the incoming data.
+4. Run the tests (using Jest)
 
-Psychart is capable of plotting 1 series of states per panel. Due to the fact that 2 properties are needed to fix the state, two numeric time-dependent fields are required. The user must select whether those two fields are dry bulb and wet bulb, dry bulb and dew point, or dry bulb and relative humidity. These fields must then be entered into the field selectors below respectively.
+   ```bash
+   # Runs the tests and watches for changes, requires git init first
+   yarn test
+   
+   # Exists after running all the tests
+   yarn test:ci
+   ```
 
-It is important to note that one or two queries may be necessary depending on the data structure. One single query may be sufficient to return the two fields needed to fix the state. Other times, one query will be needed to obtain the dry bulb field and another for relative humidity field, for example.
+5. Spin up a Grafana instance and run the plugin inside it (using Docker)
 
-### Display options
+   ```bash
+   yarn server
+   ```
 
-This section changes the visual appearance of data within the chart.
+6. Run the E2E tests (using Cypress)
 
-Allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. The user can also optionally select to view more state variables here.
+   ```bash
+   # Spin up a Grafana instance first that we tests against 
+   yarn server
+   
+   # Start the tests
+   yarn e2e
+   ```
 
-## Errors & Troubleshooting
+7. Run the linter
 
-Some errors can arise from the [Data options](#data-options) section due to the fact that wet bulb and dew point must be less than or equal to the dry bulb temperature and relative humidity must be within the range of 0-1. If relative humidity is a driving measurement, make sure that the measurement type is correct (0-1 or 0%-100%). For other measurements, make sure that they are being reported correctly.
+   ```bash
+   yarn lint
+   
+   # or
 
-Psychart matches up values with similar timestamps. For a dry bulb & relative humidity series, the dry bulb measurement timestamp must match that of the relative humidity timestamp in order to be recognized as a single point. The _Query options_ in the query inspector may provide the tools required to fix any time discrepancies.
+   yarn lint:fix
+   ```
 
-Importantly, if there is missing data in one field, for example if dry bulb temperature has not been reporting for the last 5 minutes, no new states are calculated, and no new data is plotted in Psychart for the last 5 minutes to avoid the display of inaccurate data.
 
-Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series or reducing the point radius.
+# Distributing your plugin
 
-## License
+When distributing a Grafana plugin either within the community or privately the plugin must be signed so the Grafana application can verify its authenticity. This can be done with the `@grafana/sign-plugin` package.
 
-Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
+_Note: It's not necessary to sign a plugin during development. The docker development environment that is scaffolded with `@grafana/create-plugin` caters for running the plugin without a signature._
 
-[Copyright Notice](https://raw.githubusercontent.com/nicfv/Psychart/main/LEGAL)
+## Initial steps
+
+Before signing a plugin please read the Grafana [plugin publishing and signing criteria](https://grafana.com/docs/grafana/latest/developers/plugins/publishing-and-signing-criteria/) documentation carefully.
+
+`@grafana/create-plugin` has added the necessary commands and workflows to make signing and distributing a plugin via the grafana plugins catalog as straightforward as possible.
+
+Before signing a plugin for the first time please consult the Grafana [plugin signature levels](https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/#plugin-signature-levels) documentation to understand the differences between the types of signature level.
+
+1. Create a [Grafana Cloud account](https://grafana.com/signup).
+2. Make sure that the first part of the plugin ID matches the slug of your Grafana Cloud account.
+   - _You can find the plugin ID in the plugin.json file inside your plugin directory. For example, if your account slug is `acmecorp`, you need to prefix the plugin ID with `acmecorp-`._
+3. Create a Grafana Cloud API key with the `PluginPublisher` role.
+4. Keep a record of this API key as it will be required for signing a plugin
+
+## Signing a plugin
+
+### Using Github actions release workflow
+
+If the plugin is using the github actions supplied with `@grafana/create-plugin` signing a plugin is included out of the box. The [release workflow](./.github/workflows/release.yml) can prepare everything to make submitting your plugin to Grafana as easy as possible. Before being able to sign the plugin however a secret needs adding to the Github repository.
+
+1. Please navigate to "settings > secrets > actions" within your repo to create secrets.
+2. Click "New repository secret"
+3. Name the secret "GRAFANA_API_KEY"
+4. Paste your Grafana Cloud API key in the Secret field
+5. Click "Add secret"
+
+#### Push a version tag
+
+To trigger the workflow we need to push a version tag to github. This can be achieved with the following steps:
+
+1. Run `npm version <major|minor|patch>`
+2. Run `git push origin main --follow-tags`
+
+
+## Learn more
+
+Below you can find source code for existing app plugins and other related documentation.
+
+- [Basic panel plugin example](https://github.com/grafana/grafana-plugin-examples/tree/master/examples/panel-basic#readme)
+- [Plugin.json documentation](https://grafana.com/docs/grafana/latest/developers/plugins/metadata/)
+- [How to sign a plugin?](https://grafana.com/docs/grafana/latest/developers/plugins/sign-a-plugin/)
