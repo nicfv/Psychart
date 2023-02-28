@@ -113,6 +113,36 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
             value: 'dc4',
             description: 'The A4 ASHRAE data center comfort zone. Typically an IT space with low environmental requirements.',
           },
+          {
+            label: 'Summer (seated)',
+            value: 'h10s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
+          },
+          {
+            label: 'Summer (walking)',
+            value: 'h15s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
+          },
+          {
+            label: 'Summer (light work)',
+            value: 'h20s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
+          },
+          {
+            label: 'Winter (seated)',
+            value: 'h10w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
+          },
+          {
+            label: 'Winter (walking)',
+            value: 'h15w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
+          },
+          {
+            label: 'Winter (light work)',
+            value: 'h20w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
+          },
         ],
       },
     })

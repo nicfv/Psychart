@@ -83,8 +83,63 @@ export class Psychart {
     };
     /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
+     * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
      */
     private readonly regions: { [index: string]: Region } = {
+        h10s: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer indoor clothing)',
+            data: [
+                { db: 32.8, rh: 0 },
+                { db: 27.2, rh: 1 },
+                { db: 22.7, rh: 1 },
+                { db: 26.9, rh: 0 },
+            ],
+        },
+        h15s: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer indoor clothing)',
+            data: [
+                { db: 31.2, rh: 0 },
+                { db: 25.8, rh: 1 },
+                { db: 20.3, rh: 1 },
+                { db: 23.2, rh: 0 },
+            ],
+        },
+        h20s: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer indoor clothing)',
+            data: [
+                { db: 30.4, rh: 0 },
+                { db: 24.8, rh: 1 },
+                { db: 19.2, rh: 1 },
+                { db: 22.0, rh: 0 },
+            ],
+        },
+        h10w: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter indoor clothing)',
+            data: [
+                { db: 28.6, rh: 0 },
+                { db: 22.7, rh: 1 },
+                { db: 17.1, rh: 1 },
+                { db: 20.5, rh: 0 },
+            ],
+        },
+        h15w: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter indoor clothing)',
+            data: [
+                { db: 26.8, rh: 0 },
+                { db: 21.5, rh: 1 },
+                { db: 14.5, rh: 1 },
+                { db: 17.2, rh: 0 },
+            ],
+        },
+        h20w: {
+            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter indoor clothing)',
+            data: [
+                { db: 25.6, rh: 0 },
+                { db: 20.4, rh: 1 },
+                { db: 13.1, rh: 1 },
+                { db: 15.5, rh: 0 },
+            ],
+        },
         dc4: {
             tooltip: 'Data center A4\nASHRAE comfort zone',
             data: [
@@ -242,11 +297,13 @@ export class Psychart {
                 this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
             }
         }
-        // Draw any regions, if applicable (sort in reverse alphabetical order)
+        // Reverse the "blue" gradient if viewing in dark theme.
         if (this.style.darkTheme) {
             this.gradients.blue.reverse();
         }
-        this.config.regions.sort().reverse().forEach((id, i) => this.drawRegion(this.regions[id].data, Color.gradient(i / this.config.regions.length, this.gradients.blue), this.regions[id].tooltip));
+        // Draw any regions, if applicable
+        let regionIndex: number = 0;
+        Object.entries(this.regions).forEach(([name, region]) => this.config.regions.includes(name) && this.drawRegion(region.data, Color.gradient(regionIndex++ / this.config.regions.length, this.gradients.blue), region.tooltip));
     }
     /**
      * Generate SVG path data from an array of psychrometric states.
@@ -424,8 +481,8 @@ export class Psychart {
         const normalized = JMath.normalize(time, startTime, endTime),
             color = Color.gradient(normalized, this.gradients[this.config.gradient]);
         // Determine whether to connect the states with a line
-        if (!!this.lastState && this.config.lineWidth > 0) {
-            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, this.config.lineWidth));
+        if (!!this.lastState) {
+            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, +this.config.line));
         }
         this.lastState = currentState;
         // Define a 0-length path element and assign its attributes.

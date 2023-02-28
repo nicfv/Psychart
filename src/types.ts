@@ -135,7 +135,7 @@ export interface PsyOptions {
     /**
      * Determines whether or not to connect points with a line.
      */
-    lineWidth: number;
+    line: boolean;
     /**
      * Determines the color gradient for time series plots.
      */
