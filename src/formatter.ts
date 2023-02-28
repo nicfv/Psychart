@@ -17,10 +17,10 @@ export function format(data: PanelData): { [index: number]: { [index: string]: n
       .forEach((t: number, i: number) => {
         frame.fields
           .filter((field) => field.type === 'number')
-          .forEach((numberField) => {
+          .forEach((field) => {
             formatted[t] = formatted[t] || {};
-            formatted[t][frame.name] = numberField.values.get(i);
-            // formatted[t][frame.name + ' ' + numberField.name] = numberField.values.get(i);
+            formatted[t][frame.name] = field.values.get(i);
+            formatted[t][field.name] = field.values.get(i);
           });
       });
   });
