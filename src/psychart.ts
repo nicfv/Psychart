@@ -300,7 +300,7 @@ export class Psychart {
             this.gradients.blue.reverse();
         }
         // Draw any regions, if applicable
-        let regionIndex: number = 0;
+        let regionIndex = 0;
         Object.entries(this.regions).forEach(([name, region]) => this.config.regions.includes(name) && this.drawRegion(region.data, Color.gradient(regionIndex++ / this.config.regions.length, this.gradients.blue), region.tooltip));
     }
     /**

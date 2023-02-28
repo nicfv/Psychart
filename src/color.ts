@@ -11,7 +11,7 @@ export class Color {
     /**
      * Initialize a new color.
      */
-    constructor(red: number, green: number, blue: number, alpha: number = 100) {
+    constructor(red: number, green: number, blue: number, alpha = 100) {
         this.red = JMath.clamp(red, 0, 255);
         this.green = JMath.clamp(green, 0, 255);
         this.blue = JMath.clamp(blue, 0, 255);

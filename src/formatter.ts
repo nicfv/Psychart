@@ -19,7 +19,7 @@ export function format(data: PanelData): { [index: number]: { [index: string]: n
           .filter((field) => field.type === 'number')
           .forEach((field) => {
             formatted[t] = formatted[t] || {};
-            formatted[t][<string>frame.name] = field.values.get(i);
+            formatted[t][frame.name as string] = field.values.get(i);
             formatted[t][field.name] = field.values.get(i);
           });
       });
