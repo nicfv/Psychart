@@ -2,10 +2,12 @@ import { PanelPlugin, Field } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 
-import inferno from './img/inferno.png';
-import magma from './img/magma.png';
-import plasma from './img/plasma.png';
-import viridis from './img/viridis.png';
+const inferno = 'public/plugins/ventura-psychrometric-panel/img/inferno.png',
+  magma = 'public/plugins/ventura-psychrometric-panel/img/magma.png',
+  plasma = 'public/plugins/ventura-psychrometric-panel/img/plasma.png',
+  viridis = 'public/plugins/ventura-psychrometric-panel/img/viridis.png';
+
+// TODO: update the paths
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
@@ -83,33 +85,63 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         options: [
           {
             label: 'Recommended (High)',
-            value: 'A0.hi',
-            description: 'The "recommended" ASHRAE comfort zone for conditions with high pollutants.',
+            value: 'dc01',
+            description: 'The "recommended" ASHRAE comfort zone for data centers with conditions with high pollutants.',
           },
           {
             label: 'Recommended (Low)',
-            value: 'A0.lo',
-            description: 'The "recommended" ASHRAE comfort zone for conditions with low pollutants.',
+            value: 'dc02',
+            description: 'The "recommended" ASHRAE comfort zone for data centers with conditions with low pollutants.',
           },
           {
             label: 'A1',
-            value: 'A1',
-            description: 'The A1 ASHRAE comfort zone. Typically a data center with mission-critical operations.',
+            value: 'dc1',
+            description: 'The A1 ASHRAE data center comfort zone. Typically a data center with mission-critical operations.',
           },
           {
             label: 'A2',
-            value: 'A2',
-            description: 'The A2 ASHRAE comfort zone. Typically an IT space with strict environmental requirements.',
+            value: 'dc2',
+            description: 'The A2 ASHRAE data center comfort zone. Typically an IT space with strict environmental requirements.',
           },
           {
             label: 'A3',
-            value: 'A3',
-            description: 'The A3 ASHRAE comfort zone. Typically an IT space with normal environmental requirements.',
+            value: 'dc3',
+            description: 'The A3 ASHRAE data center comfort zone. Typically an IT space with normal environmental requirements.',
           },
           {
             label: 'A4',
-            value: 'A4',
-            description: 'The A4 ASHRAE comfort zone. Typically an IT space with low environmental requirements.',
+            value: 'dc4',
+            description: 'The A4 ASHRAE data center comfort zone. Typically an IT space with low environmental requirements.',
+          },
+          {
+            label: 'Summer (seated)',
+            value: 'h10s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
+          },
+          {
+            label: 'Summer (walking)',
+            value: 'h15s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
+          },
+          {
+            label: 'Summer (light work)',
+            value: 'h20s',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
+          },
+          {
+            label: 'Winter (seated)',
+            value: 'h10w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
+          },
+          {
+            label: 'Winter (walking)',
+            value: 'h15w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
+          },
+          {
+            label: 'Winter (light work)',
+            value: 'h20w',
+            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
           },
         ],
       },
@@ -186,16 +218,16 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Relative Humidity Type',
       description: 'Choose how relative humidity is actively being measured.',
       category: ['Data options'],
-      defaultValue: 'p',
+      defaultValue: 'percent',
       settings: {
         allowCustomValue: false,
         options: [
           {
-            value: 'p',
+            value: 'percent',
             label: '100%',
           },
           {
-            value: 'f',
+            value: 'float',
             label: '0.0-1.0',
           },
         ],
@@ -203,7 +235,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       showIf: (x) => x.measurements === 'dbrh',
     })
     .addSliderInput({
-      path: 'ptr',
+      path: 'pointRadius',
       name: 'Point Size',
       description: 'Enter the point radius, in pixels.',
       defaultValue: 5,
@@ -231,22 +263,22 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         allowCustomValue: false,
         options: [
           {
-            value: 'v',
+            value: 'viridis',
             label: 'Viridis',
             imgUrl: viridis,
           },
           {
-            value: 'i',
+            value: 'inferno',
             label: 'Inferno',
             imgUrl: inferno,
           },
           {
-            value: 'm',
+            value: 'magma',
             label: 'Magma',
             imgUrl: magma,
           },
           {
-            value: 'p',
+            value: 'plasma',
             label: 'Plasma',
             imgUrl: plasma,
           },

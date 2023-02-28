@@ -1,7 +1,3 @@
 {
-  "extends": "./.config/.eslintrc",
-  "ignorePatterns": [
-    "docs/*",
-    "src/psychart.js"
-  ]
+  "extends": "./.config/.eslintrc"
 }

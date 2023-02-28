@@ -31,5 +31,7 @@ e2e-results/
 # Editor
 .idea
 
-yarn.lock
 .eslintcache
+
+# Custom
+yarn.lock

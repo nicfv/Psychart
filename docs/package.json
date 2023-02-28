@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "build": "tsc src/*.ts --outFile dist/psychart.js && cp -r src/* dist && rm dist/*.ts",
+        "clean": "rm -r dist"
+    }
+}
