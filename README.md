@@ -1,9 +1,9 @@
 # Psychart
 
-### _A Psychrometric Chart for Monitoring Data Center Health_
+### _A Psychrometric Chart for Monitoring Data Center Health & Human Comfort_
 
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/ci.yml)](https://github.com/nicfv/Psychart)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/is-compatible.yml?label=compatibility)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/is-compatible.yml?label=compatibility)](https://github.com/nicfv/Psychart)
 [![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 [![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22ventura-psychrometric-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 
@@ -45,7 +45,7 @@ This is the default panel options for all Grafana panels which gives the user ac
 
 These options affect how the chart itself is displayed.
 
-Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, and optionally display ASHRAE comfort regions. These comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality.
+Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, and optionally display ASHRAE comfort regions. For data center envelopes, these comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality. For human comfort envelopes, these comfort regions follow the ASHRAE-55 guidelines published in 2017.
 
 ### Data options
 

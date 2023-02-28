@@ -35,3 +35,5 @@ e2e-results/
 
 # Custom
 yarn.lock
+docs/app.js
+docs/logo.svg
