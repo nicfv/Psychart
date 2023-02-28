@@ -16,7 +16,7 @@
     "sign": "npx --yes @grafana/sign-plugin",
     "clean": "rm -rf dist node_modules yarn.lock .eslintcache"
   },
-  "author": "Ventura",
+  "author": "Nicolas Ventura",
   "license": "Apache-2.0",
   "devDependencies": {
     "@babel/core": "^7.16.7",
