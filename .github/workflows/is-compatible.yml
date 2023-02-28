@@ -1,5 +1,7 @@
 name: Latest Grafana API compatibility check
-on: [pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   compatibilitycheck:
