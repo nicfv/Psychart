@@ -140,7 +140,7 @@ export class Psychart {
                 { db: 15.5, rh: 0 },
             ],
         },
-        dc4: {
+        dca4: {
             tooltip: 'Data center A4\nASHRAE comfort zone',
             data: [
                 { db: 5, dp: -12 },
@@ -151,7 +151,7 @@ export class Psychart {
                 { db: 5, rh: 0.90 },
             ],
         },
-        dc3: {
+        dca3: {
             tooltip: 'Data center A3\nASHRAE comfort zone',
             data: [
                 { db: 5, dp: -12 },
@@ -162,7 +162,7 @@ export class Psychart {
                 { db: 5, rh: 0.85 },
             ],
         },
-        dc2: {
+        dca2: {
             tooltip: 'Data center A2\nASHRAE comfort zone',
             data: [
                 { db: 10.0, dp: -12 },
@@ -173,7 +173,7 @@ export class Psychart {
                 { db: 10.0, rh: 0.80 },
             ],
         },
-        dc1: {
+        dca1: {
             tooltip: 'Data center A1\nASHRAE comfort zone',
             data: [
                 { db: 15.0, dp: -12 },

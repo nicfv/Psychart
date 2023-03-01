@@ -10,13 +10,13 @@ import { Color } from './color';
 interface Props extends PanelProps<PsyOptions> { }
 
 export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const isLightTheme = useTheme2().isLight;
+  const isDarkTheme = !useTheme2().isLight;
   try {
     const layout = { padding: 30, size: { x: width, y: height } } as Layout,
       style = {
-        darkTheme: !isLightTheme,
-        fontColor: isLightTheme ? new Color(32, 32, 32) : new Color(208, 208, 208),
-        lineColor: isLightTheme ? new Color(224, 224, 224) : new Color(48, 48, 48),
+        darkTheme: isDarkTheme,
+        fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
+        lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
         fontSize: 12,
         resolution: 0.5,
         major: 10,

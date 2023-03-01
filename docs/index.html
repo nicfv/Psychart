@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>Psychart</title>
@@ -18,27 +18,48 @@
         <form action="javascript:void(0);">
             <h2>Psychart Generator</h2>
             <h3>Graph Shape/Bounds</h3>
-            <input type="radio" name="unitSystem" id="unitSystem_SI"><label for="unitSystem_SI">SI Units
-                (&deg;C, ...)</label>
-            <input type="radio" name="unitSystem" id="unitSystem_US" checked><label for="unitSystem_US">US Units
-                (&deg;F, ...)</label><br>
-            <input type="number" id="db_min" step="10" value="20"><label for="db_min">Minimum Dry Bulb
-                (&deg;C/&deg;F)</label><br>
-            <input type="number" id="db_max" step="10" value="120"><label for="db_min">Maximum Dry Bulb
-                (&deg;C/&deg;F)</label><br>
-            <input type="number" id="dp_max" step="10" value="90"><label for="db_min">Maximum Dry Bulb
-                (&deg;C/&deg;F)</label><br>
-            <input type="number" id="alt" step="10" value="0"><label for="db_min">Altitude (m/ft)</label><br>
-            <input type="checkbox" id="adv"><label for="adv">Advanced mode: Additionally calculate humidity ratio, vapor
-                pressure, enthalpy, and specific volume. (Psychart calculates dry bulb, wet bulb, dew point, and
-                relative humidity by default.)</label>
+            <input type="radio" name="unitSystem" id="unitSystem_SI">
+            <label for="unitSystem_SI">SI Units (&deg;C, ...)</label>
+            <input type="radio" name="unitSystem" id="unitSystem_US" checked>
+            <label for="unitSystem_US">US Units (&deg;F, ...)</label><br>
+            <input type="number" id="db_min" step="10" value="20">
+            <label for="db_min">Minimum Dry Bulb (&deg;C/&deg;F)</label><br>
+            <input type="number" id="db_max" step="10" value="120">
+            <label for="db_max">Maximum Dry Bulb (&deg;C/&deg;F)</label><br>
+            <input type="number" id="dp_max" step="10" value="90">
+            <label for="dp_max">Maximum Dry Bulb (&deg;C/&deg;F)</label><br>
+            <input type="number" id="alt" step="10" value="0">
+            <label for="alt">Altitude (m/ft)</label><br>
+            <input type="checkbox" id="adv">
+            <label for="adv">Advanced mode: Additionally calculate humidity ratio, vapor pressure, enthalpy, and
+                specific volume. (Psychart calculates dry bulb, wet bulb, dew point, and relative humidity by
+                default.)</label>
+            <h3>ASHRAE-55 Zones for Human Comfort</h3>
+            <input type="checkbox" id="h10s"><label for="h10s">Summer clothing (activity: seated)</label><br>
+            <input type="checkbox" id="h15s"><label for="h15s">Summer clothing (activity: walking)</label><br>
+            <input type="checkbox" id="h20s"><label for="h20s">Summer clothing (activity: light work)</label><br>
+            <input type="checkbox" id="h10w"><label for="h10w">Winter clothing (activity: seated)</label><br>
+            <input type="checkbox" id="h15w"><label for="h15w">Winter clothing (activity: walking)</label><br>
+            <input type="checkbox" id="h20w"><label for="h20w">Winter clothing (activity: light work)</label><br>
             <h3>ASHRAE Comfort Zones for IT Spaces</h3>
-            <input type="checkbox" id="rec_hi"><label for="rec_hi">Recommended (high levels of pollutants)</label><br>
-            <input type="checkbox" id="rec_lo"><label for="rec_lo">Recommended (low levels of pollutants)</label><br>
-            <input type="checkbox" id="a1"><label for="a1">ASHRAE A1 comfort zone</label><br>
-            <input type="checkbox" id="a2"><label for="a2">ASHRAE A2 comfort zone</label><br>
-            <input type="checkbox" id="a3"><label for="a3">ASHRAE A3 comfort zone</label><br>
-            <input type="checkbox" id="a4"><label for="a4">ASHRAE A4 comfort zone</label>
+            <input type="checkbox" id="dc01"><label for="dc01">Recommended (high levels of pollutants)</label><br>
+            <input type="checkbox" id="dc02"><label for="dc02">Recommended (low levels of pollutants)</label><br>
+            <input type="checkbox" id="dca1"><label for="dca1">ASHRAE A1 comfort zone</label><br>
+            <input type="checkbox" id="dca2"><label for="dca2">ASHRAE A2 comfort zone</label><br>
+            <input type="checkbox" id="dca3"><label for="dca3">ASHRAE A3 comfort zone</label><br>
+            <input type="checkbox" id="dca4"><label for="dca4">ASHRAE A4 comfort zone</label>
+            <h3>Visual Options</h3>
+            <!-- <input type="color" id="ptColor" value="#FF0000"><label for="ptColor">Color</label> -->
+            <select id="gradient">
+                <option value="viridis">Viridis</option>
+                <option value="inferno">Inferno</option>
+                <option value="magma">Magma</option>
+                <option value="plasma">Plasma</option>
+            </select>
+            <label for="gradient">Color Gradient</label>
+            <input type="range" id="ptRad" step="1" min="1" max="10" value="5"><label for="ptRad">Point Radius</label>
+            <input type="checkbox" id="ptLine"><label for="ptLine">Connect with a line?</label>
+            <!-- <input type="checkbox" id="ptTime"><label for="ptTime">Include timestamp?</label> -->
             <input type="button" id="btnGenerate" value="Generate Psychart">
             <div class="clear"></div>
         </form>
@@ -47,18 +68,15 @@
     <div id="data-input">
         <form action="javascript:void(0);">
             <h3>Data Input</h3>
-            <input type="radio" name="measurementType" id="measurementType_dbwb"><label for="measurementType_dbwb">Dry
-                Bulb and Wet Bulb (&deg;C/&deg;F)</label><br>
-            <input type="radio" name="measurementType" id="measurementType_dbdp"><label for="measurementType_dbdp">Dry
-                Bulb and Dew Point (&deg;C/&deg;F)</label><br>
-            <input type="radio" name="measurementType" id="measurementType_dbrh"><label for="measurementType_dbrh">Dry
-                Bulb and Relative Humidity (0%-100%)</label><br>
-            <input type="number" id="db"><input type="number" id="state2"><br>
-            <h3>Visual Options</h3>
-            <input type="color" id="ptColor" value="#FF0000"><label for="ptColor">Color</label>
-            <input type="number" id="ptRad" step="1" min="1" max="10" value="5"><label for="ptRad">Radius</label>
-            <input type="checkbox" id="ptLine"><label for="ptLine">Connect with a line?</label>
-            <input type="checkbox" id="ptTime"><label for="ptTime">Include timestamp?</label>
+            <input type="number" id="db">
+            <label for="db">Dry Bulb (&deg;C/&deg;F)</label>
+            <input type="number" id="state2">
+            <input type="radio" name="measurementType" id="measurementType_dbwb" checked>
+            <label for="measurementType_dbwb">Wet Bulb (&deg;C/&deg;F)</label>
+            <input type="radio" name="measurementType" id="measurementType_dbdp">
+            <label for="measurementType_dbdp">Dew Point (&deg;C/&deg;F)</label>
+            <input type="radio" name="measurementType" id="measurementType_dbrh">
+            <label for="measurementType_dbrh">Humidity (0%-100%)</label>
             <input type="button" id="btnClear" value="Clear">
             <input type="button" id="btnPlot" value="Plot">
             <div class="clear"></div>

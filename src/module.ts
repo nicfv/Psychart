@@ -95,22 +95,22 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           },
           {
             label: 'A1',
-            value: 'dc1',
+            value: 'dca1',
             description: 'The A1 ASHRAE data center comfort zone. Typically a data center with mission-critical operations.',
           },
           {
             label: 'A2',
-            value: 'dc2',
+            value: 'dca2',
             description: 'The A2 ASHRAE data center comfort zone. Typically an IT space with strict environmental requirements.',
           },
           {
             label: 'A3',
-            value: 'dc3',
+            value: 'dca3',
             description: 'The A3 ASHRAE data center comfort zone. Typically an IT space with normal environmental requirements.',
           },
           {
             label: 'A4',
-            value: 'dc4',
+            value: 'dca4',
             description: 'The A4 ASHRAE data center comfort zone. Typically an IT space with low environmental requirements.',
           },
           {
