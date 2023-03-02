@@ -112,8 +112,10 @@ jobs:
       - name: Create Github release
         uses: softprops/action-gh-release@v1
         with:
+          name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref }}
           draft: true
-          generate_release_notes: true
+          generate_release_notes: false
           files: |
             ./${{ steps.metadata.outputs.archive }}
             ./${{ steps.metadata.outputs.archive-checksum }}
