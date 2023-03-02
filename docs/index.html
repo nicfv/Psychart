@@ -35,27 +35,12 @@
                 specific volume. (Psychart calculates dry bulb, wet bulb, dew point, and relative humidity by
                 default.)</label>
             <h3>ASHRAE-55 Zones for Human Comfort</h3>
-            <input type="checkbox" id="h10s"><label for="h10s">Summer clothing (activity: seated)</label><br>
-            <input type="checkbox" id="h15s"><label for="h15s">Summer clothing (activity: walking)</label><br>
-            <input type="checkbox" id="h20s"><label for="h20s">Summer clothing (activity: light work)</label><br>
-            <input type="checkbox" id="h10w"><label for="h10w">Winter clothing (activity: seated)</label><br>
-            <input type="checkbox" id="h15w"><label for="h15w">Winter clothing (activity: walking)</label><br>
-            <input type="checkbox" id="h20w"><label for="h20w">Winter clothing (activity: light work)</label><br>
+            <span id="ashrae-55-container"></span>
             <h3>ASHRAE Comfort Zones for IT Spaces</h3>
-            <input type="checkbox" id="dc01"><label for="dc01">Recommended (high levels of pollutants)</label><br>
-            <input type="checkbox" id="dc02"><label for="dc02">Recommended (low levels of pollutants)</label><br>
-            <input type="checkbox" id="dca1"><label for="dca1">ASHRAE A1 comfort zone</label><br>
-            <input type="checkbox" id="dca2"><label for="dca2">ASHRAE A2 comfort zone</label><br>
-            <input type="checkbox" id="dca3"><label for="dca3">ASHRAE A3 comfort zone</label><br>
-            <input type="checkbox" id="dca4"><label for="dca4">ASHRAE A4 comfort zone</label>
+            <span id="ashrae-dc-container"></span>
             <h3>Visual Options</h3>
             <!-- <input type="color" id="ptColor" value="#FF0000"><label for="ptColor">Color</label> -->
-            <select id="gradient">
-                <option value="viridis">Viridis</option>
-                <option value="inferno">Inferno</option>
-                <option value="magma">Magma</option>
-                <option value="plasma">Plasma</option>
-            </select>
+            <select id="gradient"></select>
             <label for="gradient">Color Gradient</label>
             <input type="range" id="ptRad" step="1" min="1" max="10" value="5"><label for="ptRad">Point Radius</label>
             <input type="checkbox" id="ptLine"><label for="ptLine">Connect with a line?</label>

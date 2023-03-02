@@ -15,6 +15,35 @@ window.addEventListener('load', () => {
     setVisibility('svg-container', false);
     setVisibility('data-input', false);
 
+    // Create region checkboxes
+    Object.entries(Psychart.regions).forEach(([id, region]) => {
+        const checkbox = document.createElement('input'),
+            label = document.createElement('label'),
+            linebreak = document.createElement('br');
+        checkbox.type = 'checkbox';
+        checkbox.id = id;
+        label.setAttribute('for', id);
+        label.textContent = region.name;
+        label.title = region.tooltip;
+        let parent: HTMLElement | null = null;
+        if (id.match(/h[0-9]{2}[sw]/)) {
+            parent = document.getElementById('ashrae-55-container');
+        } else if (id.match(/dc[a0][0-9]/)) {
+            parent = document.getElementById('ashrae-dc-container');
+        }
+        parent?.appendChild(checkbox);
+        parent?.appendChild(label);
+        parent?.appendChild(linebreak);
+    });
+
+    // Add gradient dropdown options
+    Object.keys(Psychart.gradients).forEach(key => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = key[0].toUpperCase() + key.substring(1).toLowerCase();
+        document.getElementById('gradient')?.appendChild(option);
+    });
+
     setOnClick('btnGenerate', () => {
         const dbMin = getNumericValue('db_min'),
             dbMax = getNumericValue('db_max'),
