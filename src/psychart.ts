@@ -206,7 +206,7 @@ export class Psychart {
     /**
      * Return an array of region names and their corresponding tooltips.
      */
-    static getRegionNamesAndTips(): [string, string][] {
+    static getRegionNamesAndTips(): Array<[string, string]> {
         return Object.entries(this.regions).map(([name, region]) => [name, region.tooltip]);
     }
     /**
