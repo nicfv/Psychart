@@ -117,19 +117,4 @@ jobs:
           files: |
             ./${{ steps.metadata.outputs.archive }}
             ./${{ steps.metadata.outputs.archive-checksum }}
-          body: |
-            **This Github draft release has been created for your plugin.**
-
-            _Note: if this is the first release for your plugin please consult the [distributing-your-plugin section](https://github.com/${{github.repository}}/blob/main/README.md#distributing-your-plugin) of the README_
-
-            If you would like to submit this release to Grafana please consider the following steps:
-
-            - Check the Validate plugin step in the [release workflow](https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}) for any warnings that need attention
-            - Navigate to https://grafana.com/auth/sign-in/ to sign into your account
-            - Once logged in click **My Plugins** in the admin navigation
-            - Click the **Submit Plugin** button
-            - Fill in the Plugin Submission form:
-              - Paste this [.zip asset link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive }}) in the Plugin URL field
-              - Paste this [.zip.md5 link](https://github.com/${{ github.repository }}/releases/download/v${{ steps.metadata.outputs.plugin-version }}/${{ steps.metadata.outputs.archive-checksum }}) in the MD5 field
-
-            Once done please remove these instructions and publish this release.
+          body_path: ${{ steps.changelog.outputs.path }}
