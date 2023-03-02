@@ -3,13 +3,6 @@ import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 import { Psychart } from 'psychart';
 
-const inferno = 'public/plugins/ventura-psychrometric-panel/img/inferno.png',
-  magma = 'public/plugins/ventura-psychrometric-panel/img/magma.png',
-  plasma = 'public/plugins/ventura-psychrometric-panel/img/plasma.png',
-  viridis = 'public/plugins/ventura-psychrometric-panel/img/viridis.png';
-
-// TODO: update the paths
-
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
     .addRadio({
@@ -207,28 +200,13 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       defaultValue: 'viridis',
       settings: {
         allowCustomValue: false,
-        options: [
-          {
-            value: 'viridis',
-            label: 'Viridis',
-            imgUrl: viridis,
-          },
-          {
-            value: 'inferno',
-            label: 'Inferno',
-            imgUrl: inferno,
-          },
-          {
-            value: 'magma',
-            label: 'Magma',
-            imgUrl: magma,
-          },
-          {
-            value: 'plasma',
-            label: 'Plasma',
-            imgUrl: plasma,
-          },
-        ],
+        options: Psychart.getGradientNames().map(name => {
+          return {
+            value: name,
+            label: name,
+            imgUrl: 'public/plugins/ventura-psychrometric-panel/img/' + name.toLowerCase() + '.png', // TODO: update this path
+          };
+        }),
       },
     })
     .addBooleanSwitch({
