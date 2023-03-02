@@ -5,7 +5,7 @@ for ARG in "${@}" ; do
     echo "Usage: ${0} [-h] [-o] [-r] [-P=#.#.#]"
     echo '  -h: Show this help message.'
     echo '  -o: Open the svg generator in a web browser.'
-    echo '  -r: Clears the terminal, rebuilds the plugin, and restarts Grafana.'
+    echo '  -r: Starts or restarts Grafana.'
     echo '  -P: Publish the plugin to Grafana. Requires a version number.'
   elif [[ "${ARG}" == -o ]] ; then
     open './docs/index.html'
