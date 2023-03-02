@@ -12,7 +12,11 @@
     "keywords": [
       "air",
       "temperature",
-      "humidity"
+      "humidity",
+      "hvac",
+      "psychrometric",
+      "psychrometry",
+      "psychart"
     ],
     "logos": {
       "small": "img/logo.svg",

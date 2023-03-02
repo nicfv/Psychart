@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.0.0
+
+- Migrate from a JavaScript to a TypeScript code base
+- Dynamically generate region & gradient selections in both the [standalone app](https://psychart.nicfv.com/) and the [Grafana plugin](https://grafana.com/grafana/plugins/ventura-psychrometric-panel/)
+    - This means, less code duplication, so it will be much easier to add additional regions or gradients in the future
+- Regions are now rendered in a blue gradient instead of a violet gradient
+- Tooltips now follow the mouse instead of being in predefined calculated positions
+- Regions, chart axes, and points are no longer rendered outside of chart boundaries
+- Rebuild with `npx @grafana/create-plugin@1.0.0` to make sure source files and dependencies are up-to-date
+- Better support for **long** and **multi-frame** time series (**wide** time series still not implemented)
+    - For now, if you are using a **wide** time series, use the Grafana transform to convert to the **long** or **multi-frame** format
+- Standalone app now adds timestamps to data points by default
+- Minor updates in `README.md` to explain new ASHRAE guidelines and to update badges
+- Add link to [official Grafana blog post](https://grafana.com/blog/2022/10/14/how-to-monitor-high-performance-computing-system-health-with-grafana-and-psychrometric-charts/) in `plugin.json`
+- Add more relevant search keywords in `plugin.json`
+
 ## 2.0.1
 
 - Fixed broken badges in `README.md`
