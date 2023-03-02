@@ -477,6 +477,10 @@ export class Psychart {
      * Plot one psychrometric state onto the psychrometric chart.
      */
     plot(state: Datum, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
+        // Divide by 100 if relHumType is set to 'percent'
+        if (typeof state.rh === 'number' && this.config.relHumType === 'percent') {
+            state.rh /= 100;
+        }
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
