@@ -1,5 +1,8 @@
 import { Color } from './color';
 
+export type RegionId = 'h10s' | 'h15s' | 'h20s' | 'h10w' | 'h15w' | 'h20w' | 'dca4' | 'dca3' | 'dca2' | 'dca1' | 'dc02' | 'dc01';
+export type GradientId = 'viridis' | 'inferno' | 'magma' | 'plasma' | 'blue';
+
 export interface Point {
     /**
      * The x-coordinate (horizontal)
@@ -42,6 +45,10 @@ export interface Datum {
 }
 
 export interface Region {
+    /**
+     * The full name of the region.
+     */
+    name: string;
     /**
      * The text to display on mouse hover
      */
@@ -103,7 +110,7 @@ export interface PsyOptions {
     /**
      * Render pre-defined shaded regions.
      */
-    regions: string[];
+    regions: RegionId[];
     /**
      * The type of measurements that were taken.
      */
@@ -139,7 +146,7 @@ export interface PsyOptions {
     /**
      * Determines the color gradient for time series plots.
      */
-    gradient: 'viridis' | 'inferno' | 'magma' | 'plasma';
+    gradient: GradientId;
     /**
      * Defines whether or not to show advanced state variables.
      */

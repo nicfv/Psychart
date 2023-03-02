@@ -7,9 +7,7 @@ import { format } from './formatter';
 import { Psychart } from './psychart';
 import { Color } from './color';
 
-interface Props extends PanelProps<PsyOptions> { }
-
-export const PsyPanel: React.FC<Props> = ({ options, data, width, height }) => {
+export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = !useTheme2().isLight;
   try {
     const layout = { padding: 30, size: { x: width, y: height } } as Layout,

@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { PsyOptions, Datum, Layout, Point, Region, StyleOptions } from './types';
+import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientId, RegionId } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -32,21 +32,9 @@ export class Psychart {
         tooltips: document.createElementNS(NS, 'g'),
     };
     /**
-     * Layout settings for Psychart.
-     */
-    private readonly layout = {} as Layout;
-    /**
-     * Configuration options for Psychart.
-     */
-    private readonly config = {} as PsyOptions;
-    /**
-     * Styling options for Psychart.
-     */
-    private readonly style = {} as StyleOptions;
-    /**
      * Gradient source: https://waldyrious.net/viridis-palette-generator/
      */
-    private readonly gradients: { [index: string]: Color[] } = {
+    static readonly gradients: { [K in GradientId]: Color[] } = {
         viridis: [
             new Color(68, 1, 84),
             new Color(59, 82, 139),
@@ -85,9 +73,10 @@ export class Psychart {
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
      */
-    private readonly regions: { [index: string]: Region } = {
+    static readonly regions: { [K in RegionId]: Region } = {
         h10s: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer indoor clothing)',
+            name: 'Summer (sitting)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 32.8, rh: 0 },
                 { db: 27.2, rh: 1 },
@@ -96,7 +85,8 @@ export class Psychart {
             ],
         },
         h15s: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer indoor clothing)',
+            name: 'Summer (walking)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 31.2, rh: 0 },
                 { db: 25.8, rh: 1 },
@@ -105,7 +95,8 @@ export class Psychart {
             ],
         },
         h20s: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer indoor clothing)',
+            name: 'Summer (light work)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 30.4, rh: 0 },
                 { db: 24.8, rh: 1 },
@@ -114,7 +105,8 @@ export class Psychart {
             ],
         },
         h10w: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter indoor clothing)',
+            name: 'Winter (sitting)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 28.6, rh: 0 },
                 { db: 22.7, rh: 1 },
@@ -123,7 +115,8 @@ export class Psychart {
             ],
         },
         h15w: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter indoor clothing)',
+            name: 'Winter (walking)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 26.8, rh: 0 },
                 { db: 21.5, rh: 1 },
@@ -132,7 +125,8 @@ export class Psychart {
             ],
         },
         h20w: {
-            tooltip: 'ASHRAE-55 (Human comfort) air temperature\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter indoor clothing)',
+            name: 'Winter (light work)',
+            tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 25.6, rh: 0 },
                 { db: 20.4, rh: 1 },
@@ -141,7 +135,8 @@ export class Psychart {
             ],
         },
         dca4: {
-            tooltip: 'Data center A4\nASHRAE comfort zone',
+            name: 'Data center A4',
+            tooltip: 'The A4 ASHRAE data center\ncomfort zone. Typically\nan IT space with low\nenvironmental requirements.',
             data: [
                 { db: 5, dp: -12 },
                 { db: 22.5, rh: 0.08 },
@@ -152,7 +147,8 @@ export class Psychart {
             ],
         },
         dca3: {
-            tooltip: 'Data center A3\nASHRAE comfort zone',
+            name: 'Data center A3',
+            tooltip: 'The A3 ASHRAE data center\ncomfort zone. Typically\nan IT space with normal\nenvironmental requirements.',
             data: [
                 { db: 5, dp: -12 },
                 { db: 22.5, rh: 0.08 },
@@ -163,7 +159,8 @@ export class Psychart {
             ],
         },
         dca2: {
-            tooltip: 'Data center A2\nASHRAE comfort zone',
+            name: 'Data center A2',
+            tooltip: 'The A2 ASHRAE data center\ncomfort zone. Typically\nan IT space with strict\nenvironmental requirements.',
             data: [
                 { db: 10.0, dp: -12 },
                 { db: 22.5, rh: 0.08 },
@@ -174,7 +171,8 @@ export class Psychart {
             ],
         },
         dca1: {
-            tooltip: 'Data center A1\nASHRAE comfort zone',
+            name: 'Data center A1',
+            tooltip: 'The A1 ASHRAE data\ncenter comfort zone.\nTypically a data center with\nmission-critical operations.',
             data: [
                 { db: 15.0, dp: -12 },
                 { db: 22.5, rh: 0.08 },
@@ -185,7 +183,8 @@ export class Psychart {
             ],
         },
         dc02: {
-            tooltip: 'Recommended ASHRAE data center\nconditions for low levels of pollutants',
+            name: 'Data center recommended (low pollutants)',
+            tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with low\nconcentration of pollutants.',
             data: [
                 { db: 18.0, dp: -9 },
                 { db: 27.0, dp: -9 },
@@ -195,7 +194,8 @@ export class Psychart {
             ],
         },
         dc01: {
-            tooltip: 'Recommended ASHRAE data center\nconditions for high levels of pollutants',
+            name: 'Data center recommended (high pollutants)',
+            tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with high\nconcentration of pollutants.',
             data: [
                 { db: 18.0, dp: -9 },
                 { db: 27.0, dp: -9 },
@@ -212,11 +212,7 @@ export class Psychart {
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
-    constructor(layout: Layout, config: PsyOptions, style: StyleOptions) {
-        // Set internal variables.
-        this.layout = layout;
-        this.config = config;
-        this.style = style;
+    constructor(private readonly layout: Layout, private readonly config: PsyOptions, private readonly style: StyleOptions) {
         // Compute a first-time initialization of psychrolib
         PsyState.initialize(layout, config);
         // Set the chart's viewport size.
@@ -227,19 +223,6 @@ export class Psychart {
         this.units.vp = (this.config.unitSystem === 'IP' ? 'Psi' : 'Pa');
         this.units.h = (this.config.unitSystem === 'IP' ? 'Btu/lb' : 'J/kg');
         this.units.v = (this.config.unitSystem === 'IP' ? 'ft\u00B3/lb' : 'm\u00B3/kg');
-        // Convert regions to the IP unit system if applicable
-        if (this.config.unitSystem === 'IP') {
-            for (let region in this.regions) {
-                this.regions[region].data.forEach(datum => {
-                    datum.db = JMath.CtoF(datum.db);
-                    if (typeof datum.wb === 'number') {
-                        datum.wb = JMath.CtoF(datum.wb);
-                    } else if (typeof datum.dp === 'number') {
-                        datum.dp = JMath.CtoF(datum.dp);
-                    }
-                });
-            }
-        }
         // Create new SVG groups, and append all the
         // layers into the chart.
         Object.values(this.g).forEach(group => this.base.appendChild(group));
@@ -295,13 +278,28 @@ export class Psychart {
                 this.drawLabel(rh + '%', data[data.length - 1], preferredAnchor, 'Relative Humidity');
             }
         }
-        // Reverse the "blue" gradient if viewing in dark theme.
-        if (this.style.darkTheme) {
-            this.gradients.blue.reverse();
-        }
         // Draw any regions, if applicable
         let regionIndex = 0;
-        Object.entries(this.regions).forEach(([name, region]) => this.config.regions.includes(name) && this.drawRegion(region.data, Color.gradient(regionIndex++ / this.config.regions.length, this.gradients.blue), region.tooltip));
+        Object.entries(Psychart.regions)
+            .filter(([name,]) => config.regions.includes(name as RegionId))
+            .forEach(([, region]) => {
+                const numRegions = this.config.regions.length,
+                    normalized = this.style.darkTheme ? JMath.normalize(regionIndex, numRegions, 0) : JMath.normalize(regionIndex, 0, numRegions),
+                    data = this.deepCopy(region.data);
+                if (this.config.unitSystem === 'IP') {
+                    // Convert from SI to US units
+                    data.forEach(datum => {
+                        datum.db = JMath.CtoF(datum.db);
+                        if (typeof datum.wb === 'number') {
+                            datum.wb = JMath.CtoF(datum.wb);
+                        } else if (typeof datum.dp === 'number') {
+                            datum.dp = JMath.CtoF(datum.dp);
+                        }
+                    });
+                }
+                this.drawRegion(data, Color.gradient(normalized, Psychart.gradients.blue), region.tooltip);
+                regionIndex++;
+            });
     }
     /**
      * Generate SVG path data from an array of psychrometric states.
@@ -470,6 +468,12 @@ export class Psychart {
         }
     }
     /**
+     * Produce a deep copy of an object.
+     */
+    private deepCopy<T>(obj: T): T {
+        return JSON.parse(JSON.stringify(obj));
+    }
+    /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
     plot(state: Datum, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
@@ -477,7 +481,7 @@ export class Psychart {
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = JMath.normalize(time, startTime, endTime),
-            color = Color.gradient(normalized, this.gradients[this.config.gradient]);
+            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientId]);
         // Determine whether to connect the states with a line
         if (!!this.lastState) {
             this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, +this.config.line));
@@ -543,6 +547,7 @@ export class Psychart {
      * Clear all plotted data from Psychart.
      */
     clearData(): void {
+        this.lastState = undefined;
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
     }

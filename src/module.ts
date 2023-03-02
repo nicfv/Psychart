@@ -1,6 +1,7 @@
 import { PanelPlugin, Field } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
+import { Psychart } from 'psychart';
 
 const inferno = 'public/plugins/ventura-psychrometric-panel/img/inferno.png',
   magma = 'public/plugins/ventura-psychrometric-panel/img/magma.png',
@@ -82,68 +83,13 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       category: ['Chart options'],
       settings: {
         allowCustomValue: false,
-        options: [
-          {
-            label: 'Recommended (High)',
-            value: 'dc01',
-            description: 'The "recommended" ASHRAE comfort zone for data centers with conditions with high pollutants.',
-          },
-          {
-            label: 'Recommended (Low)',
-            value: 'dc02',
-            description: 'The "recommended" ASHRAE comfort zone for data centers with conditions with low pollutants.',
-          },
-          {
-            label: 'A1',
-            value: 'dca1',
-            description: 'The A1 ASHRAE data center comfort zone. Typically a data center with mission-critical operations.',
-          },
-          {
-            label: 'A2',
-            value: 'dca2',
-            description: 'The A2 ASHRAE data center comfort zone. Typically an IT space with strict environmental requirements.',
-          },
-          {
-            label: 'A3',
-            value: 'dca3',
-            description: 'The A3 ASHRAE data center comfort zone. Typically an IT space with normal environmental requirements.',
-          },
-          {
-            label: 'A4',
-            value: 'dca4',
-            description: 'The A4 ASHRAE data center comfort zone. Typically an IT space with low environmental requirements.',
-          },
-          {
-            label: 'Summer (seated)',
-            value: 'h10s',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
-          },
-          {
-            label: 'Summer (walking)',
-            value: 'h15s',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
-          },
-          {
-            label: 'Summer (light work)',
-            value: 'h20s',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
-          },
-          {
-            label: 'Winter (seated)',
-            value: 'h10w',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are seated.',
-          },
-          {
-            label: 'Winter (walking)',
-            value: 'h15w',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are walking around.',
-          },
-          {
-            label: 'Winter (light work)',
-            value: 'h20w',
-            description: 'The ASHRAE-55 human comfort zone for a typical indoor space where most of the occupants are performing light work.',
-          },
-        ],
+        options: Object.entries(Psychart.regions).map(([id, region]) => {
+          return {
+            value: id,
+            label: region.name,
+            description: region.tooltip,
+          };
+        }),
       },
     })
     .addSelect({
@@ -258,7 +204,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Gradient',
       description: 'The series color gradient.',
       category: ['Display options'],
-      defaultValue: 'v',
+      defaultValue: 'viridis',
       settings: {
         allowCustomValue: false,
         options: [
