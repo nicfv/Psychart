@@ -28,6 +28,10 @@
         "url": "https://grafana.com/grafana/plugins/ventura-psychrometric-panel/"
       },
       {
+        "name": "Blog",
+        "url": "https://grafana.com/blog/2022/10/14/how-to-monitor-high-performance-computing-system-health-with-grafana-and-psychrometric-charts/"
+      },
+      {
         "name": "GitHub",
         "url": "https://github.com/nicfv/Psychart"
       },
