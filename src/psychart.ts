@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientId, RegionId } from './types';
+import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -34,36 +34,36 @@ export class Psychart {
     /**
      * Gradient source: https://waldyrious.net/viridis-palette-generator/
      */
-    static readonly gradients: { [K in GradientId]: Color[] } = {
-        viridis: [
+    private static readonly gradients: { [K in GradientName]: Color[] } = {
+        Viridis: [
             new Color(68, 1, 84),
             new Color(59, 82, 139),
             new Color(33, 145, 140),
             new Color(94, 201, 98),
             new Color(253, 231, 37),
         ],
-        inferno: [
+        Inferno: [
             new Color(0, 0, 4),
             new Color(87, 16, 110),
             new Color(188, 55, 84),
             new Color(249, 142, 9),
             new Color(252, 255, 164),
         ],
-        magma: [
+        Magma: [
             new Color(0, 0, 4),
             new Color(81, 18, 124),
             new Color(183, 55, 121),
             new Color(252, 137, 97),
             new Color(252, 253, 191),
         ],
-        plasma: [
+        Plasma: [
             new Color(13, 8, 135),
             new Color(126, 3, 168),
             new Color(204, 71, 120),
             new Color(248, 149, 64),
             new Color(240, 249, 33),
         ],
-        blue: [
+        Blue: [
             new Color(193, 231, 255),
             new Color(105, 150, 179),
             new Color(0, 76, 109),
@@ -73,9 +73,8 @@ export class Psychart {
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
      */
-    static readonly regions: { [K in RegionId]: Region } = {
-        h10s: {
-            name: 'Summer (sitting)',
+    private static readonly regions: { [K in RegionName]: Region } = {
+        'Summer (sitting)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 32.8, rh: 0 },
@@ -84,8 +83,7 @@ export class Psychart {
                 { db: 26.9, rh: 0 },
             ],
         },
-        h15s: {
-            name: 'Summer (walking)',
+        'Summer (walking)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 31.2, rh: 0 },
@@ -94,8 +92,7 @@ export class Psychart {
                 { db: 23.2, rh: 0 },
             ],
         },
-        h20s: {
-            name: 'Summer (light work)',
+        'Summer (light work)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer clothing)',
             data: [
                 { db: 30.4, rh: 0 },
@@ -104,8 +101,7 @@ export class Psychart {
                 { db: 22.0, rh: 0 },
             ],
         },
-        h10w: {
-            name: 'Winter (sitting)',
+        'Winter (sitting)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 28.6, rh: 0 },
@@ -114,8 +110,7 @@ export class Psychart {
                 { db: 20.5, rh: 0 },
             ],
         },
-        h15w: {
-            name: 'Winter (walking)',
+        'Winter (walking)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 26.8, rh: 0 },
@@ -124,8 +119,7 @@ export class Psychart {
                 { db: 17.2, rh: 0 },
             ],
         },
-        h20w: {
-            name: 'Winter (light work)',
+        'Winter (light work)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter clothing)',
             data: [
                 { db: 25.6, rh: 0 },
@@ -134,8 +128,7 @@ export class Psychart {
                 { db: 15.5, rh: 0 },
             ],
         },
-        dca4: {
-            name: 'Data center A4',
+        'Data Center A4': {
             tooltip: 'The A4 ASHRAE data center\ncomfort zone. Typically\nan IT space with low\nenvironmental requirements.',
             data: [
                 { db: 5, dp: -12 },
@@ -146,8 +139,7 @@ export class Psychart {
                 { db: 5, rh: 0.90 },
             ],
         },
-        dca3: {
-            name: 'Data center A3',
+        'Data Center A3': {
             tooltip: 'The A3 ASHRAE data center\ncomfort zone. Typically\nan IT space with normal\nenvironmental requirements.',
             data: [
                 { db: 5, dp: -12 },
@@ -158,8 +150,7 @@ export class Psychart {
                 { db: 5, rh: 0.85 },
             ],
         },
-        dca2: {
-            name: 'Data center A2',
+        'Data Center A2': {
             tooltip: 'The A2 ASHRAE data center\ncomfort zone. Typically\nan IT space with strict\nenvironmental requirements.',
             data: [
                 { db: 10.0, dp: -12 },
@@ -170,8 +161,7 @@ export class Psychart {
                 { db: 10.0, rh: 0.80 },
             ],
         },
-        dca1: {
-            name: 'Data center A1',
+        'Data Center A1': {
             tooltip: 'The A1 ASHRAE data\ncenter comfort zone.\nTypically a data center with\nmission-critical operations.',
             data: [
                 { db: 15.0, dp: -12 },
@@ -182,8 +172,7 @@ export class Psychart {
                 { db: 15.0, rh: 0.80 },
             ],
         },
-        dc02: {
-            name: 'Data center recommended (low pollutants)',
+        'Data Center Recommended (low pollutants)': {
             tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with low\nconcentration of pollutants.',
             data: [
                 { db: 18.0, dp: -9 },
@@ -193,8 +182,7 @@ export class Psychart {
                 { db: 18.0, rh: 0.70 },
             ],
         },
-        dc01: {
-            name: 'Data center recommended (high pollutants)',
+        'Data Center Recommended (high pollutants)': {
             tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with high\nconcentration of pollutants.',
             data: [
                 { db: 18.0, dp: -9 },
@@ -209,6 +197,18 @@ export class Psychart {
      * The last state plotted on Psychart.
      */
     private lastState?: PsyState;
+    /**
+     * Return an array of all gradient names.
+     */
+    static getGradientNames(): string[] {
+        return Object.keys(this.gradients);
+    }
+    /**
+     * Return an array of region names and their corresponding tooltips.
+     */
+    static getRegionNamesAndTips(): [string, string][] {
+        return Object.entries(this.regions).map(([name, region]) => [name, region.tooltip]);
+    }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
      */
@@ -281,7 +281,7 @@ export class Psychart {
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(Psychart.regions)
-            .filter(([name,]) => config.regions.includes(name as RegionId))
+            .filter(([name,]) => config.regions.includes(name as RegionName))
             .forEach(([, region]) => {
                 const numRegions = this.config.regions.length,
                     normalized = this.style.darkTheme ? JMath.normalize(regionIndex, numRegions, 0) : JMath.normalize(regionIndex, 0, numRegions),
@@ -297,7 +297,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Color.gradient(normalized, Psychart.gradients.blue), region.tooltip);
+                this.drawRegion(data, Color.gradient(normalized, Psychart.gradients.Blue), region.tooltip);
                 regionIndex++;
             });
     }
@@ -481,7 +481,7 @@ export class Psychart {
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = JMath.normalize(time, startTime, endTime),
-            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientId]);
+            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientName]);
         // Determine whether to connect the states with a line
         if (!!this.lastState) {
             this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, +this.config.line));

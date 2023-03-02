@@ -1,7 +1,7 @@
 import { Color } from './color';
 
-export type RegionId = 'h10s' | 'h15s' | 'h20s' | 'h10w' | 'h15w' | 'h20w' | 'dca4' | 'dca3' | 'dca2' | 'dca1' | 'dc02' | 'dc01';
-export type GradientId = 'viridis' | 'inferno' | 'magma' | 'plasma' | 'blue';
+export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)';
+export type GradientName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Blue';
 
 export interface Point {
     /**
@@ -45,10 +45,6 @@ export interface Datum {
 }
 
 export interface Region {
-    /**
-     * The full name of the region.
-     */
-    name: string;
     /**
      * The text to display on mouse hover
      */
@@ -110,7 +106,7 @@ export interface PsyOptions {
     /**
      * Render pre-defined shaded regions.
      */
-    regions: RegionId[];
+    regions: RegionName[];
     /**
      * The type of measurements that were taken.
      */
@@ -146,7 +142,7 @@ export interface PsyOptions {
     /**
      * Determines the color gradient for time series plots.
      */
-    gradient: GradientId;
+    gradient: GradientName;
     /**
      * Defines whether or not to show advanced state variables.
      */

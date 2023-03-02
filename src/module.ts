@@ -83,11 +83,11 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       category: ['Chart options'],
       settings: {
         allowCustomValue: false,
-        options: Object.entries(Psychart.regions).map(([id, region]) => {
+        options: Psychart.getRegionNamesAndTips().map(([name, tip]) => {
           return {
-            value: id,
-            label: region.name,
-            description: region.tooltip,
+            value: name,
+            label: name,
+            description: tip,
           };
         }),
       },

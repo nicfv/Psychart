@@ -16,19 +16,19 @@ window.addEventListener('load', () => {
     setVisibility('data-input', false);
 
     // Create region checkboxes
-    Object.entries(Psychart.regions).forEach(([id, region]) => {
+    Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
         const checkbox = document.createElement('input'),
             label = document.createElement('label'),
             linebreak = document.createElement('br');
         checkbox.type = 'checkbox';
-        checkbox.id = id;
-        label.setAttribute('for', id);
-        label.textContent = region.name;
-        label.title = region.tooltip;
+        checkbox.id = name;
+        label.setAttribute('for', name);
+        label.textContent = name;
+        label.title = tip;
         let parent: HTMLElement | null = null;
-        if (id.match(/h[0-9]{2}[sw]/)) {
+        if (name.match(/(Summer|Winter).*/)) {
             parent = document.getElementById('ashrae-55-container');
-        } else if (id.match(/dc[a0][0-9]/)) {
+        } else if (name.match(/Data Center.*/)) {
             parent = document.getElementById('ashrae-dc-container');
         }
         parent?.appendChild(checkbox);
@@ -37,18 +37,17 @@ window.addEventListener('load', () => {
     });
 
     // Add gradient dropdown options
-    Object.keys(Psychart.gradients).forEach(key => {
+    Psychart.getGradientNames().forEach(name => {
         const option = document.createElement('option');
-        option.value = key;
-        option.textContent = key[0].toUpperCase() + key.substring(1).toLowerCase();
+        option.value = name;
+        option.textContent = name;
         document.getElementById('gradient')?.appendChild(option);
     });
 
     setOnClick('btnGenerate', () => {
         const dbMin = getNumericValue('db_min'),
             dbMax = getNumericValue('db_max'),
-            dpMax = getNumericValue('dp_max'),
-            allRegions: string[] = ['dca4', 'dca3', 'dca2', 'dca1', 'dc02', 'dc01', 'h10s', 'h15s', 'h20s', 'h10w', 'h15w', 'h20w'];
+            dpMax = getNumericValue('dp_max');
         if (dbMin >= dbMax) {
             alert('Dry bulb min should be less than dry bulb max.');
         } else if (dpMax > dbMax) {
@@ -68,7 +67,7 @@ window.addEventListener('load', () => {
                     gradient: getStringValue('gradient'),
                     line: getCheckedState('ptLine'),
                     pointRadius: getNumericValue('ptRad'),
-                    regions: allRegions.filter(region => getCheckedState(region)),
+                    regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
                     relHumType: 'percent',
                     unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
                 } as PsyOptions, {
