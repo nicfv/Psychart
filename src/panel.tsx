@@ -1,24 +1,16 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { Layout, PsyOptions, StyleOptions } from './types';
+import { Layout, PsyOptions } from './types';
 import { Container } from './container';
 import { format } from './formatter';
 import { Psychart } from './psychart';
-import { Color } from './color';
 
 export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
-  const isDarkTheme = !useTheme2().isLight;
+  const isDarkTheme = useTheme2().isDark;
   try {
     const layout = { padding: 30, size: { x: width, y: height } } as Layout,
-      style = {
-        darkTheme: isDarkTheme,
-        fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
-        lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
-        fontSize: 12,
-        resolution: 0.5,
-        major: 10,
-      } as StyleOptions,
+      style = Psychart.getDefaultStyleOptions(isDarkTheme),
       psychart = new Psychart(layout, options, style),
       formatted = format(data),
       startTime = data.timeRange.from.unix() * 1e3,

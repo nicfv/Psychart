@@ -1,6 +1,5 @@
-import { Color } from "color";
 import { Psychart } from "psychart";
-import { Layout, PsyOptions, StyleOptions } from "types";
+import { Layout, PsyOptions } from "types";
 
 let ps: Psychart;
 
@@ -70,19 +69,12 @@ window.addEventListener('load', () => {
                     regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
                     relHumType: 'percent',
                     unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
-                } as PsyOptions, {
-                    darkTheme: isDarkTheme(),
-                    fontColor: isDarkTheme() ? new Color(208, 208, 208) : new Color(32, 32, 32),
-                    lineColor: isDarkTheme() ? new Color(48, 48, 48) : new Color(224, 224, 224),
-                    fontSize: 12,
-                    major: 10,
-                    resolution: 0.5,
-                } as StyleOptions);
+                } as PsyOptions,
+                Psychart.getDefaultStyleOptions(isDarkTheme()));
             document.getElementById('svg-container')?.appendChild(ps.getElement());
             setVisibility('generator', false);
             setVisibility('svg-container', true);
             setVisibility('data-input', true);
-            generateRandomData(); // TODO: remove
         }
     });
 
@@ -115,21 +107,4 @@ window.addEventListener('load', () => {
             ps.clearData();
         }
     });
-    console.log('Loaded script!');
 });
-
-const generateRandomData = (n = 1e3): void => {
-    const ran = (min: number, max: number): number => Math.random() * (max - min) + min,
-        clamp = (x: number, min: number, max: number) => Math.min(Math.max(min, x), max),
-        dbMin = getNumericValue('db_min'),
-        dbMax = getNumericValue('db_max');
-    let ranDb = ran(dbMin, dbMax), ranRh = ran(0, 1);
-    for (let i = 0; i < n; i++) {
-        ranDb += ran(-2, 2);
-        ranDb = clamp(ranDb, dbMin, dbMax);
-        ranRh += ran(-0.05, 0.05);
-        ranRh = clamp(ranRh, 0, 1);
-        console.log('plotting ' + ranDb + ',' + ranRh);
-        ps.plot({ db: ranDb, rh: ranRh });
-    }
-};

@@ -80,6 +80,10 @@ export interface StyleOptions {
      * The major axis interval.
      */
     major: number;
+    /**
+     * The default time span (ms) between the first and last plotted point.
+     */
+    timeSpan: number;
 }
 
 export interface PsyOptions {

@@ -198,16 +198,38 @@ export class Psychart {
      */
     private lastState?: PsyState;
     /**
+     * The timestamp of which Psychart was initialized. For plotting, this represents the origin.
+     */
+    private readonly startTime: number;
+    /**
+     * The timestamp that's used as the final time for plotting. By default, this is 1 hour after `startTime`
+     */
+    private readonly endTime: number;
+    /**
      * Return an array of all gradient names.
      */
-    static getGradientNames(): string[] {
-        return Object.keys(this.gradients).filter(name => name !== 'Blue');
+    static getGradientNames(): GradientName[] {
+        return Object.keys(this.gradients).filter(name => name !== 'Blue') as GradientName[];
     }
     /**
      * Return an array of region names and their corresponding tooltips.
      */
-    static getRegionNamesAndTips(): Array<[string, string]> {
-        return Object.entries(this.regions).map(([name, region]) => [name, region.tooltip]);
+    static getRegionNamesAndTips(): Array<[RegionName, string]> {
+        return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
+    }
+    /**
+     * Return some suggested style options based on if the current display is dark or light theme.
+     */
+    static getDefaultStyleOptions(isDarkTheme: boolean): StyleOptions {
+        return {
+            darkTheme: isDarkTheme,
+            fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
+            lineColor: isDarkTheme ? new Color(48, 48, 48) : new Color(224, 224, 224),
+            fontSize: 12,
+            resolution: 0.5,
+            major: 10,
+            timeSpan: 60 * 60 * 1e3,
+        } as StyleOptions;
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
@@ -215,6 +237,9 @@ export class Psychart {
     constructor(private readonly layout: Layout, private readonly config: PsyOptions, private readonly style: StyleOptions) {
         // Compute a first-time initialization of psychrolib
         PsyState.initialize(layout, config);
+        // Set the starting and ending timestamps
+        this.startTime = Date.now();
+        this.endTime = this.startTime + this.style.timeSpan;
         // Set the chart's viewport size.
         this.base.setAttribute('viewBox', '0 0 ' + this.layout.size.x + ' ' + this.layout.size.y);
         // Sets the displayed units based on the unit system.
@@ -476,7 +501,7 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    plot(state: Datum, time: number = Date.now(), startTime: number = Date.now(), endTime: number = Date.now() + 1): void {
+    plot(state: Datum, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
         // Divide by 100 if relHumType is set to 'percent'
         if (typeof state.rh === 'number' && this.config.relHumType === 'percent') {
             state.rh /= 100;
