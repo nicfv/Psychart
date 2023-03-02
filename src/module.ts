@@ -2,6 +2,7 @@ import { PanelPlugin, Field } from '@grafana/data';
 import { PsyOptions } from './types';
 import { PsyPanel } from './panel';
 import { Psychart } from 'psychart';
+import { icons } from 'icons';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder) => {
   return builder
@@ -204,7 +205,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           return {
             value: name,
             label: name,
-            imgUrl: 'public/plugins/ventura-psychrometric-panel/img/' + name.toLowerCase() + '.png', // TODO: update this path
+            imgUrl: icons[name],
           };
         }),
       },
