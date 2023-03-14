@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1
+
+- Set `Viridis` as the default color gradient
+- Add a short blurb in `README.md` in **Troubleshooting** to explain how to fix errors when upgrading to major versions
+
 ## 3.0.0
 
 - Migrate from a JavaScript to a TypeScript code base

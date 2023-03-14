@@ -73,6 +73,8 @@ Importantly, if there is missing data in one field, for example if dry bulb temp
 
 Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series or reducing the point radius.
 
+Finally, if there are issues after upgrading to a newer version of Psychart, (for example the regions are not being rendered) try to open the panel editor, reapply your customization settings, and save the panel. Sometimes, the panel options are not properly stored from version to version.
+
 ## License
 
 Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`

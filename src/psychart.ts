@@ -510,7 +510,7 @@ export class Psychart {
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = JMath.normalize(time, startTime, endTime),
-            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientName]);
+            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientName] ?? Psychart.gradients.Viridis);
         // Determine whether to connect the states with a line
         if (!!this.lastState) {
             this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, +this.config.line));
@@ -520,7 +520,7 @@ export class Psychart {
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
         point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', this.config.pointRadius + 'px');
+        point.setAttribute('stroke-width', +this.config.pointRadius + 'px');
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
