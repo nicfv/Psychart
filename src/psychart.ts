@@ -237,6 +237,10 @@ export class Psychart {
     constructor(private readonly layout: Layout, private readonly config: PsyOptions, private readonly style: StyleOptions) {
         // Compute a first-time initialization of psychrolib
         PsyState.initialize(layout, config);
+        // Check to make sure that dpMax is less than dbMax
+        if (config.dpMax > config.dbMax) {
+            throw new Error('Dew point maximum is greater than dry bulb range!');
+        }
         // Set the starting and ending timestamps
         this.startTime = Date.now();
         this.endTime = this.startTime + this.style.timeSpan;
