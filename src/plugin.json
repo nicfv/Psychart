@@ -7,7 +7,8 @@
     "description": "View air conditions on a psychrometric chart.",
     "author": {
       "name": "Nicolas Ventura",
-      "url": "https://www.nersc.gov"
+      "url": "https://www.nersc.gov/about/nersc-staff/building-infrastructure-group/nicolas-ventura/",
+      "email": "ventura@lbl.gov"
     },
     "keywords": [
       "air",
@@ -47,7 +48,7 @@
     "screenshots": [
       {
         "name": "HVAC use case: Air handler supply temperatures.",
-        "path": "img/screenshot_ahu.png"
+        "path": "img/screenshot_ahu.png TODO"
       },
       {
         "name": "IT use case: Inlet conditions of an air-cooled compute cabinet.",

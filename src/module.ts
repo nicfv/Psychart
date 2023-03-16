@@ -198,7 +198,6 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       name: 'Gradient',
       description: 'The series color gradient.',
       category: ['Display options'],
-      defaultValue: 'viridis',
       settings: {
         allowCustomValue: false,
         options: Psychart.getGradientNames().map(name => {
@@ -209,6 +208,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           };
         }),
       },
+      defaultValue: 'Viridis',
     })
     .addBooleanSwitch({
       path: 'advanced',

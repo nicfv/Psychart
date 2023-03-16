@@ -113,6 +113,8 @@ export class PsyState {
             this.vp = PSY_CALC[3];
             this.h = PSY_CALC[4];
             this.v = PSY_CALC[5];
+        } else {
+            throw new Error('Invalid state. Series not found?');
         }
     }
     /**

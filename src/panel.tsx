@@ -18,15 +18,21 @@ export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, widt
     for (let t in formatted) {
       switch (options.measurements) {
         case ('dbwb'): {
-          psychart.plot({ db: formatted[t][options.dryBulb], wb: formatted[t][options.wetBulb] }, +t, startTime, endTime);
+          if (typeof options.dryBulb === 'string' && typeof options.wetBulb === 'string') {
+            psychart.plot({ db: formatted[t][options.dryBulb], wb: formatted[t][options.wetBulb] }, +t, startTime, endTime);
+          }
           break;
         }
         case ('dbrh'): {
-          psychart.plot({ db: formatted[t][options.dryBulb], rh: formatted[t][options.relHum] }, +t, startTime, endTime);
+          if (typeof options.dryBulb === 'string' && typeof options.relHum === 'string') {
+            psychart.plot({ db: formatted[t][options.dryBulb], rh: formatted[t][options.relHum] }, +t, startTime, endTime);
+          }
           break;
         }
         case ('dbdp'): {
-          psychart.plot({ db: formatted[t][options.dryBulb], dp: formatted[t][options.dewPoint] }, +t, startTime, endTime);
+          if (typeof options.dryBulb === 'string' && typeof options.dewPoint === 'string') {
+            psychart.plot({ db: formatted[t][options.dryBulb], dp: formatted[t][options.dewPoint] }, +t, startTime, endTime);
+          }
           break;
         }
         default: {

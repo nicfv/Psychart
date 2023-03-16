@@ -306,7 +306,7 @@ export class Psychart {
         // Draw any regions, if applicable
         let regionIndex = 0;
         Object.entries(Psychart.regions)
-            .filter(([name,]) => config.regions.includes(name as RegionName))
+            .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 const numRegions = this.config.regions.length,
                     normalized = this.style.darkTheme ? JMath.normalize(regionIndex, numRegions, 0) : JMath.normalize(regionIndex, 0, numRegions),
