@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.1.0
+
+- Screenshots are no longer packaged with the plugin
+- Add more and new screenshots with better descriptions
+- Fix bug that prevented the default gradient from being set
+- Don't attempt to plot data if no field names are selected
+- Show an error if field is not found or otherwise invalid
+- Show an error if maximum dew point > maximum dry bulb
+- Add author contact information in `plugin.json`
+- Publishing script now ensures changelog matches published version number
+
 ## 3.0.1
 
 - Set `Viridis` as the default color gradient
