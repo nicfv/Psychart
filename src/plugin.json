@@ -47,48 +47,8 @@
     ],
     "screenshots": [
       {
-        "name": "HVAC use case: Air handler supply temperatures.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/summer.png"
-      },
-      {
-        "name": "There are many different styling options for Psychart.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/winter.png"
-      },
-      {
-        "name": "Psychart can render data in imperial or metric units!",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/metric.png"
-      },
-      {
-        "name": "IT use case: Data center supply air conditions.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/data_center.png"
-      },
-      {
-        "name": "Hover the mouse over the shaded regions to learn more!",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/region_hover.png"
-      },
-      {
-        "name": "Hover the mouse over the data points to show the thermodynamic properties of air. (Currently showing advanced state variables.)",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/style.png"
-      },
-      {
-        "name": "Meteorological use case: Long-term outdoor air conditions.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/outdoor.png"
-      },
-      {
-        "name": "General use case: Psychart as a thermodynamic calculator.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor.png"
-      },
-      {
-        "name": "Grafana configuration options for Psychart.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor.png"
-      },
-      {
-        "name": "Data options panel for Psychart.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/data_options.png"
-      },
-      {
-        "name": "Display options panel for Psychart.",
-        "path": "https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/display_options.png"
+        "name": "Logo - See screenshots in README.md",
+        "path": "img/logo.svg"
       }
     ],
     "version": "%VERSION%",
