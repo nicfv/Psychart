@@ -1,8 +1,12 @@
 # Changelog
 
+## 3.1.1
+
+- Screenshots are moved to `README.md`
+
 ## 3.1.0
 
-- ~~Screenshots are no longer packaged with the plugin~~
+- Screenshots are no longer packaged with the plugin
 - Add more and new screenshots with better descriptions
 - Fix bug that prevented the default gradient from being set
 - Don't attempt to plot data if no field names are selected
