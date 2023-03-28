@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.2
+
+- Move `README.md` from base folder to `src/`
+- Update dependencies
+
 ## 3.1.1
 
 - Screenshots are moved to `README.md`
