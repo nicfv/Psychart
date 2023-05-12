@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.3
+
+- Update to the latest version of `@grafana/create-plugin` (1.3.0)
+- Change `yarn` commands to `npm run`
+
 ## 3.1.2
 
 - Move `README.md` from base folder to `src/`
