@@ -2,14 +2,11 @@
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
-    echo "Usage: ${0} [-h] [-o] [-r] [-v] [-P]"
+    echo "Usage: ${0} [-h] [-r] [-v] [-P]"
     echo '  -h: Show this help message.'
-    echo '  -o: Open the svg generator in a web browser.'
     echo '  -r: Starts or restarts Grafana.'
     echo '  -v: Validate the plugin using grafana/plugin-validator.'
     echo '  -P: Publish the plugin to Grafana with the latest version number in the changelog.'
-  elif [[ "${ARG}" == -o ]] ; then
-    open './docs/index.html'
   elif [[ "${ARG}" == -r ]] ; then
     brew services restart grafana
   elif [[ "${ARG}" == -v ]] ; then

@@ -31,10 +31,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: Install node packages
-        run: yarn install
+      - name: Install dependencies
+        run: npm ci
       - name: Build project
-        run: yarn docs
+        run: npm run docs
       - name: Set version
         run: |
           VERSION=$(grep version < package.json | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
