@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0
+
+- Update to the latest version of `@grafana/create-plugin` (1.6.3)
+    - Grafana version required: `>=9.5.3`
+- Automatically build and validate plugin in validation script
+
 ## 3.1.3
 
 - Update to the latest version of `@grafana/create-plugin` (1.3.0)
