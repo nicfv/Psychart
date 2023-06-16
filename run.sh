@@ -19,7 +19,7 @@ for ARG in "${@}" ; do
   elif [[ "${ARG}" == -P ]] ; then
     VERSION=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
     echo "Publishing with version ${VERSION}."
-    if git status | grep -q clean ; then
+    if git status | grep -q clean && git status | grep -q 'up to date' ; then
       EXT='.bk'
       PACKAGE_JSON='package.json'
       REMOTE_ORIGIN='origin'
