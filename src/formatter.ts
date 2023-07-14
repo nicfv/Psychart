@@ -21,6 +21,7 @@ export function format(data: PanelData): { [index: number]: { [index: string]: n
             formatted[t] = formatted[t] || {};
             formatted[t][frame.name as string] = field.values.get(i);
             formatted[t][field.name] = field.values.get(i);
+            formatted[t][field.config.displayNameFromDS as string] = field.values.get(i);
           });
       });
   });

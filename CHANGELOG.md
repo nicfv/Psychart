@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 3.2.1
 
 - Update to the latest version of `@grafana/create-plugin` (1.9.0)
+- Remove references to `npm` in build script
+- Store series value in label named `field.config.displayNameFromDS`
 
 ## 3.2.0
 

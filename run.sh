@@ -11,7 +11,6 @@ for ARG in "${@}" ; do
     brew services restart grafana
   elif [[ "${ARG}" == -v ]] ; then
     PLUGIN_ID=$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')
-    npm run build
     cp -r dist "${PLUGIN_ID}"
     zip -qr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
     npx -y @grafana/plugin-validator@latest -sourceCodeUri file://. "${PLUGIN_ID}.zip"
