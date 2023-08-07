@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.2.2
 
 - Update to the latest version of `@grafana/create-plugin` (1.10.0)
 - Fix incorrect plugin ID in `docker-compose.yaml`
