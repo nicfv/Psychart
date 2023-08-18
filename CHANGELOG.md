@@ -1,9 +1,14 @@
 # Changelog
 
+## 3.2.3
+
+- Update to the latest version of `@grafana/create-plugin` (1.12.0)
+
 ## 3.2.2
 
 - Update to the latest version of `@grafana/create-plugin` (1.10.0)
 - Fix incorrect plugin ID in `docker-compose.yaml`
+- Remove references to `GRAFANA_API_KEY` in favor of `GRAFANA_ACCESS_POLICY_TOKEN`
 
 ## 3.2.1
 
