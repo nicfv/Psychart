@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.3.0
+
+- Update to the latest version of `@grafana/create-plugin` (2.0.2)
+    - Grafana version required: `>=10.0.3`
+- Node version updated to `v18`
+
 ## 3.2.3
 
 - Update to the latest version of `@grafana/create-plugin` (1.12.0)
