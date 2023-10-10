@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Change `-r` flag to `-g` flag in runner (restarts local Grafana instance)
+- Fix edge case in `normalize` function where `min = max`
+- Psychrometric regions now utilize the full scale of the gradient
+
 ## 3.3.0
 
 - Update to the latest version of `@grafana/create-plugin` (2.0.2)

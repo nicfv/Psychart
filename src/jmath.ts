@@ -13,6 +13,9 @@ export class JMath {
    * Normalize a number `x` from the coordinate system `[min, max]`
    */
   static normalize(x: number, min: number, max: number): number {
+    if (min === max) {
+      return min;
+    }
     return (x - min) / (max - min);
   }
 

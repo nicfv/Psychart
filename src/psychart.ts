@@ -312,8 +312,8 @@ export class Psychart {
         Object.entries(Psychart.regions)
             .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
-                const numRegions = this.config.regions.length,
-                    normalized = this.style.darkTheme ? JMath.normalize(regionIndex, numRegions, 0) : JMath.normalize(regionIndex, 0, numRegions),
+                const maxRegion = this.config.regions.length - 1,
+                    normalized = this.style.darkTheme ? JMath.normalize(regionIndex, maxRegion, 0) : JMath.normalize(regionIndex, 0, maxRegion),
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units

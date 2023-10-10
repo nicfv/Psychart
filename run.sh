@@ -2,12 +2,12 @@
 
 for ARG in "${@}" ; do
   if [[ "${ARG}" == -h ]] ; then
-    echo "Usage: ${0} [-h] [-r] [-v] [-P]"
+    echo "Usage: ${0} [-h] [-g] [-v] [-P]"
     echo '  -h: Show this help message.'
-    echo '  -r: Starts or restarts Grafana.'
+    echo '  -g: Starts or restarts Grafana.'
     echo '  -v: Validate the plugin using grafana/plugin-validator.'
     echo '  -P: Publish the plugin to Grafana with the latest version number in the changelog.'
-  elif [[ "${ARG}" == -r ]] ; then
+  elif [[ "${ARG}" == -g ]] ; then
     brew services restart grafana
   elif [[ "${ARG}" == -v ]] ; then
     PLUGIN_ID=$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')
