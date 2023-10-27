@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## 3.3.1
 
 - Change `-r` flag to `-g` flag in runner (restarts local Grafana instance)
 - Fix edge case in `normalize` function where `min = max`
 - Psychrometric regions now utilize the full scale of the gradient
+- Improve error checking for psychrometric states (remove nuisance error)
+- Update data formatter for newer Grafana API version
 
 ## 3.3.0
 

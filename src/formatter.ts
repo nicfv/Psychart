@@ -13,15 +13,14 @@ export function format(data: PanelData): { [index: number]: { [index: string]: n
   data.series.forEach((frame) => {
     frame.fields
       .find((field) => field.type === 'time')
-      ?.values.toArray()
-      .forEach((t: number, i: number) => {
+      ?.values.forEach((t: number, i: number) => {
         frame.fields
           .filter((field) => field.type === 'number')
           .forEach((field) => {
             formatted[t] = formatted[t] || {};
-            formatted[t][frame.name as string] = field.values.get(i);
-            formatted[t][field.name] = field.values.get(i);
-            formatted[t][field.config.displayNameFromDS as string] = field.values.get(i);
+            formatted[t][frame.name as string] = field.values[i];
+            formatted[t][field.name] = field.values[i];
+            formatted[t][field.config.displayNameFromDS as string] = field.values[i];
           });
       });
   });
