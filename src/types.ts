@@ -2,6 +2,7 @@ import { Color } from './color';
 
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)';
 export type GradientName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Blue';
+export type DataSeries = { [index: number]: DataOptions };
 
 export interface Point {
     /**
@@ -118,7 +119,7 @@ export interface PsyOptions {
     /**
      * The data series information.
      */
-    series: { [index: number]: DataOptions };
+    series: DataSeries;
 }
 
 export interface DataOptions {

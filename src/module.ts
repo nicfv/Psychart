@@ -1,5 +1,5 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
-import { PsyOptions } from './types';
+import { DataSeries, PsyOptions } from './types';
 import { PsyPanel } from './panel';
 import { Psychart } from 'psychart';
 import { icons } from 'icons';
@@ -116,169 +116,179 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       delete context.options.series[+key];
     }
   }
-  // Generate controls for data series
-  for (let i = 0; i < context.options!.count; i++) {
-    const subcategory: string = 'Series ' + JMath.itoa(i);
-    context.options.series[i] = cleanDataOptions(context.options.series[i] || {});
-    builder
-      .addTextInput({
-        path: 'series.' + i + '.legend',
-        name: 'Legend',
-        description: 'Add a label to this data series.',
-        defaultValue: undefined,
-        category: [subcategory],
-        settings: {
-          maxLength: 50,
-          placeholder: subcategory,
+  builder
+    .addNestedOptions<DataSeries>({
+      path: 'series',
+      category: ['Data options'],
+      build(subbuilder, subcontext) {
+        subcontext.options = subcontext.options || {};
+        // Generate controls for data series
+        for (let i = 0; i < context.options!.count; i++) {
+          // Force clean data options
+          subcontext.options[i] = cleanDataOptions(subcontext.options[i] || {});
+          // Use legend as subcategory or default string if none exists
+          const subcategory: string = subcontext.options[i].legend || 'Series ' + JMath.itoa(i);
+          subbuilder
+            .addTextInput({
+              path: i + '.legend',
+              name: 'Legend',
+              description: 'Add a label to this data series.',
+              defaultValue: undefined,
+              category: [subcategory],
+              settings: {
+                maxLength: 50,
+                placeholder: subcategory,
+              }
+            })
+            .addSelect({
+              path: i + '.measurements',
+              name: 'Measurements',
+              description: 'Select which series are being measured.',
+              defaultValue: subcontext.options![i].measurements,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: false,
+                options: [
+                  {
+                    value: 'dbwb',
+                    label: 'Dry Bulb & Wet Bulb',
+                  },
+                  {
+                    value: 'dbdp',
+                    label: 'Dry Bulb & Dew Point',
+                  },
+                  {
+                    value: 'dbrh',
+                    label: 'Dry Bulb & Rel. Humidity',
+                  },
+                ],
+              },
+              showIf: (x) => !!(x[i].legend),
+            })
+            .addSelect({
+              path: i + '.dryBulb',
+              name: 'Dry Bulb Series',
+              description: 'Select a series that measures the dry bulb temperature.',
+              defaultValue: subcontext.options[i].dryBulb,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: true,
+                options: fieldOptions,
+              },
+              showIf: (x) => !!(x[i].legend),
+            })
+            .addSelect({
+              path: i + '.wetBulb',
+              name: 'Wet Bulb Series',
+              description: 'Select a series that measures the wet bulb temperature.',
+              defaultValue: subcontext.options[i].wetBulb,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: true,
+                options: fieldOptions,
+              },
+              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbwb'),
+            })
+            .addSelect({
+              path: i + '.dewPoint',
+              name: 'Dew Point Series',
+              description: 'Select a series that measures the dew point temperature.',
+              defaultValue: subcontext.options[i].dewPoint,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: true,
+                options: fieldOptions,
+              },
+              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbdp'),
+            })
+            .addSelect({
+              path: i + '.relHum',
+              name: 'Relative Humidity Series',
+              description: 'Select a series that measures the relative humidity.',
+              defaultValue: subcontext.options[i].relHum,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: true,
+                options: fieldOptions,
+              },
+              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbrh'),
+            })
+            .addRadio({
+              path: i + '.relHumType',
+              name: 'Relative Humidity Type',
+              description: 'Choose how relative humidity is actively being measured.',
+              category: [subcategory],
+              defaultValue: subcontext.options[i].relHumType,
+              settings: {
+                allowCustomValue: false,
+                isClearable: false,
+                options: [
+                  {
+                    value: 'percent',
+                    label: '100%',
+                  },
+                  {
+                    value: 'float',
+                    label: '0.0-1.0',
+                  },
+                ],
+              },
+              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbrh'),
+            })
+            .addSliderInput({
+              path: i + '.pointRadius',
+              name: 'Point Size',
+              description: 'Enter the point radius, in pixels.',
+              defaultValue: subcontext.options[i].pointRadius,
+              category: [subcategory],
+              settings: {
+                min: 1,
+                max: 10,
+                step: 1,
+              },
+              showIf: (x) => !!(x[i].legend),
+            })
+            .addBooleanSwitch({
+              path: i + '.line',
+              name: 'Show Line',
+              description: 'Connect data points with a line?',
+              defaultValue: subcontext.options[i].line,
+              category: [subcategory],
+              showIf: (x) => !!(x[i].legend),
+            })
+            .addSelect({
+              path: i + '.gradient',
+              name: 'Gradient',
+              description: 'The series color gradient.',
+              defaultValue: subcontext.options[i].gradient,
+              category: [subcategory],
+              settings: {
+                allowCustomValue: false,
+                isClearable: false,
+                options: Psychart.getGradientNames().map(name => {
+                  return {
+                    value: name,
+                    label: name,
+                    imgUrl: icons[name],
+                  };
+                }),
+              },
+              showIf: (x) => !!(x[i].legend),
+            })
+            .addBooleanSwitch({
+              path: i + '.advanced',
+              name: 'Show Advanced State Variables',
+              description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
+              defaultValue: subcontext.options[i].advanced,
+              category: [subcategory],
+              showIf: (x) => !!(x[i].legend),
+            });
         }
-      })
-      .addSelect({
-        path: 'series.' + i + '.measurements',
-        name: 'Measurements',
-        description: 'Select which series are being measured.',
-        defaultValue: context.options.series[i].measurements,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: false,
-          options: [
-            {
-              value: 'dbwb',
-              label: 'Dry Bulb & Wet Bulb',
-            },
-            {
-              value: 'dbdp',
-              label: 'Dry Bulb & Dew Point',
-            },
-            {
-              value: 'dbrh',
-              label: 'Dry Bulb & Rel. Humidity',
-            },
-          ],
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      })
-      .addSelect({
-        path: 'series.' + i + '.dryBulb',
-        name: 'Dry Bulb Series',
-        description: 'Select a series that measures the dry bulb temperature.',
-        defaultValue: context.options.series[i].dryBulb,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: true,
-          options: fieldOptions,
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      })
-      .addSelect({
-        path: 'series.' + i + '.wetBulb',
-        name: 'Wet Bulb Series',
-        description: 'Select a series that measures the wet bulb temperature.',
-        defaultValue: context.options.series[i].wetBulb,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: true,
-          options: fieldOptions,
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend && x.series?.[i]?.measurements === 'dbwb'),
-      })
-      .addSelect({
-        path: 'series.' + i + '.dewPoint',
-        name: 'Dew Point Series',
-        description: 'Select a series that measures the dew point temperature.',
-        defaultValue: context.options.series[i].dewPoint,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: true,
-          options: fieldOptions,
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend && x.series?.[i]?.measurements === 'dbdp'),
-      })
-      .addSelect({
-        path: 'series.' + i + '.relHum',
-        name: 'Relative Humidity Series',
-        description: 'Select a series that measures the relative humidity.',
-        defaultValue: context.options.series[i].relHum,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: true,
-          options: fieldOptions,
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend && x.series?.[i]?.measurements === 'dbrh'),
-      })
-      .addRadio({
-        path: 'series.' + i + '.relHumType',
-        name: 'Relative Humidity Type',
-        description: 'Choose how relative humidity is actively being measured.',
-        category: [subcategory],
-        defaultValue: context.options.series[i].relHumType,
-        settings: {
-          allowCustomValue: false,
-          isClearable: false,
-          options: [
-            {
-              value: 'percent',
-              label: '100%',
-            },
-            {
-              value: 'float',
-              label: '0.0-1.0',
-            },
-          ],
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend && x.series?.[i]?.measurements === 'dbrh'),
-      })
-      .addSliderInput({
-        path: 'series.' + i + '.pointRadius',
-        name: 'Point Size',
-        description: 'Enter the point radius, in pixels.',
-        defaultValue: context.options.series[i].pointRadius,
-        category: [subcategory],
-        settings: {
-          min: 1,
-          max: 10,
-          step: 1,
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      })
-      .addBooleanSwitch({
-        path: 'series.' + i + '.line',
-        name: 'Show Line',
-        description: 'Connect data points with a line?',
-        defaultValue: context.options.series[i].line,
-        category: [subcategory],
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      })
-      .addSelect({
-        path: 'series.' + i + '.gradient',
-        name: 'Gradient',
-        description: 'The series color gradient.',
-        defaultValue: context.options.series[i].gradient,
-        category: [subcategory],
-        settings: {
-          allowCustomValue: false,
-          isClearable: false,
-          options: Psychart.getGradientNames().map(name => {
-            return {
-              value: name,
-              label: name,
-              imgUrl: icons[name],
-            };
-          }),
-        },
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      })
-      .addBooleanSwitch({
-        path: 'series.' + i + '.advanced',
-        name: 'Show Advanced State Variables',
-        description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
-        defaultValue: context.options.series[i].advanced,
-        category: [subcategory],
-        showIf: (x) => !!(x.series?.[i]?.legend),
-      });
-  }
+      },
+    });
 });

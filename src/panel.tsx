@@ -3,7 +3,7 @@ import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 import { Layout, PsyOptions } from './types';
 import { Container } from './container';
-import { format } from './formatter';
+import { format, getFieldList } from './formatter';
 import { Psychart } from './psychart';
 
 export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
@@ -13,30 +13,31 @@ export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, widt
       style = Psychart.getDefaultStyleOptions(isDarkTheme),
       psychart = new Psychart(layout, options, style),
       formatted = format(data.series),
+      fieldList = getFieldList(formatted),
       startTime = data.timeRange.from.unix() * 1e3,
       endTime = data.timeRange.to.unix() * 1e3;
     for (let t in formatted) {
-      for (let f = 0; f < options.count; f++) {
+      for (let f in options.series || {}) {
         // Skip unset series
-        if (!options.series?.[f] || !options.series?.[f].legend) {
+        if (!options.series[f].legend) {
           continue;
         }
         switch (options.series[f].measurements) {
           case ('dbwb'): {
-            if (typeof options.series[f].dryBulb === 'string' && typeof options.series[f].wetBulb === 'string') {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], wb: formatted[t][options.series[f].wetBulb] }, options.series[f], +t, startTime, endTime);
+            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].wetBulb)) {
+              psychart.plot({ db: formatted[t][options.series[f].dryBulb], wb: formatted[t][options.series[f].wetBulb] }, +f, +t, startTime, endTime);
             }
             break;
           }
           case ('dbrh'): {
-            if (typeof options.series[f].dryBulb === 'string' && typeof options.series[f].relHum === 'string') {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], rh: formatted[t][options.series[f].relHum] }, options.series[f], +t, startTime, endTime);
+            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].relHum)) {
+              psychart.plot({ db: formatted[t][options.series[f].dryBulb], rh: formatted[t][options.series[f].relHum] }, +f, +t, startTime, endTime);
             }
             break;
           }
           case ('dbdp'): {
-            if (typeof options.series[f].dryBulb === 'string' && typeof options.series[f].dewPoint === 'string') {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], dp: formatted[t][options.series[f].dewPoint] }, options.series[f], +t, startTime, endTime);
+            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].dewPoint)) {
+              psychart.plot({ db: formatted[t][options.series[f].dryBulb], dp: formatted[t][options.series[f].dewPoint] }, +f, +t, startTime, endTime);
             }
             break;
           }

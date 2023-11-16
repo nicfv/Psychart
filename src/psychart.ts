@@ -196,7 +196,7 @@ export class Psychart {
     /**
      * The last states plotted on Psychart for each series.
      */
-    private lastState: { [index: string]: PsyState } = {};
+    private lastState: { [index: number]: PsyState } = {};
     /**
      * The timestamp of which Psychart was initialized. For plotting, this represents the origin.
      */
@@ -505,7 +505,9 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    plot(state: Datum, options: DataOptions, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+    plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+        // Grab the corresponding data options
+        const options: DataOptions = this.config.series[id];
         // Check for invalid timestamps.
         if (!Number.isFinite(time)) {
             throw new Error('Data timestamp is invalid for series ' + options.legend + '.');
@@ -524,10 +526,10 @@ export class Psychart {
         const normalized = JMath.normalize(time, startTime, endTime),
             color = Color.gradient(normalized, Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis);
         // Determine whether to connect the states with a line
-        if (!!this.lastState[options.legend]) {
-            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, +options.line));
+        if (!!this.lastState[id]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[id], currentState], color, +options.line));
         }
-        this.lastState[options.legend] = currentState;
+        this.lastState[id] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
