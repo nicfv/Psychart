@@ -1,5 +1,6 @@
 import { Color } from 'color';
 
+export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)';
 export type GradientName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Blue';
 export type DataSeries = { [index: number]: DataOptions };
@@ -28,21 +29,20 @@ export interface Layout {
 
 export interface Datum {
     /**
-     * Dry Bulb (Required)
+     * Dry Bulb
      */
     db: number;
     /**
-     * Relative Humidity (Optional)
+     * One of these values, depending on `measurement`
+     * - Relative Humidity
+     * - Wet Bulb
+     * - Dew Point
      */
-    rh?: number;
+    other: number;
     /**
-     * Wet Bulb (Optional)
+     * The type of measurements that were taken.
      */
-    wb?: number;
-    /**
-     * Dew Point (Optional)
-     */
-    dp?: number;
+    measurement: Measurement;
 }
 
 export interface Region {
@@ -130,23 +130,15 @@ export interface DataOptions {
     /**
      * The type of measurements that were taken.
      */
-    measurements: 'dbwb' | 'dbrh' | 'dbdp';
+    measurement: Measurement;
     /**
      * The name of the dry bulb series.
      */
     dryBulb: string;
     /**
-     * The name of the wet bulb series.
+     * The name of the wet bulb, dew point, or relative humidity series, depending on `measurement`.
      */
-    wetBulb: string;
-    /**
-     * The name of the dew point series.
-     */
-    dewPoint: string;
-    /**
-     * The name of the relative humidity series.
-     */
-    relHum: string;
+    other: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */

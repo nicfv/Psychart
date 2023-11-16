@@ -141,10 +141,10 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               }
             })
             .addSelect({
-              path: i + '.measurements',
+              path: i + '.measurement',
               name: 'Measurements',
               description: 'Select which series are being measured.',
-              defaultValue: subcontext.options![i].measurements,
+              defaultValue: subcontext.options![i].measurement,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
@@ -180,43 +180,17 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               showIf: (x) => !!(x[i].legend),
             })
             .addSelect({
-              path: i + '.wetBulb',
-              name: 'Wet Bulb Series',
-              description: 'Select a series that measures the wet bulb temperature.',
-              defaultValue: subcontext.options[i].wetBulb,
+              path: i + '.other',
+              name: 'Other Series',
+              description: 'Select a series that measures the secondary state variable.',
+              defaultValue: subcontext.options[i].other,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbwb'),
-            })
-            .addSelect({
-              path: i + '.dewPoint',
-              name: 'Dew Point Series',
-              description: 'Select a series that measures the dew point temperature.',
-              defaultValue: subcontext.options[i].dewPoint,
-              category: [subcategory],
-              settings: {
-                allowCustomValue: false,
-                isClearable: true,
-                options: fieldOptions,
-              },
-              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbdp'),
-            })
-            .addSelect({
-              path: i + '.relHum',
-              name: 'Relative Humidity Series',
-              description: 'Select a series that measures the relative humidity.',
-              defaultValue: subcontext.options[i].relHum,
-              category: [subcategory],
-              settings: {
-                allowCustomValue: false,
-                isClearable: true,
-                options: fieldOptions,
-              },
-              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbrh'),
+              showIf: (x) => !!(x[i].legend),
             })
             .addRadio({
               path: i + '.relHumType',
@@ -238,7 +212,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend && x[i].measurements === 'dbrh'),
+              showIf: (x) => !!(x[i].legend && x[i].measurement === 'dbrh'),
             })
             .addSliderInput({
               path: i + '.pointRadius',

@@ -84,35 +84,43 @@ export class PsyState {
      */
     constructor(state: Datum) {
         this.db = state.db;
-        if (typeof state.rh === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.rh, PsyState.atm);
-            this.rh = state.rh;
-            this.wb = PSY_CALC[1];
-            this.dp = PSY_CALC[2];
-            this.hr = PSY_CALC[0];
-            this.vp = PSY_CALC[3];
-            this.h = PSY_CALC[4];
-            this.v = PSY_CALC[5];
-        }
-        else if (typeof state.wb === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.wb, PsyState.atm);
-            this.rh = PSY_CALC[2];
-            this.wb = state.wb;
-            this.dp = PSY_CALC[1];
-            this.hr = PSY_CALC[0];
-            this.vp = PSY_CALC[3];
-            this.h = PSY_CALC[4];
-            this.v = PSY_CALC[5];
-        }
-        else if (typeof state.dp === 'number') {
-            const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.dp, PsyState.atm);
-            this.rh = PSY_CALC[2];
-            this.wb = PSY_CALC[1];
-            this.dp = state.dp;
-            this.hr = PSY_CALC[0];
-            this.vp = PSY_CALC[3];
-            this.h = PSY_CALC[4];
-            this.v = PSY_CALC[5];
+        switch (state.measurement) {
+            case ('dbrh'): {
+                const PSY_CALC = Psychrolib.CalcPsychrometricsFromRelHum(state.db, state.other, PsyState.atm);
+                this.rh = state.other;
+                this.wb = PSY_CALC[1];
+                this.dp = PSY_CALC[2];
+                this.hr = PSY_CALC[0];
+                this.vp = PSY_CALC[3];
+                this.h = PSY_CALC[4];
+                this.v = PSY_CALC[5];
+                break;
+            }
+            case ('dbwb'): {
+                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTWetBulb(state.db, state.other, PsyState.atm);
+                this.rh = PSY_CALC[2];
+                this.wb = state.other;
+                this.dp = PSY_CALC[1];
+                this.hr = PSY_CALC[0];
+                this.vp = PSY_CALC[3];
+                this.h = PSY_CALC[4];
+                this.v = PSY_CALC[5];
+                break;
+            }
+            case ('dbdp'): {
+                const PSY_CALC = Psychrolib.CalcPsychrometricsFromTDewPoint(state.db, state.other, PsyState.atm);
+                this.rh = PSY_CALC[2];
+                this.wb = PSY_CALC[1];
+                this.dp = state.other;
+                this.hr = PSY_CALC[0];
+                this.vp = PSY_CALC[3];
+                this.h = PSY_CALC[4];
+                this.v = PSY_CALC[5];
+                break;
+            }
+            default: {
+                throw new Error('Invalid measurement type ' + state.measurement + '.');
+            }
         }
     }
     /**

@@ -16,15 +16,13 @@ export function getDefaultPsyOptions(): PsyOptions {
 export function getDefaultDataOptions(legend = ''): DataOptions {
     return {
         advanced: false,
-        dewPoint: '',
         dryBulb: '',
         gradient: 'Viridis',
         legend: legend,
         line: true,
-        measurements: 'dbwb',
+        measurement: 'dbwb',
+        other: '',
         pointRadius: 5,
-        relHum: '',
         relHumType: 'percent',
-        wetBulb: '',
     };
 }

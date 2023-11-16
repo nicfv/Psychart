@@ -18,32 +18,8 @@ export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, widt
       endTime = data.timeRange.to.unix() * 1e3;
     for (let t in formatted) {
       for (let f in options.series || {}) {
-        // Skip unset series
-        if (!options.series[f].legend) {
-          continue;
-        }
-        switch (options.series[f].measurements) {
-          case ('dbwb'): {
-            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].wetBulb)) {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], wb: formatted[t][options.series[f].wetBulb] }, +f, +t, startTime, endTime);
-            }
-            break;
-          }
-          case ('dbrh'): {
-            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].relHum)) {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], rh: formatted[t][options.series[f].relHum] }, +f, +t, startTime, endTime);
-            }
-            break;
-          }
-          case ('dbdp'): {
-            if (fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].dewPoint)) {
-              psychart.plot({ db: formatted[t][options.series[f].dryBulb], dp: formatted[t][options.series[f].dewPoint] }, +f, +t, startTime, endTime);
-            }
-            break;
-          }
-          default: {
-            throw new Error('Invalid measurement type for series ' + options.series[f].legend + '.');
-          }
+        if (options.series[f].legend && fieldList.includes(options.series[f].dryBulb) && fieldList.includes(options.series[f].other)) {
+          psychart.plot({ db: formatted[t][options.series[f].dryBulb], other: formatted[t][options.series[f].other], measurement: options.series[f].measurement }, +f, +t, startTime, endTime);
         }
       }
     }

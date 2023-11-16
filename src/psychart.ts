@@ -77,119 +77,119 @@ export class Psychart {
         'Summer (sitting)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 0.5 (summer clothing)',
             data: [
-                { db: 32.8, rh: 0 },
-                { db: 27.2, rh: 1 },
-                { db: 22.7, rh: 1 },
-                { db: 26.9, rh: 0 },
+                { db: 32.8, other: 0, measurement: 'dbrh' },
+                { db: 27.2, other: 1, measurement: 'dbrh' },
+                { db: 22.7, other: 1, measurement: 'dbrh' },
+                { db: 26.9, other: 0, measurement: 'dbrh' },
             ],
         },
         'Summer (walking)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 0.5 (summer clothing)',
             data: [
-                { db: 31.2, rh: 0 },
-                { db: 25.8, rh: 1 },
-                { db: 20.3, rh: 1 },
-                { db: 23.2, rh: 0 },
+                { db: 31.2, other: 0, measurement: 'dbrh' },
+                { db: 25.8, other: 1, measurement: 'dbrh' },
+                { db: 20.3, other: 1, measurement: 'dbrh' },
+                { db: 23.2, other: 0, measurement: 'dbrh' },
             ],
         },
         'Summer (light work)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 0.5 (summer clothing)',
             data: [
-                { db: 30.4, rh: 0 },
-                { db: 24.8, rh: 1 },
-                { db: 19.2, rh: 1 },
-                { db: 22.0, rh: 0 },
+                { db: 30.4, other: 0, measurement: 'dbrh' },
+                { db: 24.8, other: 1, measurement: 'dbrh' },
+                { db: 19.2, other: 1, measurement: 'dbrh' },
+                { db: 22.0, other: 0, measurement: 'dbrh' },
             ],
         },
         'Winter (sitting)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.0 (seated)\nCLO = 1.0 (winter clothing)',
             data: [
-                { db: 28.6, rh: 0 },
-                { db: 22.7, rh: 1 },
-                { db: 17.1, rh: 1 },
-                { db: 20.5, rh: 0 },
+                { db: 28.6, other: 0, measurement: 'dbrh' },
+                { db: 22.7, other: 1, measurement: 'dbrh' },
+                { db: 17.1, other: 1, measurement: 'dbrh' },
+                { db: 20.5, other: 0, measurement: 'dbrh' },
             ],
         },
         'Winter (walking)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 1.5 (walking)\nCLO = 1.0 (winter clothing)',
             data: [
-                { db: 26.8, rh: 0 },
-                { db: 21.5, rh: 1 },
-                { db: 14.5, rh: 1 },
-                { db: 17.2, rh: 0 },
+                { db: 26.8, other: 0, measurement: 'dbrh' },
+                { db: 21.5, other: 1, measurement: 'dbrh' },
+                { db: 14.5, other: 1, measurement: 'dbrh' },
+                { db: 17.2, other: 0, measurement: 'dbrh' },
             ],
         },
         'Winter (light work)': {
             tooltip: 'ASHRAE-55 (Human comfort)\nAir speed = 0.1 m/s\nMET = 2.0 (light work)\nCLO = 1.0 (winter clothing)',
             data: [
-                { db: 25.6, rh: 0 },
-                { db: 20.4, rh: 1 },
-                { db: 13.1, rh: 1 },
-                { db: 15.5, rh: 0 },
+                { db: 25.6, other: 0, measurement: 'dbrh' },
+                { db: 20.4, other: 1, measurement: 'dbrh' },
+                { db: 13.1, other: 1, measurement: 'dbrh' },
+                { db: 15.5, other: 0, measurement: 'dbrh' },
             ],
         },
         'Data Center A4': {
             tooltip: 'The A4 ASHRAE data center\ncomfort zone. Typically\nan IT space with low\nenvironmental requirements.',
             data: [
-                { db: 5, dp: -12 },
-                { db: 22.5, rh: 0.08 },
-                { db: 45.0, rh: 0.08 },
-                { db: 45.0, dp: 24 },
-                { db: 25.8, rh: 0.90 },
-                { db: 5, rh: 0.90 },
+                { db: 5, other: -12, measurement: 'dbdp' },
+                { db: 22.5, other: 0.08, measurement: 'dbrh' },
+                { db: 45.0, other: 0.08, measurement: 'dbrh' },
+                { db: 45.0, other: 24, measurement: 'dbdp' },
+                { db: 25.8, other: 0.90, measurement: 'dbrh' },
+                { db: 5, other: 0.90, measurement: 'dbrh' },
             ],
         },
         'Data Center A3': {
             tooltip: 'The A3 ASHRAE data center\ncomfort zone. Typically\nan IT space with normal\nenvironmental requirements.',
             data: [
-                { db: 5, dp: -12 },
-                { db: 22.5, rh: 0.08 },
-                { db: 40.0, rh: 0.08 },
-                { db: 40.0, dp: 24 },
-                { db: 26.7, rh: 0.85 },
-                { db: 5, rh: 0.85 },
+                { db: 5, other: -12, measurement: 'dbdp' },
+                { db: 22.5, other: 0.08, measurement: 'dbrh' },
+                { db: 40.0, other: 0.08, measurement: 'dbrh' },
+                { db: 40.0, other: 24, measurement: 'dbdp' },
+                { db: 26.7, other: 0.85, measurement: 'dbrh' },
+                { db: 5, other: 0.85, measurement: 'dbrh' },
             ],
         },
         'Data Center A2': {
             tooltip: 'The A2 ASHRAE data center\ncomfort zone. Typically\nan IT space with strict\nenvironmental requirements.',
             data: [
-                { db: 10.0, dp: -12 },
-                { db: 22.5, rh: 0.08 },
-                { db: 35.0, rh: 0.08 },
-                { db: 35.0, dp: 21 },
-                { db: 24.7, rh: 0.80 },
-                { db: 10.0, rh: 0.80 },
+                { db: 10.0, other: -12, measurement: 'dbdp' },
+                { db: 22.5, other: 0.08, measurement: 'dbrh' },
+                { db: 35.0, other: 0.08, measurement: 'dbrh' },
+                { db: 35.0, other: 21, measurement: 'dbdp' },
+                { db: 24.7, other: 0.80, measurement: 'dbrh' },
+                { db: 10.0, other: 0.80, measurement: 'dbrh' },
             ],
         },
         'Data Center A1': {
             tooltip: 'The A1 ASHRAE data\ncenter comfort zone.\nTypically a data center with\nmission-critical operations.',
             data: [
-                { db: 15.0, dp: -12 },
-                { db: 22.5, rh: 0.08 },
-                { db: 32.0, rh: 0.08 },
-                { db: 32.0, dp: 17 },
-                { db: 20.6, rh: 0.80 },
-                { db: 15.0, rh: 0.80 },
+                { db: 15.0, other: -12, measurement: 'dbdp' },
+                { db: 22.5, other: 0.08, measurement: 'dbrh' },
+                { db: 32.0, other: 0.08, measurement: 'dbrh' },
+                { db: 32.0, other: 17, measurement: 'dbdp' },
+                { db: 20.6, other: 0.80, measurement: 'dbrh' },
+                { db: 15.0, other: 0.80, measurement: 'dbrh' },
             ],
         },
         'Data Center Recommended (low pollutants)': {
             tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with low\nconcentration of pollutants.',
             data: [
-                { db: 18.0, dp: -9 },
-                { db: 27.0, dp: -9 },
-                { db: 27.0, dp: 15 },
-                { db: 20.7, rh: 0.70 },
-                { db: 18.0, rh: 0.70 },
+                { db: 18.0, other: -9, measurement: 'dbdp' },
+                { db: 27.0, other: -9, measurement: 'dbdp' },
+                { db: 27.0, other: 15, measurement: 'dbdp' },
+                { db: 20.7, other: 0.70, measurement: 'dbrh' },
+                { db: 18.0, other: 0.70, measurement: 'dbrh' },
             ],
         },
         'Data Center Recommended (high pollutants)': {
             tooltip: 'The "recommended" ASHRAE\ncomfort zone for data centers\nwith conditions with high\nconcentration of pollutants.',
             data: [
-                { db: 18.0, dp: -9 },
-                { db: 27.0, dp: -9 },
-                { db: 27.0, dp: 15 },
-                { db: 26.2, rh: 0.50 },
-                { db: 18.0, rh: 0.50 },
+                { db: 18.0, other: -9, measurement: 'dbdp' },
+                { db: 27.0, other: -9, measurement: 'dbdp' },
+                { db: 27.0, other: 15, measurement: 'dbdp' },
+                { db: 26.2, other: 0.50, measurement: 'dbrh' },
+                { db: 18.0, other: 0.50, measurement: 'dbrh' },
             ],
         },
     };
@@ -259,9 +259,9 @@ export class Psychart {
         for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.major) {
             const data: PsyState[] = [];
             // The lower point is on the X-axis (rh = 0%)
-            data.push(new PsyState({ db: db, rh: 0 }));
+            data.push(new PsyState({ db: db, other: 0, measurement: 'dbrh' }));
             // The upper point is on the saturation line (rh = 100%)
-            data.push(new PsyState({ db: db, rh: 1 }));
+            data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(db + this.units.temp, data[0], TextAnchor.N, 'Dry Bulb');
@@ -270,9 +270,9 @@ export class Psychart {
         for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
             const data: PsyState[] = [];
             // The left point is on the saturation line (db = dp)
-            data.push(new PsyState({ db: dp, dp: dp }));
+            data.push(new PsyState({ db: dp, other: dp, measurement: 'dbdp' }));
             // The right point is at the maximum dry bulb temperature
-            data.push(new PsyState({ db: this.config.dbMax, dp: dp }));
+            data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
             // Draw the axis and the label
             this.drawAxis(data);
             this.drawLabel(dp + this.units.temp, data[1], TextAnchor.W, 'Dew Point');
@@ -282,7 +282,7 @@ export class Psychart {
             const data: PsyState[] = [];
             // Dry bulb is always equal or greater than wet bulb.
             for (let db = wb; db <= this.config.dbMax; db += this.style.resolution) {
-                data.push(new PsyState({ db: db, wb: wb }));
+                data.push(new PsyState({ db: db, other: wb, measurement: 'dbwb' }));
             }
             // Draw the axis and the label
             this.drawAxis(data);
@@ -294,7 +294,7 @@ export class Psychart {
             let preferredAnchor: TextAnchor = TextAnchor.NE;
             // Must iterate through all dry bulb temperatures to calculate each Y-coordinate
             for (let db = this.config.dbMin; db <= this.config.dbMax; db += this.style.resolution) {
-                data.push(new PsyState({ db: db, rh: rh / 100 }));
+                data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
                     preferredAnchor = TextAnchor.S;
@@ -319,10 +319,8 @@ export class Psychart {
                     // Convert from SI to US units
                     data.forEach(datum => {
                         datum.db = JMath.CtoF(datum.db);
-                        if (typeof datum.wb === 'number') {
-                            datum.wb = JMath.CtoF(datum.wb);
-                        } else if (typeof datum.dp === 'number') {
-                            datum.dp = JMath.CtoF(datum.dp);
+                        if (datum.measurement === 'dbdp' || datum.measurement === 'dbwb') {
+                            datum.other = JMath.CtoF(datum.other);
                         }
                     });
                 }
@@ -517,8 +515,8 @@ export class Psychart {
             throw new Error('End timestamp is invalid for series ' + options.legend + '.');
         }
         // Divide by 100 if relHumType is set to 'percent'
-        if (typeof state.rh === 'number' && options.relHumType === 'percent') {
-            state.rh /= 100;
+        if (options.measurement === 'dbrh' && options.relHumType === 'percent') {
+            state.other /= 100;
         }
         const currentState = new PsyState(state),
             location = currentState.toXY();
@@ -565,12 +563,12 @@ export class Psychart {
             const lastDatum = states[i - 1],
                 currentDatum = states[i];
             // Check if iso-relative humidity (curved line)
-            if (typeof lastDatum.rh === 'number' && typeof currentDatum.rh === 'number' && JMath.approx(lastDatum.rh, currentDatum.rh)) {
+            if (lastDatum.measurement === 'dbrh' && currentDatum.measurement === 'dbrh' && JMath.approx(lastDatum.other, currentDatum.other)) {
                 const range = Math.abs(currentDatum.db - lastDatum.db);
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
                 for (let i = 0; i < range; i += this.style.resolution) {
                     const db = JMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
-                    data.push(new PsyState({ db: db, rh: lastDatum.rh }));
+                    data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
                 }
             }
             // Assume iso-dry bulb, wet bulb, or dew point (straight line)
