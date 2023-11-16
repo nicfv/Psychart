@@ -67,4 +67,12 @@ export class JMath {
   static round(x: number, d = 0): number {
     return Math.round(x * 10 ** d) / (10 ** d);
   }
+
+  /**
+   * Convert the number `i` to a character.
+   */
+  static itoa(i: number): string {
+    const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    return ALPH[Math.floor(i) % ALPH.length].repeat(1 + Math.floor(i / ALPH.length));
+  }
 }

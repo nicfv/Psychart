@@ -112,6 +112,21 @@ export interface PsyOptions {
      */
     regions: RegionName[];
     /**
+     * The number of data series to render.
+     */
+    count: number;
+    /**
+     * The data series information.
+     */
+    series: { [index: number]: DataOptions };
+}
+
+export interface DataOptions {
+    /**
+     * Add a label to this data series.
+     */
+    legend: string;
+    /**
      * The type of measurements that were taken.
      */
     measurements: 'dbwb' | 'dbrh' | 'dbdp';

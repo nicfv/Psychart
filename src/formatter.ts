@@ -1,4 +1,14 @@
-import { PanelData } from '@grafana/data';
+import { DataFrame } from '@grafana/data';
+
+/**
+ * Represents a single-dimensional data point in time.
+ */
+type DataPoint = { [index: string]: number };
+
+/**
+ * The data structure for formatted time-series data.
+ */
+type FormattedData = { [index: number]: DataPoint };
 
 /**
  * Format and clean up the panel data.
@@ -8,21 +18,31 @@ import { PanelData } from '@grafana/data';
  * @returns A formatted object of panel data.
  * `{ timestamp : { field : value, ... }, ... }`
  */
-export function format(data: PanelData): { [index: number]: { [index: string]: number } } {
-  const formatted: { [index: number]: { [index: string]: number } } = {};
-  data.series.forEach((frame) => {
+export function format(series: DataFrame[]): FormattedData {
+  const formatted: FormattedData = {};
+  series.forEach((frame) => {
     frame.fields
       .find((field) => field.type === 'time')
       ?.values.forEach((t: number, i: number) => {
         frame.fields
           .filter((field) => field.type === 'number')
           .forEach((field) => {
+            const name: string = field.config.displayNameFromDS || field.config.displayName || field.name;
             formatted[t] = formatted[t] || {};
-            formatted[t][frame.name as string] = field.values[i];
-            formatted[t][field.name] = field.values[i];
-            formatted[t][field.config.displayNameFromDS as string] = field.values[i];
+            formatted[t][name] = field.values[i];
           });
       });
   });
   return formatted;
+}
+
+/**
+ * Generate a list of unique field names from formatted data.
+ * @param data The formatted data returned by `format(...)`
+ * @returns A list of unique field names.
+ */
+export function getFieldList(data: FormattedData): string[] {
+  let store: DataPoint = {};
+  Object.values(data).forEach(point => store = { ...store, ...point });
+  return Object.keys(store);
 }

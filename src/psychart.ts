@@ -1,7 +1,7 @@
 import { Color } from './color';
 import { JMath } from './jmath';
 import { PsyState } from './psystate';
-import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName } from './types';
+import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -194,9 +194,9 @@ export class Psychart {
         },
     };
     /**
-     * The last state plotted on Psychart.
+     * The last states plotted on Psychart for each series.
      */
-    private lastState?: PsyState;
+    private lastState: { [index: string]: PsyState } = {};
     /**
      * The timestamp of which Psychart was initialized. For plotting, this represents the origin.
      */
@@ -505,37 +505,46 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    plot(state: Datum, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+    plot(state: Datum, options: DataOptions, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+        // Check for invalid timestamps.
+        if (!Number.isFinite(time)) {
+            throw new Error('Data timestamp is invalid for series ' + options.legend + '.');
+        } else if (!Number.isFinite(startTime)) {
+            throw new Error('Start timestamp is invalid for series ' + options.legend + '.');
+        } else if (!Number.isFinite(endTime)) {
+            throw new Error('End timestamp is invalid for series ' + options.legend + '.');
+        }
         // Divide by 100 if relHumType is set to 'percent'
-        if (typeof state.rh === 'number' && this.config.relHumType === 'percent') {
+        if (typeof state.rh === 'number' && options.relHumType === 'percent') {
             state.rh /= 100;
         }
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = JMath.normalize(time, startTime, endTime),
-            color = Color.gradient(normalized, Psychart.gradients[this.config.gradient as GradientName] ?? Psychart.gradients.Viridis);
+            color = Color.gradient(normalized, Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis);
         // Determine whether to connect the states with a line
-        if (!!this.lastState) {
-            this.g.trends.appendChild(this.createLine([this.lastState, currentState], color, +this.config.line));
+        if (!!this.lastState[options.legend]) {
+            this.g.trends.appendChild(this.createLine([this.lastState[options.legend], currentState], color, +options.line));
         }
-        this.lastState = currentState;
+        this.lastState[options.legend] = currentState;
         // Define a 0-length path element and assign its attributes.
         const point = document.createElementNS(NS, 'path');
         point.setAttribute('fill', 'none');
         point.setAttribute('stroke', color.toString());
-        point.setAttribute('stroke-width', +this.config.pointRadius + 'px');
+        point.setAttribute('stroke-width', +options.pointRadius + 'px');
         point.setAttribute('stroke-linecap', 'round');
         point.setAttribute('vector-effect', 'non-scaling-stroke');
         point.setAttribute('d', 'M ' + location.x + ',' + location.y + ' h 0');
         this.g.points.appendChild(point);
         // Generate the text to display on mouse hover.
-        const tooltipString = new Date(time).toLocaleString() + '\n' +
+        const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
+            new Date(time).toLocaleString() + '\n' +
             JMath.round(currentState.db, 1) + this.units.temp + ' Dry Bulb\n' +
             JMath.round(currentState.rh * 100) + '% Rel. Hum.\n' +
             JMath.round(currentState.wb, 1) + this.units.temp + ' Wet Bulb\n' +
             JMath.round(currentState.dp, 1) + this.units.temp + ' Dew Point' +
-            (this.config.advanced ? '\n' +
+            (options.advanced ? '\n' +
                 JMath.round(currentState.hr, 2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
                 JMath.round(currentState.vp, 1) + ' ' + this.units.vp + ' Vap. Press.\n' +
                 JMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
@@ -580,7 +589,7 @@ export class Psychart {
      * Clear all plotted data from Psychart.
      */
     clearData(): void {
-        this.lastState = undefined;
+        this.lastState = {};
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
     }
