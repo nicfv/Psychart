@@ -1,5 +1,5 @@
-import { JMath } from './jmath';
-import { PsyOptions, Datum, Layout, Point } from './types';
+import { JMath } from 'jmath';
+import { PsyOptions, Datum, Layout, Point } from 'types';
 const Psychrolib = require('psychrolib');
 
 /**

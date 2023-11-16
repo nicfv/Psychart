@@ -1,4 +1,4 @@
-import { JMath } from './jmath';
+import { JMath } from 'jmath';
 
 /**
  * Represents a class for storing an RGBA color value.

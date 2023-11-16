@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased]
+
+- Psychart now has the ability to render multiple data series
+    - Data series options are shown as nested options under `Data options` in the panel editor
+- Psychart will only attempt to plot data if the data series name is a valid option
+- Panel editor options are now automatically validated
+
 ## 3.3.1
 
 - Change `-r` flag to `-g` flag in runner (restarts local Grafana instance)
