@@ -111,7 +111,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         integer: true,
         min: 0,
-        max: 26,
+        max: 104,
         step: 1,
       },
     })
