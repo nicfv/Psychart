@@ -15,7 +15,8 @@
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
     "clean": "rm -rf dist node_modules package-lock.json .eslintcache",
-    "docs": "webpack -c ./webpack.config.docs.ts && cp ./src/img/logo.svg ./docs"
+    "docs": "webpack -c ./webpack.config.docs.ts && cp ./src/img/logo.svg ./docs",
+    "icon": "webpack -c ./webpack.config.icon.ts && node temp/igen.js && rm -rv temp"
   },
   "author": "Nicolas Ventura",
   "license": "Apache-2.0",

@@ -1,9 +1,9 @@
 import { GradientName } from 'types';
 
-import viridis from 'img/viridis.png';
-import inferno from 'img/inferno.png';
-import magma from 'img/magma.png';
-import plasma from 'img/plasma.png';
+import viridis from 'img/viridis.svg';
+import inferno from 'img/inferno.svg';
+import magma from 'img/magma.svg';
+import plasma from 'img/plasma.svg';
 
 export const icons: { [K in GradientName]: string } = {
     Viridis: viridis,
