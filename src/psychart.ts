@@ -66,6 +66,26 @@ export default class Psychart {
             new Color(248, 149, 64),
             new Color(240, 249, 33),
         ],
+        Emerald: [
+            new Color(7, 64, 80),
+            new Color(76, 155, 130),
+            new Color(211, 242, 163),
+        ],
+        Mint: [
+            new Color(13, 88, 95),
+            new Color(99, 166, 160),
+            new Color(228, 241, 225),
+        ],
+        Sunset: [
+            new Color(92, 83, 165),
+            new Color(235, 127, 134),
+            new Color(243, 231, 155),
+        ],
+        Dusk: [
+            new Color(124, 29, 111),
+            new Color(227, 79, 111),
+            new Color(252, 222, 156),
+        ],
         Blue: [
             new Color(193, 231, 255),
             new Color(105, 150, 179),
