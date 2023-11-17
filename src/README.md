@@ -1,4 +1,4 @@
-# Psychart
+# Psychart v%VERSION%
 
 ### _A Psychrometric Chart for Monitoring Data Center Health & Human Comfort_
 

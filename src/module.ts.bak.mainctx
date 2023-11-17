@@ -9,14 +9,9 @@ import { cleanDataOptions } from 'validator';
 import { legacyOptions } from 'legacy';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
-  // console.log('' + context.options)
-  // if (context.options === undefined) {
-  //   context.options = legacyOptions(context.options || {});
-  //   return;
-  // }
-  console.log(context.options?.count);
+  // console.log(JSON.stringify(context.options, null, 2));
   context.options = legacyOptions(context.options || {});
-  console.log(context.options.count);
+  // context.options = context.options || {} as PsyOptions;
   builder
     .addRadio({
       path: 'unitSystem',
@@ -128,20 +123,20 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
     .addNestedOptions<DataSeries>({
       path: 'series',
       category: ['Data options'],
-      build(subbuilder, subcontext) {
-        subcontext.options = subcontext.options || {};
+      build(subbuilder) {
+        context.options!.series = context.options?.series || {};
         // Generate controls for data series
         for (let i = 0; i < context.options!.count; i++) {
           // Force clean data options
-          subcontext.options[i] = cleanDataOptions(subcontext.options[i] || {});
+          context.options!.series[i] = cleanDataOptions(context.options?.series[i] || {});
           // Use legend as subcategory or default string if none exists
-          const subcategory: string = subcontext.options[i].legend || 'Series ' + JMath.itoa(i);
+          const subcategory: string = context.options?.series[i].legend || 'Series ' + JMath.itoa(i);
           subbuilder
             .addTextInput({
               path: i + '.legend',
               name: 'Legend',
               description: 'Add a label to this data series.',
-              defaultValue: undefined,
+              defaultValue: context.options?.series[i].legend,
               category: [subcategory],
               settings: {
                 maxLength: 50,
@@ -152,7 +147,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               path: i + '.measurement',
               name: 'Measurements',
               description: 'Select which series are being measured.',
-              defaultValue: subcontext.options![i].measurement,
+              defaultValue: context.options?.series[i].measurement,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
@@ -172,40 +167,40 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addSelect({
               path: i + '.dryBulb',
               name: 'Dry Bulb Series',
               description: 'Select a series that measures the dry bulb temperature.',
-              defaultValue: subcontext.options[i].dryBulb,
+              defaultValue: context.options?.series[i].dryBulb,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addSelect({
               path: i + '.other',
               name: 'Other Series',
               description: 'Select a series that measures the secondary state variable.',
-              defaultValue: subcontext.options[i].other,
+              defaultValue: context.options?.series[i].other,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addRadio({
               path: i + '.relHumType',
               name: 'Relative Humidity Type',
               description: 'Choose how relative humidity is actively being measured.',
               category: [subcategory],
-              defaultValue: subcontext.options[i].relHumType,
+              defaultValue: context.options?.series[i].relHumType,
               settings: {
                 allowCustomValue: false,
                 isClearable: false,
@@ -220,34 +215,34 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend && x[i].measurement === 'dbrh'),
+              showIf: () => !!(context.options?.series[i].legend && context.options.series[i].measurement === 'dbrh'),
             })
             .addSliderInput({
               path: i + '.pointRadius',
               name: 'Point Size',
               description: 'Enter the point radius, in pixels.',
-              defaultValue: subcontext.options[i].pointRadius,
+              defaultValue: context.options?.series[i].pointRadius,
               category: [subcategory],
               settings: {
                 min: 1,
                 max: 10,
                 step: 1,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addBooleanSwitch({
               path: i + '.line',
               name: 'Show Line',
               description: 'Connect data points with a line?',
-              defaultValue: subcontext.options[i].line,
+              defaultValue: context.options?.series[i].line,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addSelect({
               path: i + '.gradient',
               name: 'Gradient',
               description: 'The series color gradient.',
-              defaultValue: subcontext.options[i].gradient,
+              defaultValue: context.options?.series[i].gradient,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
@@ -260,15 +255,15 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   };
                 }),
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             })
             .addBooleanSwitch({
               path: i + '.advanced',
               name: 'Show Advanced State Variables',
               description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
-              defaultValue: subcontext.options[i].advanced,
+              defaultValue: context.options?.series[i].advanced,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: () => !!(context.options?.series[i].legend),
             });
         }
       },

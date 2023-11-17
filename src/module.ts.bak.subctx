@@ -5,18 +5,10 @@ import { Psychart } from 'psychart';
 import { icons } from 'icons';
 import { format, getFieldList } from 'formatter';
 import { JMath } from 'jmath';
-import { cleanDataOptions } from 'validator';
-import { legacyOptions } from 'legacy';
+import { cleanDataOptions, cleanPsyOptions } from 'validator';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
-  // console.log('' + context.options)
-  // if (context.options === undefined) {
-  //   context.options = legacyOptions(context.options || {});
-  //   return;
-  // }
-  console.log(context.options?.count);
-  context.options = legacyOptions(context.options || {});
-  console.log(context.options.count);
+  context.options = cleanPsyOptions(context.options || {});
   builder
     .addRadio({
       path: 'unitSystem',
