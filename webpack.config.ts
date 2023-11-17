@@ -1,6 +1,7 @@
-const path = require('path');
+import path from 'path';
+import webpack from 'webpack';
 
-module.exports = {
+const config: webpack.Configuration = {
     entry: './src/app.ts',
     output: {
         filename: 'app.js',
@@ -20,3 +21,5 @@ module.exports = {
     },
     mode: 'production',
 };
+
+export default config;
