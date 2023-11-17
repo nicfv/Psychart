@@ -49,19 +49,23 @@ These options affect how the chart itself is displayed.
 
 Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, and optionally display ASHRAE comfort regions (envelopes). For data center envelopes, these comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality. For human comfort envelopes, these comfort regions follow the ASHRAE-55 guidelines published in 2017. These human comfort envelopes are a function of metabolic rate (`MET`, which is dependent on the indoor activity), clothing level (`CLO`), and air speed. In both cases, the envelopes show the target region for conditioned air supplied into the indoor space.
 
-### Data options [TODO]
+### Data options
 
 These options help process the incoming data.
 
-Psychart is capable of plotting 1 series of states per panel. Due to the fact that 2 properties are needed to fix the state, two numeric time-dependent fields are required. The user must select whether those two fields are dry bulb and wet bulb, dry bulb and dew point, or dry bulb and relative humidity. These fields must then be entered into the field selectors below respectively.
+Psychart is capable of plotting several data series of states per panel. The amount of data series is defined by the series count. Due to the fact that 2 properties are needed to fix the state, at least two numeric time-dependent fields are required. The user must select whether those two fields are dry bulb and wet bulb, dry bulb and dew point, or dry bulb and relative humidity. These fields must then be entered into the field selectors below respectively.
 
 It is important to note that one or two queries may be necessary depending on the data structure. One single query may be sufficient to return the two fields needed to fix the state. Other times, one query will be needed to obtain the dry bulb field and another for relative humidity field, for example.
 
-### Display options
+Different data series are independent from one another - one series may incorporate dry bulb and wet bulb measurements, and another may incorporate dry bulb and dew point measurements, for instance.
 
-This section changes the visual appearance of data within the chart.
+### Series display options
 
-Allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. The user can also optionally select to view more state variables here.
+This section configures each individual data series.
+
+First, a legend must be set. This will name your data series as well as add a label when hovering the cursor over the plotted data. Then, select the 2 data series which represent the 2 psychrometric measurements.
+
+The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the brigher, more saturated colors for the more recent data points. The user can also optionally select to view more state variables here.
 
 ## Errors & Troubleshooting
 
@@ -71,7 +75,7 @@ Psychart matches up values with similar timestamps. For a dry bulb & relative hu
 
 Importantly, if there is missing data in one field, for example if dry bulb temperature has not been reporting for the last 5 minutes, no new states are calculated, and no new data is plotted in Psychart for the last 5 minutes to avoid the display of inaccurate data.
 
-Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series or reducing the point radius.
+Psychart works best both visually and practically when observing a narrow span of time. If Psychart is loading very slowly, try to decrease the _Time range_ in Grafana. Both absolute and relative time spans are accepted by Psychart. If the data still seems too cluttered, try disabling the line that connects the series, reducing the point radius, or reducing the amount of data series rendered on a single panel.
 
 Finally, if there are issues after upgrading to a newer version of Psychart, (for example the regions are not being rendered) try to open the panel editor, reapply your customization settings, and save the panel. Sometimes, the panel options are not properly stored from version to version.
 
