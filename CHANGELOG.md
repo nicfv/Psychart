@@ -6,6 +6,7 @@
     - Options are shown as nested options under `Data options` in the panel editor
     - Can now be labeled, and Psychart will show the series label in the hover text
     - Supports different styles for different series
+    - Series count limit: 104 (send me an email if you would like this increased)
 - Psychart will only attempt to plot data if the data series name is a valid option
 - Panel editor options are now automatically validated
     - Deprecated options are now deleted from dashboard settings
@@ -15,6 +16,12 @@
 - Update to the latest version of `@grafana/create-plugin` (2.6.0)
     - Node version upgraded to `v20`
 - Gradient icons are now automatically generated based on gradient definitions
+- Gradient icons are now shown in [standalone app](https://psychart.nicfv.com/) when setting up Psychart
+- Added 4 new gradients! [Credit](https://carto.com/carto-colors/)
+    - Emerald
+    - Mint
+    - Sunset
+    - Dusk
 
 ## 3.3.1
 
