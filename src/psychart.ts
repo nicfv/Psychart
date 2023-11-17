@@ -543,6 +543,10 @@ export default class Psychart {
      * Plot one psychrometric state onto the psychrometric chart.
      */
     plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+        // Skip series that are missing a measurement point.
+        if (typeof state.db !== 'number' || typeof state.other !== 'number') {
+            return;
+        }
         // Grab the corresponding data options
         const options: DataOptions = this.config.series[id];
         // Check for invalid timestamps.
