@@ -1,4 +1,4 @@
-import { Psychart } from 'psychart';
+import Psychart from 'psychart';
 import { Layout, PsyOptions } from 'types';
 
 let ps: Psychart;
