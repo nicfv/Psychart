@@ -4,7 +4,7 @@ import { useTheme2 } from '@grafana/ui';
 import { Layout, PsyOptions } from 'types';
 import { Container } from 'container';
 import { format, getFieldList } from 'formatter';
-import { Psychart } from 'psychart';
+import Psychart from 'psychart';
 
 export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = useTheme2().isDark;

@@ -5,7 +5,7 @@ import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, R
 
 const NS = 'http://www.w3.org/2000/svg';
 
-export class Psychart {
+export default class Psychart {
     /**
      * Defines the string representations of the current unit system.
      */
@@ -230,6 +230,43 @@ export class Psychart {
             major: 10,
             timeSpan: 60 * 60 * 1e3,
         } as StyleOptions;
+    }
+    /**
+     * Generate an SVG element to use as this gradient's icon.
+     */
+    static getGradientIcon(gradient: GradientName): SVGElement {
+        // Define SVG elements
+        const icon: SVGElement = document.createElementNS(NS, 'svg'),
+            defs: SVGDefsElement = document.createElementNS(NS, 'defs'),
+            grad: SVGLinearGradientElement = document.createElementNS(NS, 'linearGradient'),
+            rect: SVGRectElement = document.createElementNS(NS, 'rect');
+        // Stitch elements together
+        icon.appendChild(defs);
+        icon.appendChild(rect);
+        defs.appendChild(grad);
+        // Set attributes of main elements
+        icon.setAttribute('viewBox', '0 0 10 10');
+        grad.setAttribute('id', 'grad');
+        grad.setAttribute('x1', '0');
+        grad.setAttribute('y1', '0');
+        grad.setAttribute('x2', '1');
+        grad.setAttribute('y2', '0');
+        rect.setAttribute('style', 'fill:url(#grad);stroke:none');
+        rect.setAttribute('width', '10');
+        rect.setAttribute('height', '10');
+        rect.setAttribute('x', '0');
+        rect.setAttribute('y', '0');
+        rect.setAttribute('rx', '2');
+        rect.setAttribute('ry', '2');
+        // Define color stops
+        const numColors: number = this.gradients[gradient].length - 1;
+        for (let i in this.gradients[gradient]) {
+            const stop: SVGStopElement = document.createElementNS(NS, 'stop');
+            stop.setAttribute('offset', JMath.normalize(+i, 0, numColors).toString());
+            stop.setAttribute('style', 'stop-color:' + this.gradients[gradient][i].toString());
+            defs.appendChild(stop);
+        }
+        return icon;
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.

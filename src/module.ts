@@ -1,7 +1,7 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
 import { DataSeries, PsyOptions } from 'types';
 import { PsyPanel } from 'panel';
-import { Psychart } from 'psychart';
+import Psychart from 'psychart';
 import { icons } from 'icons';
 import { format, getFieldList } from 'formatter';
 import { JMath } from 'jmath';
