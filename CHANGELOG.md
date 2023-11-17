@@ -3,9 +3,15 @@
 ## [Unreleased]
 
 - Psychart now has the ability to render multiple data series
-    - Data series options are shown as nested options under `Data options` in the panel editor
+    - Options are shown as nested options under `Data options` in the panel editor
+    - Can now be labeled, and Psychart will show the series label in the hover text
+    - Supports different styles for different series
 - Psychart will only attempt to plot data if the data series name is a valid option
 - Panel editor options are now automatically validated
+    - Deprecated options are now deleted from dashboard settings
+- Reference files with relative paths without the `./`
+- Data points now just store dry bulb + `other` value + measurement type, where `other` is either wet bulb, dew point, or relative humidity, depending on the measurement type
+- Add version number in `README.md`
 
 ## 3.3.1
 

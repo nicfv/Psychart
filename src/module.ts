@@ -5,19 +5,24 @@ import { Psychart } from 'psychart';
 import { icons } from 'icons';
 import { format, getFieldList } from 'formatter';
 import { JMath } from 'jmath';
-import { cleanDataOptions } from 'validator';
-import { legacyOptions } from 'legacy';
+import { cleanDataOptions, cleanPsyOptions } from 'validator';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
-  // console.log('' + context.options)
-  // if (context.options === undefined) {
-  //   context.options = legacyOptions(context.options || {});
-  //   return;
-  // }
-  console.log(context.options?.count);
-  context.options = legacyOptions(context.options || {});
-  console.log(context.options.count);
-  builder
+  context.options = cleanPsyOptions(context.options || {});
+  // Generate a list of valid field options
+  const fieldOptions: Array<SelectableValue<string>> = getFieldList(format(context.data)).map(f => {
+    return {
+      label: f,
+      value: f,
+    };
+  });
+  // Delete data options that shouldn't be rendered
+  for (let key in context.options.series) {
+    if (+key >= context.options.count) {
+      delete context.options.series[+key];
+    }
+  }
+  return builder
     .addRadio({
       path: 'unitSystem',
       name: 'Unit System',
@@ -110,21 +115,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         max: 26,
         step: 1,
       },
-    });
-  // Generate a list of valid field options
-  const fieldOptions: Array<SelectableValue<string>> = getFieldList(format(context.data)).map(f => {
-    return {
-      label: f,
-      value: f,
-    };
-  });
-  // Delete data options that shouldn't be rendered
-  for (let key in context.options.series) {
-    if (+key >= context.options.count) {
-      delete context.options.series[+key];
-    }
-  }
-  builder
+    })
     .addNestedOptions<DataSeries>({
       path: 'series',
       category: ['Data options'],
