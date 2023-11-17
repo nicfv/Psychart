@@ -72,6 +72,9 @@ export class JMath {
    * Convert the number `i` to a character.
    */
   static itoa(i: number): string {
+    if (i < 0) {
+      throw new Error('Index should be positive.');
+    }
     const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return ALPH[Math.floor(i) % ALPH.length].repeat(1 + Math.floor(i / ALPH.length));
   }
