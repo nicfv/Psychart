@@ -25,7 +25,6 @@ export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, widt
     }
     return <Container child={psychart.getElement()} />;
   } catch (ex: any) {
-    console.error(ex); // TODO: Delete (testing only)
     return (
       <div className="panel-empty">
         <p>{ex.name + ': ' + ex.message}</p>
