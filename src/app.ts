@@ -1,5 +1,5 @@
 import Psychart from 'psychart';
-import { Layout, PsyOptions } from 'types';
+import { GradientName, Layout, PsyOptions } from 'types';
 
 let ps: Psychart;
 
@@ -46,6 +46,16 @@ window.addEventListener('load', () => {
         option.textContent = name;
         document.getElementById('gradient')?.appendChild(option);
     });
+
+    (document.getElementById('gradient') as HTMLSelectElement).addEventListener('change', updateIcon);
+
+    // Define a function to update the icon associated with the gradient.
+    function updateIcon(): void {
+        console.log(getStringValue('gradient'));
+        (document.getElementById('gradicon') as HTMLImageElement)
+            .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as GradientName));
+    }
+    updateIcon();
 
     setOnClick('btnGenerate', () => {
         const dbMin = getNumericValue('db_min'),

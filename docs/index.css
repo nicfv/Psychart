@@ -35,6 +35,11 @@ div {
     max-width: 800px;
 }
 
+#gradicon {
+    width: auto;
+    height: 1em;
+}
+
 @media (prefers-color-scheme: dark) {
     /* dark theme */
 
