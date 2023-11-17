@@ -233,40 +233,13 @@ export default class Psychart {
     }
     /**
      * Generate an SVG element to use as this gradient's icon.
+     * Returns the outer HTML string to be saved in a file.
      */
-    static getGradientIcon(gradient: GradientName): SVGElement {
-        // Define SVG elements
-        const icon: SVGElement = document.createElementNS(NS, 'svg'),
-            defs: SVGDefsElement = document.createElementNS(NS, 'defs'),
-            grad: SVGLinearGradientElement = document.createElementNS(NS, 'linearGradient'),
-            rect: SVGRectElement = document.createElementNS(NS, 'rect');
-        // Stitch elements together
-        icon.appendChild(defs);
-        icon.appendChild(rect);
-        defs.appendChild(grad);
-        // Set attributes of main elements
-        icon.setAttribute('viewBox', '0 0 10 10');
-        grad.setAttribute('id', 'grad');
-        grad.setAttribute('x1', '0');
-        grad.setAttribute('y1', '0');
-        grad.setAttribute('x2', '1');
-        grad.setAttribute('y2', '0');
-        rect.setAttribute('style', 'fill:url(#grad);stroke:none');
-        rect.setAttribute('width', '10');
-        rect.setAttribute('height', '10');
-        rect.setAttribute('x', '0');
-        rect.setAttribute('y', '0');
-        rect.setAttribute('rx', '2');
-        rect.setAttribute('ry', '2');
-        // Define color stops
-        const numColors: number = this.gradients[gradient].length - 1;
-        for (let i in this.gradients[gradient]) {
-            const stop: SVGStopElement = document.createElementNS(NS, 'stop');
-            stop.setAttribute('offset', JMath.normalize(+i, 0, numColors).toString());
-            stop.setAttribute('style', 'stop-color:' + this.gradients[gradient][i].toString());
-            defs.appendChild(stop);
-        }
-        return icon;
+    static getGradientIcon(gradient: GradientName): string {
+        const maxColorIndex: number = this.gradients[gradient].length - 1;
+        return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
+            this.gradients[gradient].map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + JMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
+            '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
