@@ -2,6 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 const config: webpack.Configuration = {
+    mode: 'production',
     entry: './src/app.ts',
     output: {
         filename: 'app.js',
@@ -10,7 +11,7 @@ const config: webpack.Configuration = {
     module: {
         rules: [
             { test: /\.ts$/, loader: 'swc-loader' },
-        ]
+        ],
     },
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -19,7 +20,6 @@ const config: webpack.Configuration = {
             'node_modules',
         ],
     },
-    mode: 'production',
 };
 
 export default config;
