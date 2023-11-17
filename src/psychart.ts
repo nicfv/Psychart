@@ -552,7 +552,7 @@ export default class Psychart {
             throw new Error('End timestamp is invalid for series ' + options.legend + '.');
         }
         // Divide by 100 if relHumType is set to 'percent'
-        if (options.measurement === 'dbrh' && options.relHumType === 'percent') {
+        if (state.measurement === 'dbrh' && options.relHumType === 'percent') {
             state.other /= 100;
         }
         const currentState = new PsyState(state),
