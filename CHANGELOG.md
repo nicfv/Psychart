@@ -14,6 +14,7 @@
 - Add version number in `README.md`
 - Update to the latest version of `@grafana/create-plugin` (2.6.0)
     - Node version upgraded to `v20`
+- Gradient icons are now automatically generated based on gradient definitions
 
 ## 3.3.1
 

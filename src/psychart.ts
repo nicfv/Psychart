@@ -238,11 +238,17 @@ export default class Psychart {
      * Generate an SVG element to use as this gradient's icon.
      * Returns the outer HTML string to be saved in a file.
      */
-    static getGradientIcon(gradient: GradientName): string {
+    static generateGradientIcon(gradient: GradientName): string {
         const maxColorIndex: number = this.gradients[gradient].length - 1;
         return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
             this.gradients[gradient].map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + JMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
             '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
+    }
+    /**
+     * Returns the path to the gradient icon.
+     */
+    static getGradientIcon(gradient: GradientName): string {
+        return require('img/' + gradient.toLowerCase() + '.svg');
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.

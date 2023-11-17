@@ -36,5 +36,5 @@ e2e-results/
 
 # Custom
 docs/app.js
-docs/logo.svg
+docs/*.svg
 package-lock.json

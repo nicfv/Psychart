@@ -11,6 +11,7 @@ const config: webpack.Configuration = {
     module: {
         rules: [
             { test: /\.ts$/, loader: 'swc-loader' },
+            { test: /\.svg$/, type: 'asset/resource' },
         ],
     },
     resolve: {

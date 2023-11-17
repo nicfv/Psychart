@@ -14,6 +14,10 @@ window.addEventListener('load', () => {
     setVisibility('svg-container', false);
     setVisibility('data-input', false);
 
+    // Set the window icon
+    document.querySelector('link[rel=icon]')
+        ?.setAttribute('href', require('img/logo.svg'));
+
     // Create region checkboxes
     Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
         const checkbox = document.createElement('input'),
