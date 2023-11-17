@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## 4.0.0
 
 - Psychart now has the ability to render multiple data series
     - Options are shown as nested options under `Data options` in the panel editor
@@ -12,6 +12,8 @@
 - Reference files with relative paths without the `./`
 - Data points now just store dry bulb + `other` value + measurement type, where `other` is either wet bulb, dew point, or relative humidity, depending on the measurement type
 - Add version number in `README.md`
+- Update to the latest version of `@grafana/create-plugin` (2.6.0)
+    - Node version upgraded to `v20`
 
 ## 3.3.1
 

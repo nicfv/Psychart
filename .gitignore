@@ -35,7 +35,6 @@ e2e-results/
 .eslintcache
 
 # Custom
-yarn.lock
 docs/app.js
 docs/logo.svg
 package-lock.json
