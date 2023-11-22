@@ -2,9 +2,9 @@
 name: Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    tags:
+      - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
