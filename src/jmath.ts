@@ -14,7 +14,7 @@ export default class JMath {
    */
   static normalize(x: number, min: number, max: number): number {
     if (min === max) {
-      return min;
+      return 0;
     }
     return (x - min) / (max - min);
   }

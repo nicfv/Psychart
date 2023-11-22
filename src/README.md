@@ -65,7 +65,7 @@ This section configures each individual data series.
 
 First, a legend must be set. This will name your data series as well as add a label when hovering the cursor over the plotted data. Then, select the 2 data series which represent the 2 psychrometric measurements.
 
-The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the brigher, more saturated colors for the more recent data points. The user can also optionally select to view more state variables here.
+The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the more saturated/contrasting colors for the more recent data points, regardless of which theme (light/dark) is preferred. The user can also optionally select to view more state variables here.
 
 ## Errors & Troubleshooting
 

@@ -3,6 +3,10 @@
 ## 4.0.1 [Unpublished]
 
 - Make exports default where possible
+- Reverse gradients for light theme
+    - The most saturated colors are the more recent data points, regardless of which theme
+- Fix bug where normalized values would return a value outside of `[0, 1]` when `min = max`
+- Minor improvements in region colorizing
 
 ## 4.0.0
 

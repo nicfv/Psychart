@@ -87,9 +87,9 @@ export default class Psychart {
             new Color(252, 222, 156),
         ],
         Blue: [
-            new Color(193, 231, 255),
-            new Color(105, 150, 179),
             new Color(0, 76, 109),
+            new Color(105, 150, 179),
+            new Color(193, 231, 255),
         ],
     };
     /**
@@ -352,7 +352,7 @@ export default class Psychart {
             .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 const maxRegion = this.config.regions.length - 1,
-                    normalized = this.style.darkTheme ? JMath.normalize(regionIndex, maxRegion, 0) : JMath.normalize(regionIndex, 0, maxRegion),
+                    normalized = this.getGradientX(regionIndex, 0, maxRegion + 2), // +2 (arbirary) causes gradient to not take the full span - improves visual impact in light/dark themes
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -534,6 +534,13 @@ export default class Psychart {
         }
     }
     /**
+     * Return the normalized value to use in the gradient calculation.
+     */
+    private getGradientX(x: number, min: number, max: number): number {
+        const normalized = JMath.normalize(x, min, max);
+        return this.style.darkTheme ? normalized : 1 - normalized;
+    }
+    /**
      * Produce a deep copy of an object.
      */
     private deepCopy<T>(obj: T): T {
@@ -564,7 +571,7 @@ export default class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const normalized = JMath.normalize(time, startTime, endTime),
+        const normalized = this.getGradientX(time, startTime, endTime),
             color = Color.gradient(normalized, Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
