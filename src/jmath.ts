@@ -1,7 +1,7 @@
 /**
  * Contains special mathematics functions.
  */
-export class JMath {
+export default class JMath {
   /**
    * Clamp the number `x` between `min` and `max`, returns a number `[min, max]`
    */

@@ -3,7 +3,7 @@ import { DataSeries, PsyOptions } from 'types';
 import { PsyPanel } from 'panel';
 import Psychart from 'psychart';
 import { format, getFieldList } from 'formatter';
-import { JMath } from 'jmath';
+import JMath from 'jmath';
 import { cleanDataOptions, cleanPsyOptions } from 'validator';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {

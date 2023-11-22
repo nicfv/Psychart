@@ -1,11 +1,11 @@
-import { JMath } from 'jmath';
+import JMath from 'jmath';
 import { PsyOptions, Datum, Layout, Point } from 'types';
 const Psychrolib = require('psychrolib');
 
 /**
  * Represents a single air condition using several states.
  */
-export class PsyState {
+export default class PsyState {
     /**
      * Dry Bulb
      */

@@ -1,6 +1,6 @@
-import { Color } from 'color';
-import { JMath } from 'jmath';
-import { PsyState } from 'psystate';
+import Color from 'color';
+import JMath from 'jmath';
+import PsyState from 'psystate';
 import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';

@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1 [Unpublished]
+
+- Make exports default where possible
+
 ## 4.0.0
 
 - Psychart now has the ability to render multiple data series

@@ -2,7 +2,7 @@ import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
 import { Layout, PsyOptions } from 'types';
-import { Container } from 'container';
+import Container from 'container';
 import { format, getFieldList } from 'formatter';
 import Psychart from 'psychart';
 
