@@ -35,6 +35,7 @@ e2e-results/
 .eslintcache
 
 # Custom
+.DS_Store
 docs/app.js
 docs/*.svg
 package-lock.json

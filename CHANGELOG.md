@@ -7,6 +7,9 @@
     - The most saturated colors are the more recent data points, regardless of which theme
 - Fix bug where normalized values would return a value outside of `[0, 1]` when `min = max`
 - Minor improvements in region colorizing
+- Updated some screenshots in `README`
+    - Panel editor and options
+    - Example with multiple data series
 
 ## 4.0.0
 
