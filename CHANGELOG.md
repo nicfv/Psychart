@@ -8,7 +8,7 @@
 - Fix bug where normalized values would return a value outside of `[0, 1]` when `min = max`
 - Minor improvements in region colorizing
 - Updated some screenshots in `README`
-    - Panel editor and options
+    - Showing the panel editor options
     - Example with multiple data series
 
 ## 4.0.0

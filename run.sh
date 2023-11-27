@@ -10,7 +10,7 @@ for ARG in "${@}" ; do
   elif [[ "${ARG}" == -g ]] ; then
     brew services restart grafana
   elif [[ "${ARG}" == -v ]] ; then
-    PLUGIN_ID=$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')
+    PLUGIN_ID="$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')"
     cp -r dist "${PLUGIN_ID}"
     zip -qr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
     npx -y @grafana/plugin-validator@latest -sourceCodeUri file://. "${PLUGIN_ID}.zip"
