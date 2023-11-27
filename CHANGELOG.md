@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.1 [Unpublished]
+## 4.0.1
 
 - Make exports default where possible
 - Reverse gradients for light theme
