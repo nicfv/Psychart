@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+- Add banner image
+
 ## 4.0.1
 
 - Make exports default where possible
