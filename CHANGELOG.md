@@ -10,6 +10,7 @@
 - Updated some screenshots in `README`
     - Showing the panel editor options
     - Example with multiple data series
+- Standalone app only published on version releases
 
 ## 4.0.0
 
