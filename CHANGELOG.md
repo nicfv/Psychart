@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## 4.0.2
 
 - Add banner image
 - Update to the latest version of `@grafana/create-plugin` (2.8.0)
