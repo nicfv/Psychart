@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 - Add banner image
+- Update to the latest version of `@grafana/create-plugin` (2.8.0)
+    - Use `grafana/plugin-actions/build-plugin` action
+    - Add dashboard provisioning
 
 ## 4.0.1
 
