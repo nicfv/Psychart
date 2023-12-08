@@ -51,7 +51,7 @@ done
   version=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
   echo "Current version number is ${version}."
   git status | grep -q clean && echo 'No files need to be committed.' || echo -e "The following files need to be committed:\n$(git status -s)"
-  git status | grep -q 'up to date' && echo 'Local branch is up-to-date.' || echo 'Some unpushed commits will be pushed on publish.'
+  git status | grep -q 'up to date' && echo 'Local branch is up-to-date.' || echo 'Some commits need to be pushed.'
   if "${force_cmd}" ; then
     echo "Publishing with version ${version}."
     ext='.bk'
