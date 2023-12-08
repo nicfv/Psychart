@@ -4,7 +4,8 @@
 
 - Add banner image in GitHub repository
 - Update to the latest version of `@grafana/create-plugin` (2.8.0)
-    - Use `grafana/plugin-actions/build-plugin` action
+    - ~~Use `grafana/plugin-actions/build-plugin` action~~
+        - This does not work for my project since I do not commit `package-lock.json`
     - Add dashboard provisioning
 - Major updates to runner file
     - Check options using `getopts`
