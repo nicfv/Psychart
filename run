@@ -1,35 +1,67 @@
 #!/usr/bin/env bash
 
-for ARG in "${@}" ; do
-  if [[ "${ARG}" == -h ]] ; then
-    echo "Usage: ${0} [-h] [-g] [-v] [-P]"
-    echo '  -h: Show this help message.'
-    echo '  -g: Starts or restarts Grafana.'
-    echo '  -v: Validate the plugin using grafana/plugin-validator.'
-    echo '  -P: Publish the plugin to Grafana with the latest version number in the changelog.'
-  elif [[ "${ARG}" == -g ]] ; then
-    brew services restart grafana
-  elif [[ "${ARG}" == -v ]] ; then
-    PLUGIN_ID="$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')"
-    cp -r dist "${PLUGIN_ID}"
-    zip -qr "${PLUGIN_ID}.zip" "${PLUGIN_ID}"
-    npx -y @grafana/plugin-validator@latest -sourceCodeUri file://. "${PLUGIN_ID}.zip"
-    rm -r "${PLUGIN_ID}" "${PLUGIN_ID}.zip"
-  elif [[ "${ARG}" == -P ]] ; then
-    VERSION=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
-    echo "Publishing with version ${VERSION}."
-    if git status | grep -q clean && git status | grep -q 'up to date' ; then
-      EXT='.bk'
-      PACKAGE_JSON='package.json'
-      REMOTE_ORIGIN='origin'
-      sed -i"${EXT}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${VERSION}\"/" "${PACKAGE_JSON}"
-      rm -v "${PACKAGE_JSON}${EXT}"
-      git add "${PACKAGE_JSON}" && git commit -m "v${VERSION}" && git push
-      git tag -a "v${VERSION}" -m "${VERSION}" && git push "${REMOTE_ORIGIN}" "v${VERSION}"
-    else
-      echo 'Some changes not committed. Commit or discard them first before publishing.'
-    fi
-  else
-    echo "Unknown switch ${ARG}. Use ${0} -h for help."
-  fi
+usage() {
+  echo "Usage: ${0} [ options ]"
+  echo '  -h: Show this help message.'
+  echo '  -g: Starts or restarts Grafana.'
+  echo '  -v: Validate the plugin using grafana/plugin-validator.'
+  echo '  -x: By default, nothing will be published unless this flag is also set.'
+  echo '  -P: Publish the plugin to Grafana with the latest version number in the changelog.'
+  exit 1
+}
+
+# Print usage for no arguments
+[[ "${#}" -eq 0 ]] && usage
+
+grafana_restart=false
+validate_plugin=false
+force_cmd=false
+publishing=false
+
+# Parse command line arguments
+while getopts ':hgvxP' opt ; do
+  case "${opt}" in
+    'g')
+      grafana_restart=true ;;
+    'v')
+      validate_plugin=true ;;
+    'x')
+      force_cmd=true ;;
+    'P')
+      publishing=true ;;
+    'h'|*)
+      usage ;;
+  esac
 done
+
+"${grafana_restart}" && brew services restart grafana
+
+"${validate_plugin}" && {
+  plugin_id="$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')"
+  cp -r dist "${plugin_id}" || {
+    echo 'Must build plugin first with npm run build'
+    exit 1
+  }
+  zip -qr "${plugin_id}.zip" "${plugin_id}"
+  npx -y @grafana/plugin-validator@latest -sourceCodeUri file://. "${plugin_id}.zip"
+  rm -r "${plugin_id}" "${plugin_id}.zip"
+}
+
+"${publishing}" && {
+  version=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
+  echo "Current version number is ${version}."
+  git status | grep -q clean && echo 'No files need to be committed.' || echo -e "The following files need to be committed:\n$(git status -s)"
+  git status | grep -q 'up to date' && echo 'Local branch is up-to-date.' || echo 'Some unpushed commits will be pushed on publish.'
+  if "${force_cmd}" ; then
+    echo "Publishing with version ${version}."
+    ext='.bk'
+    package_json='package.json'
+    remote_origin='origin'
+    sed -i"${ext}" -E "s/\"version\": \"[0-9]+\.[0-9]+\.[0-9]+\"/\"version\": \"${version}\"/" "${package_json}"
+    rm -v "${package_json}${ext}"
+    git add "${package_json}" && git commit -m "v${version}" && git push
+    git tag -a "v${version}" -m "${version}" && git push "${remote_origin}" "v${version}"
+  else
+    echo "If everything looks good, re-run this command with ${0} -Px"
+  fi
+}
