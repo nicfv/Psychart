@@ -6,12 +6,9 @@
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/is-compatible.yml?label=compatible)](https://github.com/nicfv/Psychart)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/release.yml?label=release)](https://github.com/nicfv/Psychart/releases)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/nicfv/Psychart/pages.yml?label=pages)](https://psychart.nicfv.com/)
-
 [![Marketplace](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fventura-psychrometric-panel)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 [![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fventura-psychrometric-panel)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
-[![Signature](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=signature&query=signatureType&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fventura-psychrometric-panel)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 [![Popularity](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=popularity&query=popularity&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fventura-psychrometric-panel)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
-[![Dependency](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=dependency&query=grafanaDependency&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Fventura-psychrometric-panel)](https://grafana.com/grafana/plugins/ventura-psychrometric-panel)
 
 View air conditions on a psychrometric chart.
 
