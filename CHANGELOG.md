@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.3
+
+- Update to the latest version of `@grafana/create-plugin` (2.10.1)
+
 ## 4.0.2
 
 - Add banner image in GitHub repository
