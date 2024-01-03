@@ -5,8 +5,8 @@ usage() {
   echo '  -h: Show this help message.'
   echo '  -g: Starts or restarts Grafana.'
   echo '  -v: Validate the plugin using grafana/plugin-validator.'
-  echo '  -x: By default, nothing will be published unless this flag is also set.'
-  echo '  -P: Publish the plugin to Grafana with the latest version number in the changelog.'
+  echo '  -P: Publish the plugin to Grafana with the latest version number in the'
+  echo '      changelog. Computes a dry-run first and asks for confirmation.'
   exit 1
 }
 
