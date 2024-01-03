@@ -3,6 +3,8 @@
 ## 4.0.3
 
 - Update to the latest version of `@grafana/create-plugin` (2.10.1)
+    - Use `grafana/plugin-actions/build-plugin` action
+- Add popularity badge in plugin README
 
 ## 4.0.2
 
