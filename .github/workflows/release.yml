@@ -11,6 +11,8 @@ jobs:
     steps:
       - run: touch package-lock.json
       - uses: actions/checkout@v3
+      - run: ls -alh
+      - run: touch package-lock.json
       - uses: grafana/plugin-actions/build-plugin@release
         # uncomment to enable plugin sign in
         #with:
