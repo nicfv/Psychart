@@ -1,3 +1,5 @@
+# This GitHub Action automates the process of building Grafana plugins.
+# (For more information, see https://github.com/grafana/plugin-actions/blob/main/build-plugin/README.md)
 name: Release
 
 on:
@@ -5,12 +7,14 @@ on:
     tags:
       - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: touch package-lock.json
       - uses: grafana/plugin-actions/build-plugin@release
         with:
           policy_token: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
