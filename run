@@ -7,7 +7,14 @@ usage() {
   echo '  -v: Validate the plugin using grafana/plugin-validator.'
   echo '  -P: Publish the plugin to Grafana with the latest version number in the'
   echo '      changelog. Computes a dry-run first and asks for confirmation.'
+  echo '  -U: Clears the entire folder contents and runs the create-plugin'
+  echo '      command. Computes a dry-run first and asks for confirmation.'
   exit 1
+}
+
+git_status() {
+  git status | grep -q clean && echo 'No files need to be committed.' || echo -e "The following files need to be committed:\n$(git status -s)"
+  git status | grep -q 'up to date' && echo 'Local branch is up-to-date.' || echo 'Some commits need to be pushed.'
 }
 
 # Print usage for no arguments
@@ -17,9 +24,10 @@ grafana_restart=false
 validate_plugin=false
 force_cmd=false
 publishing=false
+update_plugin=false
 
 # Parse command line arguments
-while getopts ':hgvxP' opt ; do
+while getopts ':hgvxPU' opt ; do
   case "${opt}" in
     'g')
       grafana_restart=true ;;
@@ -29,6 +37,8 @@ while getopts ':hgvxP' opt ; do
       force_cmd=true ;;
     'P')
       publishing=true ;;
+    'U')
+      update_plugin=true ;;
     'h'|*)
       usage ;;
   esac
@@ -50,10 +60,6 @@ done
 "${publishing}" && {
   version=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
   verjson=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" package.json | head -n1)
-  echo "Current version number is ${version}."
-  git status | grep -q clean && echo 'No files need to be committed.' || echo -e "The following files need to be committed:\n$(git status -s)"
-  git status | grep -q 'up to date' && echo 'Local branch is up-to-date.' || echo 'Some commits need to be pushed.'
-  [ "${version}" == "${verjson}" ] && echo 'Unpushed commits will not be pushed.' || echo 'Unpushed commits will be pushed.'
   if "${force_cmd}" ; then
     echo "Publishing with version ${version}."
     ext='.bk'
@@ -64,6 +70,18 @@ done
     git add "${package_json}" && git commit -m "v${version}" && git push
     git tag -a "v${version}" -m "${version}" && git push "${remote_origin}" "v${version}"
   else
+    echo "Current version number is ${version}."
+    git_status
+    [ "${version}" == "${verjson}" ] && echo 'Unpushed commits will not be pushed.' || echo 'Unpushed commits will be pushed.'
     echo "If everything looks good, re-run this command with ${0} -Px"
+  fi
+}
+
+"${update_plugin}" && {
+  if "${force_cmd}" ; then
+    echo 'TODO'
+  else
+    git_status
+    echo "If everything looks good, re-run this command with ${0} -Ux"
   fi
 }
