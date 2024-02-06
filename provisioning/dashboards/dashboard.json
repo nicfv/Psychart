@@ -23,7 +23,7 @@
   "panels": [
     {
       "datasource": {
-        "type": "grafana",
+        "type": "datasource",
         "uid": "grafana"
       },
       "gridPos": {
@@ -34,33 +34,79 @@
       },
       "id": 1,
       "options": {
-        "seriesCountSize": "sm",
-        "showSeriesCount": false,
-        "text": "Default value of text input option"
+        "altitude": 0,
+        "count": 3,
+        "dbMax": 120,
+        "dbMin": 20,
+        "dpMax": 90,
+        "regions": [
+          "Summer (sitting)",
+          "Summer (walking)",
+          "Summer (light work)",
+          "Winter (sitting)",
+          "Winter (walking)",
+          "Winter (light work)"
+        ],
+        "series": {
+          "0": {
+            "advanced": true,
+            "dryBulb": "Max",
+            "gradient": "Viridis",
+            "legend": "Sensor A",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Min",
+            "pointRadius": 5,
+            "relHumType": "percent"
+          },
+          "1": {
+            "advanced": true,
+            "dryBulb": "Max",
+            "gradient": "Inferno",
+            "legend": "Sensor B",
+            "line": false,
+            "measurement": "dbdp",
+            "other": "Min",
+            "pointRadius": 5,
+            "relHumType": "percent"
+          },
+          "2": {
+            "advanced": true,
+            "dryBulb": "Value",
+            "gradient": "Mint",
+            "legend": "Sensor C",
+            "line": false,
+            "measurement": "dbrh",
+            "other": "Min",
+            "pointRadius": 5,
+            "relHumType": "percent"
+          }
+        },
+        "unitSystem": "IP"
       },
       "targets": [
         {
+          "channel": "plugin/testdata/random-2s-stream",
           "datasource": {
             "type": "datasource",
             "uid": "grafana"
           },
-          "queryType": "randomWalk",
+          "queryType": "measurements",
           "refId": "A"
         }
       ],
-      "title": "Panel Title",
-      "type": "ventura-psychart-panel"
+      "title": "Psychart",
+      "type": "ventura-psychrometric-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 38,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
