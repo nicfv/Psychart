@@ -79,7 +79,10 @@ done
 
 "${update_plugin}" && {
   if "${force_cmd}" ; then
-    echo 'TODO'
+    backup_dir='.backup'
+    mkdir "${backup_dir}"
+    mv ./* ./.config ./.github "./${backup_dir}/"
+    npx -y @grafana/create-plugin@latest
   else
     git_status
     echo "If everything looks good, re-run this command with ${0} -Ux"
