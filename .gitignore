@@ -36,6 +36,7 @@ e2e-results/
 
 # Custom
 .DS_Store
+.backup
 docs/app.js
 docs/*.svg
 package-lock.json
