@@ -81,12 +81,18 @@ done
   if "${force_cmd}" ; then
     shopt -s dotglob nullglob
     backup_dir='.backup'
-    mkdir -v "${backup_dir}"
+    mkdir -v "${backup_dir}" || exit 1
+    echo "Moving files to ${backup_dir}..."
     mv -v ./* "./${backup_dir}/"
-    mv -v "./${backup_dir}/.git" .
+    cd "${backup_dir}" || exit 1
+    mv -v .git run ..
+    cd ..
     npx -y @grafana/create-plugin@latest
-    dir_name="$(ls)"
-    mv -v "./${dir_name}/*" ./*
+    dir_name="$(ls -d ./[A-Za-z]*/)"
+    cd "${dir_name}" || exit 1
+    mv -v ./* ..
+    cd ..
+    echo 'Removing files...'
     rm -vr "${dir_name}"
   else
     git_status
