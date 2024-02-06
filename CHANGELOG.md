@@ -4,6 +4,8 @@
 
 - Update to the latest version of `@grafana/create-plugin` (3.5.0)
     - Updates workflow action dependency versions, thanks to my [pull request](https://github.com/grafana/plugin-tools/pull/711)!
+- Update dashboard provisioning configuration
+    - Datasource is random 30Hz data stream
 - Add `-U` flag in runner that will automatically re-build with latest version of `@grafana/create-plugin`
 
 ## 4.0.5
