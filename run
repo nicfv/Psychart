@@ -88,7 +88,7 @@ done
     mv .git run ..
     cd ..
     npx -y @grafana/create-plugin@latest
-    dir_name="$(ls -d ./[A-Za-z]*/)"
+    dir_name="$(ls -d ./[^\.]*/)"
     cd "${dir_name}" || exit 1
     echo "Moving files from ${dir_name}..."
     mv ./* ..
