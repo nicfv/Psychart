@@ -19,7 +19,7 @@
     "icon": "webpack -c ./webpack.config.icon.ts && node temp/igen.js && rm -rv temp"
   },
   "author": "Nicolas Ventura",
-  "license": "Apache-2.0",
+  "license": "BSD-3-Clause-LBNL",
   "devDependencies": {
     "@babel/core": "^7.21.4",
     "@grafana/e2e": "10.0.3",
