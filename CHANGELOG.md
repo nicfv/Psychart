@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.0.7
+## Unreleased
 
 - Update to the latest version of `@grafana/create-plugin` (4.0.0)
 - Add link to [issues](https://github.com/nicfv/Psychart/pull/11) in main README page
