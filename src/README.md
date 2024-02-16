@@ -83,7 +83,11 @@ Finally, if there are issues after upgrading to a newer version of Psychart, (fo
 
 ## License
 
-Psychart was created by Nicolas Ventura and is distributed under a [modified BSD License](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE). Plugin ID: `ventura-psychrometric-panel`
+Psychart was created by Nicolas Ventura and is distributed under the [BSD-3-Clause-LBNL](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE) license.
+
+| Plugin ID | Last Updated | Version |
+| --------- | ------------ | ------- |
+| `%PLUGIN_ID%` | `%TODAY%` | `%VERSION%` |
 
 [Copyright Notice](https://raw.githubusercontent.com/nicfv/Psychart/main/LEGAL)
 
@@ -100,3 +104,4 @@ Psychart was created by Nicolas Ventura and is distributed under a [modified BSD
 ![Example: Rendering multiple data series on one chart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multi_series.png)
 ![Grafana configuration options for Psychart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor_1.png)
 ![Grafana configuration options for Psychart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor_2.png)
+![Example with multiple data series.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multi-series.png)
