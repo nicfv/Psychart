@@ -1,11 +1,13 @@
 # Changelog
 
-## Unreleased
+## 4.1.0
 
 - Update to the latest version of `@grafana/create-plugin` (4.0.1)
 - Add link to [issues](https://github.com/nicfv/Psychart/pull/11) in main README page and plugin page
 - Minor updates to runner update command (select non-hidden files only)
-- Correctly set the license type in package.json (thank [you](https://github.com/nagisa)!)
+- Correctly set the license type in package.json (thank you, [@nagisa](https://github.com/nagisa)!) [#10](https://github.com/nicfv/Psychart/pull/10) and README
+- Add extra stats towards the bottom of the plugin README
+- Remove duplicate images in build output
 
 ## 4.0.6
 
