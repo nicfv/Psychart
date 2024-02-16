@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Update to the latest version of `@grafana/create-plugin` (4.0.0)
+- Update to the latest version of `@grafana/create-plugin` (4.0.1)
 - Add link to [issues](https://github.com/nicfv/Psychart/pull/11) in main README page
 - Minor updates to runner update command (select non-hidden files only)
 - Correctly set the license type in package.json (thank [you](https://github.com/nagisa)!)
