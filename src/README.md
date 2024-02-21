@@ -83,7 +83,7 @@ Finally, if there are issues after upgrading to a newer version of Psychart, (fo
 
 ## License
 
-Psychart was created by Nicolas Ventura and is distributed under the [BSD-3-Clause-LBNL](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE) license.
+Psychart was created by Nicolas Ventura, owned by Berkeley Lab, a DOE funded national laboratory, and is distributed under the [BSD-3-Clause-LBNL](https://raw.githubusercontent.com/nicfv/Psychart/main/LICENSE) license.
 
 | Plugin ID | Last Updated | Version |
 | --------- | ------------ | ------- |
