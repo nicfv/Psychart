@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Add LBL/DOE notice in README
+- Replace custom `JMath` with [`smath`](https://www.npmjs.com/package/smath) dependency for linear interpolation functions
+- Default series names are numbered instead of lettered
+- Maximum of 100 data series rendered on Psychart
+
 ## 4.1.0
 
 - Update to the latest version of `@grafana/create-plugin` (4.0.1)

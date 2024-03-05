@@ -1,4 +1,4 @@
-import JMath from 'jmath';
+import { SMath } from 'smath';
 
 /**
  * Represents a class for storing an RGBA color value.
@@ -12,10 +12,10 @@ export default class Color {
      * Initialize a new color.
      */
     constructor(red: number, green: number, blue: number, alpha = 100) {
-        this.red = JMath.clamp(red, 0, 255);
-        this.green = JMath.clamp(green, 0, 255);
-        this.blue = JMath.clamp(blue, 0, 255);
-        this.alpha = JMath.clamp(alpha, 0, 100);
+        this.red = SMath.clamp(red, 0, 255);
+        this.green = SMath.clamp(green, 0, 255);
+        this.blue = SMath.clamp(blue, 0, 255);
+        this.alpha = SMath.clamp(alpha, 0, 100);
     }
     /**
      * Return the more contrasting color, black or
@@ -55,9 +55,9 @@ export default class Color {
             A = colors[n], // bucket min color
             B = colors[n + 1]; //bucket max color
         return new Color(
-            JMath.translate(x, a, b, A.red, B.red),
-            JMath.translate(x, a, b, A.green, B.green),
-            JMath.translate(x, a, b, A.blue, B.blue),
-            JMath.translate(x, a, b, A.alpha, B.alpha));
+            SMath.translate(x, a, b, A.red, B.red),
+            SMath.translate(x, a, b, A.green, B.green),
+            SMath.translate(x, a, b, A.blue, B.blue),
+            SMath.translate(x, a, b, A.alpha, B.alpha));
     }
 }

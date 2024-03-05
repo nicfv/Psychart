@@ -3,7 +3,6 @@ import { DataSeries, PsyOptions } from 'types';
 import { PsyPanel } from 'panel';
 import Psychart from 'psychart';
 import { format, getFieldList } from 'formatter';
-import JMath from 'jmath';
 import { cleanDataOptions, cleanPsyOptions } from 'validator';
 
 export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
@@ -111,7 +110,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         integer: true,
         min: 0,
-        max: 104,
+        max: 100,
         step: 1,
       },
     })
@@ -125,7 +124,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           // Force clean data options
           subcontext.options[i] = cleanDataOptions(subcontext.options[i] || {});
           // Use legend as subcategory or default string if none exists
-          const subcategory: string = subcontext.options[i].legend || 'Series ' + JMath.itoa(i);
+          const subcategory: string = subcontext.options[i].legend || 'Series ' + (i + 1);
           subbuilder
             .addTextInput({
               path: i + '.legend',
