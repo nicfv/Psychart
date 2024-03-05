@@ -1,4 +1,4 @@
-import JMath from 'jmath';
+import { SMath, Polate } from 'smath';
 import { PsyOptions, Datum, Layout, Point } from 'types';
 const Psychrolib = require('psychrolib');
 
@@ -128,8 +128,8 @@ export default class PsyState {
      */
     toXY(): Point {
         return {
-            x: JMath.clamp(JMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
-            y: JMath.clamp(PsyState.height - JMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+            x: SMath.clamp(Polate.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
+            y: SMath.clamp(PsyState.height - Polate.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
         };
     }
 }
