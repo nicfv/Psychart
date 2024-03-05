@@ -1,6 +1,6 @@
 import Color from 'color';
 import PsyState from 'psystate';
-import { SMath, Polate } from 'smath';
+import { SMath } from 'smath';
 import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -261,7 +261,7 @@ export default class Psychart {
     static generateGradientIcon(gradient: GradientName): string {
         const maxColorIndex: number = this.gradients[gradient].length - 1;
         return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
-            this.gradients[gradient].map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + Polate.normalize(i, 0, maxColorIndex) + '" />').join('') +
+            this.gradients[gradient].map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
             '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
     }
     /**
@@ -274,7 +274,7 @@ export default class Psychart {
      * Convert from Celsius to Fahrenheit.
      */
     private static CtoF(C: number): number {
-        return Polate.translate(C, 0, 100, 32, 212);
+        return SMath.translate(C, 0, 100, 32, 212);
     }
     /**
      * Construct a new instance of `Psychart` given various configuration properties.
@@ -543,7 +543,7 @@ export default class Psychart {
      * Return the normalized value to use in the gradient calculation.
      */
     private getGradientX(x: number, min: number, max: number): number {
-        const normalized = Polate.normalize(x, min, max);
+        const normalized = SMath.normalize(x, min, max);
         return this.style.darkTheme ? normalized : 1 - normalized;
     }
     /**
@@ -596,15 +596,15 @@ export default class Psychart {
         // Generate the text to display on mouse hover.
         const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
             new Date(time).toLocaleString() + '\n' +
-            SMath.round(currentState.db, 1) + this.units.temp + ' Dry Bulb\n' +
-            SMath.round(currentState.rh * 100, 0) + '% Rel. Hum.\n' +
-            SMath.round(currentState.wb, 1) + this.units.temp + ' Wet Bulb\n' +
-            SMath.round(currentState.dp, 1) + this.units.temp + ' Dew Point' +
+            currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
+            currentState.rh.toFixed() + '% Rel. Hum.\n' +
+            currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
+            currentState.dp.toFixed(1) + this.units.temp + ' Dew Point' +
             (options.advanced ? '\n' +
-                SMath.round(currentState.hr, 2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
-                SMath.round(currentState.vp, 1) + ' ' + this.units.vp + ' Vap. Press.\n' +
-                SMath.round(currentState.h, 1) + ' ' + this.units.h + ' Enthalpy\n' +
-                SMath.round(currentState.v, 2) + ' ' + this.units.v + ' Volume' : '');
+                currentState.hr.toFixed(2) + ' ' + this.units.hr + ' Hum. Ratio\n' +
+                currentState.vp.toFixed(1) + ' ' + this.units.vp + ' Vap. Press.\n' +
+                currentState.h.toFixed(1) + ' ' + this.units.h + ' Enthalpy\n' +
+                currentState.v.toFixed(2) + ' ' + this.units.v + ' Volume' : '');
         // Set the behavior when the user interacts with this point
         point.addEventListener('mouseover', e => this.drawTooltip(tooltipString, { x: e.offsetX, y: e.offsetY }, color));
         point.addEventListener('mouseleave', () => this.clearChildren(this.g.tooltips));
@@ -623,7 +623,7 @@ export default class Psychart {
                 const range = Math.abs(currentDatum.db - lastDatum.db);
                 // Calculate several psychrometric states with a dry bulb step of `resolution`
                 for (let i = 0; i < range; i += this.style.resolution) {
-                    const db = Polate.translate(i, 0, range, lastDatum.db, currentDatum.db);
+                    const db = SMath.translate(i, 0, range, lastDatum.db, currentDatum.db);
                     data.push(new PsyState({ db: db, other: lastDatum.other, measurement: 'dbrh' }));
                 }
             }

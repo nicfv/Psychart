@@ -1,4 +1,4 @@
-import { SMath, Polate } from 'smath';
+import { SMath } from 'smath';
 
 /**
  * Represents a class for storing an RGBA color value.
@@ -55,9 +55,9 @@ export default class Color {
             A = colors[n], // bucket min color
             B = colors[n + 1]; //bucket max color
         return new Color(
-            Polate.translate(x, a, b, A.red, B.red),
-            Polate.translate(x, a, b, A.green, B.green),
-            Polate.translate(x, a, b, A.blue, B.blue),
-            Polate.translate(x, a, b, A.alpha, B.alpha));
+            SMath.translate(x, a, b, A.red, B.red),
+            SMath.translate(x, a, b, A.green, B.green),
+            SMath.translate(x, a, b, A.blue, B.blue),
+            SMath.translate(x, a, b, A.alpha, B.alpha));
     }
 }
