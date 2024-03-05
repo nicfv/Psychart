@@ -3,7 +3,7 @@ import { SMath } from 'smath';
 /**
  * Represents a class for storing an RGBA color value.
  */
-export default class Color {
+export class Color {
     private red: number;
     private green: number;
     private blue: number;

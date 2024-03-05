@@ -5,7 +5,7 @@ const Psychrolib = require('psychrolib');
 /**
  * Represents a single air condition using several states.
  */
-export default class PsyState {
+export class PsyState {
     /**
      * Dry Bulb
      */

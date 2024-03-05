@@ -1,5 +1,5 @@
-import Color from 'color';
-import PsyState from 'psystate';
+import { Color } from 'color';
+import { PsyState } from 'psystate';
 import { SMath } from 'smath';
 import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
 
@@ -8,7 +8,7 @@ const NS = 'http://www.w3.org/2000/svg';
 /**
  * Generates an interactive psychrometric chart with plotting capabilities.
  */
-export default class Psychart {
+export class Psychart {
     /**
      * Defines the string representations of the current unit system.
      */
