@@ -6,6 +6,7 @@
 - Replace custom `JMath` with [`smath`](https://www.npmjs.com/package/smath) dependency for linear interpolation functions
 - Default series names are numbered instead of lettered
 - Maximum of 100 data series rendered on Psychart
+- Remove `default` exports over preference to named exports (undo change from [4.0.1](#401))
 
 ## 4.1.0
 
