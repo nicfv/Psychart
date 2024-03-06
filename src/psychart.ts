@@ -1,4 +1,4 @@
-import { Color } from 'color';
+import { Color, Gradient } from 'viridis';
 import { PsyState } from 'psystate';
 import { SMath } from 'smath';
 import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
@@ -369,7 +369,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Color.gradient(normalized, Psychart.gradients.Blue), region.tooltip);
+                this.drawRegion(data, new Gradient(Psychart.gradients.Blue).getColor(normalized), region.tooltip);
                 regionIndex++;
             });
     }
@@ -578,7 +578,7 @@ export class Psychart {
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = this.getGradientX(time, startTime, endTime),
-            color = Color.gradient(normalized, Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis);
+            color = new Gradient(Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis).getColor(normalized);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
             this.g.trends.appendChild(this.createLine([this.lastState[id], currentState], color, +options.line));
