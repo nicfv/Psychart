@@ -1,5 +1,6 @@
 import { Psychart } from 'psychart';
-import { GradientName, Layout, PsyOptions } from 'types';
+import { Layout, PsyOptions } from 'types';
+import { PaletteName } from 'viridis';
 
 let ps: Psychart;
 
@@ -53,7 +54,7 @@ window.addEventListener('load', () => {
     function updateIcon(): void {
         console.log(getStringValue('gradient'));
         (document.getElementById('gradicon') as HTMLImageElement)
-            .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as GradientName));
+            .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as PaletteName));
     }
     updateIcon();
 

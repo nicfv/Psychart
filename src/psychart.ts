@@ -1,7 +1,7 @@
-import { Color, Gradient } from 'viridis';
+import { Color, Palette, PaletteName } from 'viridis';
 import { PsyState } from 'psystate';
 import { SMath } from 'smath';
-import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, GradientName, RegionName, DataOptions } from './types';
+import { PsyOptions, Datum, Layout, Point, Region, StyleOptions, RegionName, DataOptions } from './types';
 
 const NS = 'http://www.w3.org/2000/svg';
 
@@ -33,64 +33,6 @@ export class Psychart {
         trends: document.createElementNS(NS, 'g'),
         points: document.createElementNS(NS, 'g'),
         tooltips: document.createElementNS(NS, 'g'),
-    };
-    /**
-     * Gradient source: https://waldyrious.net/viridis-palette-generator/
-     */
-    private static readonly gradients: { [K in GradientName]: Color[] } = {
-        Viridis: [
-            new Color(68, 1, 84),
-            new Color(59, 82, 139),
-            new Color(33, 145, 140),
-            new Color(94, 201, 98),
-            new Color(253, 231, 37),
-        ],
-        Inferno: [
-            new Color(0, 0, 4),
-            new Color(87, 16, 110),
-            new Color(188, 55, 84),
-            new Color(249, 142, 9),
-            new Color(252, 255, 164),
-        ],
-        Magma: [
-            new Color(0, 0, 4),
-            new Color(81, 18, 124),
-            new Color(183, 55, 121),
-            new Color(252, 137, 97),
-            new Color(252, 253, 191),
-        ],
-        Plasma: [
-            new Color(13, 8, 135),
-            new Color(126, 3, 168),
-            new Color(204, 71, 120),
-            new Color(248, 149, 64),
-            new Color(240, 249, 33),
-        ],
-        Emerald: [
-            new Color(7, 64, 80),
-            new Color(76, 155, 130),
-            new Color(211, 242, 163),
-        ],
-        Mint: [
-            new Color(13, 88, 95),
-            new Color(99, 166, 160),
-            new Color(228, 241, 225),
-        ],
-        Sunset: [
-            new Color(92, 83, 165),
-            new Color(235, 127, 134),
-            new Color(243, 231, 155),
-        ],
-        Dusk: [
-            new Color(124, 29, 111),
-            new Color(227, 79, 111),
-            new Color(252, 222, 156),
-        ],
-        Blue: [
-            new Color(0, 76, 109),
-            new Color(105, 150, 179),
-            new Color(193, 231, 255),
-        ],
     };
     /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
@@ -229,10 +171,10 @@ export class Psychart {
      */
     private readonly endTime: number;
     /**
-     * Return an array of all gradient names.
+     * Return an array of all allowed gradient names.
      */
-    static getGradientNames(): GradientName[] {
-        return Object.keys(this.gradients).filter(name => name !== 'Blue') as GradientName[];
+    static getGradientNames(): PaletteName[] {
+        return Object.keys(Palette).filter(name => (name as PaletteName) !== 'Turquoise') as PaletteName[];
     }
     /**
      * Return an array of region names and their corresponding tooltips.
@@ -258,16 +200,16 @@ export class Psychart {
      * Generate an SVG element to use as this gradient's icon.
      * Returns the outer HTML string to be saved in a file.
      */
-    static generateGradientIcon(gradient: GradientName): string {
-        const maxColorIndex: number = this.gradients[gradient].length - 1;
+    static generateGradientIcon(gradient: PaletteName): string {
+        const maxColorIndex: number = Palette[gradient].colors.length - 1;
         return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
-            this.gradients[gradient].map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
+            Palette[gradient].colors.map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
             '</linearGradient></defs><rect style="fill:url(#grad);stroke:none" width="10" height="10" x="0" y="0" rx="2" ry="2" /></svg>';
     }
     /**
      * Returns the path to the gradient icon.
      */
-    static getGradientIcon(gradient: GradientName): string {
+    static getGradientIcon(gradient: PaletteName): string {
         return require('img/' + gradient.toLowerCase() + '.svg');
     }
     /**
@@ -358,7 +300,7 @@ export class Psychart {
             .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 const maxRegion = this.config.regions.length - 1,
-                    normalized = this.getGradientX(regionIndex, 0, maxRegion + 2), // +2 (arbirary) causes gradient to not take the full span - improves visual impact in light/dark themes
+                    normalized = this.getGradientX(regionIndex + 2, 0, maxRegion + 6), // +2/+6 (arbirary) causes gradient to not take the full span - improves visual impact in light/dark themes
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -369,7 +311,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, new Gradient(Psychart.gradients.Blue).getColor(normalized), region.tooltip);
+                this.drawRegion(data, Palette.Purplish.getColor(normalized), region.tooltip);
                 regionIndex++;
             });
     }
@@ -544,7 +486,7 @@ export class Psychart {
      */
     private getGradientX(x: number, min: number, max: number): number {
         const normalized = SMath.normalize(x, min, max);
-        return this.style.darkTheme ? normalized : 1 - normalized;
+        return this.style.darkTheme ? 1 - normalized : normalized;
     }
     /**
      * Produce a deep copy of an object.
@@ -578,7 +520,7 @@ export class Psychart {
             location = currentState.toXY();
         // Compute the current color to plot
         const normalized = this.getGradientX(time, startTime, endTime),
-            color = new Gradient(Psychart.gradients[options.gradient as GradientName] ?? Psychart.gradients.Viridis).getColor(normalized);
+            color = Palette[options.gradient].getColor(normalized);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
             this.g.trends.appendChild(this.createLine([this.lastState[id], currentState], color, +options.line));

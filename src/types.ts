@@ -1,8 +1,7 @@
-import { Color } from 'viridis';
+import { Color, PaletteName } from 'viridis';
 
 export type Measurement = 'dbwb' | 'dbrh' | 'dbdp';
 export type RegionName = 'Summer (sitting)' | 'Summer (walking)' | 'Summer (light work)' | 'Winter (sitting)' | 'Winter (walking)' | 'Winter (light work)' | 'Data Center A4' | 'Data Center A3' | 'Data Center A2' | 'Data Center A1' | 'Data Center Recommended (low pollutants)' | 'Data Center Recommended (high pollutants)';
-export type GradientName = 'Viridis' | 'Inferno' | 'Magma' | 'Plasma' | 'Emerald' | 'Mint' | 'Sunset' | 'Dusk' | 'Blue';
 export type DataSeries = { [index: number]: DataOptions };
 
 export interface Point {
@@ -154,7 +153,7 @@ export interface DataOptions {
     /**
      * Determines the color gradient for time series plots.
      */
-    gradient: GradientName;
+    gradient: PaletteName;
     /**
      * Defines whether or not to show advanced state variables.
      */
