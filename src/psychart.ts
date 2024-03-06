@@ -174,7 +174,7 @@ export class Psychart {
      * Return an array of all allowed gradient names.
      */
     static getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => (name as PaletteName) !== 'Turquoise') as PaletteName[];
+        return Object.keys(Palette).filter(name => (name as PaletteName) !== 'Purplish') as PaletteName[];
     }
     /**
      * Return an array of region names and their corresponding tooltips.
