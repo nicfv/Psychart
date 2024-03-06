@@ -5,6 +5,8 @@
 - Add LBL/DOE notice in README
 - Replace custom `JMath` with [`smath`](https://www.npmjs.com/package/smath) dependency for linear interpolation functions
 - Replace custom `Color` with [`viridis`](https://www.npmjs.com/package/viridis) dependency for color gradient functions
+    - Allow all default/builtin gradients from this package, adds >10 new gradients to Psychart!
+    - Use "Purplish" palette for region shading
 - Default series names are numbered instead of lettered
 - Maximum of 100 data series rendered on Psychart
 - Remove `default` exports over preference to named exports (undo change from [4.0.1](#401))
