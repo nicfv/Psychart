@@ -14,7 +14,7 @@
     "e2e:update": "npm exec cypress install && npm exec grafana-e2e run --update-screenshots",
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
-    "clean": "rm -rf dist node_modules package-lock.json .eslintcache docs/app.js docs/*.svg",
+    "clean": "rm -rf dist node_modules package-lock.json .eslintcache .backup docs/app.js docs/*.svg",
     "docs": "webpack -c ./webpack.config.docs.ts",
     "icon": "webpack -c ./webpack.config.icon.ts && node temp/igen.js && rm -rv temp"
   },
