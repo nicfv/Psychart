@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.2.1
 
 - Update dependency versions
 - Clean script can now remove backups
