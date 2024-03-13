@@ -332,7 +332,6 @@ export class Psychart {
             .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
                 const maxRegion = this.config.regions.length - 1,
-                    normalized = this.getGradientX(regionIndex + 2, 0, maxRegion + 6), // +2/+6 (arbirary) causes gradient to not take the full span - improves visual impact in light/dark themes
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -343,7 +342,8 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(normalized), region.tooltip);
+                // +2/+6 (arbirary) forces gradient within subrange of full span - improves visual impact in light/dark themes
+                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(regionIndex + 2, 0, maxRegion + 6), region.tooltip);
                 regionIndex++;
             });
     }
