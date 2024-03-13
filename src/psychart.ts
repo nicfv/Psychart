@@ -35,6 +35,10 @@ export class Psychart {
         tooltips: document.createElementNS(NS, 'g'),
     };
     /**
+     * Defines the palette name used for region coloring.
+     */
+    private static readonly regionGradient: PaletteName = 'Purplish';
+    /**
      * Predefined regions source: 2021 Equipment Thermal Guidelines for Data Processing Environments
      * ASHRAE-55 source: https://comfort.cbe.berkeley.edu/
      */
@@ -202,7 +206,7 @@ export class Psychart {
      * Return an array of all allowed gradient names.
      */
     static getGradientNames(): PaletteName[] {
-        return Object.keys(Palette).filter(name => (name as PaletteName) !== 'Purplish') as PaletteName[];
+        return Object.keys(Palette).filter(name => name !== this.regionGradient) as PaletteName[];
     }
     /**
      * Return an array of region names and their corresponding tooltips.
@@ -339,7 +343,7 @@ export class Psychart {
                         }
                     });
                 }
-                this.drawRegion(data, Palette.Purplish.getColor(normalized), region.tooltip);
+                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(normalized), region.tooltip);
                 regionIndex++;
             });
     }
