@@ -10,6 +10,8 @@
 - Default series names are numbered instead of lettered
 - Maximum of 100 data series rendered on Psychart
 - Remove `default` exports over preference to named exports (undo change from [4.0.1](#401))
+- Region shading is now affected by your Grafana theme for better contrast
+- Add IBM TS4500 ambient condition envelopes
 
 ## 4.1.0
 
