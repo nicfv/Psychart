@@ -157,6 +157,34 @@ export class Psychart {
                 { db: 18.0, other: 0.50, measurement: 'dbrh' },
             ],
         },
+        'IBM TS4500 Ambient (cooling)': {
+            tooltip: 'The required ambient conditions\nfor the IBM TS4500 tape storage\nunit with integrated cooling.',
+            data: [
+                { db: 15, other: 0.20, measurement: 'dbrh' },
+                { db: 35, other: 0.20, measurement: 'dbrh' },
+                { db: 35, other: 0.80, measurement: 'dbrh' },
+                { db: 15, other: 0.80, measurement: 'dbrh' },
+            ],
+        },
+        'IBM TS4500 Ambient (no cooling)': {
+            tooltip: 'The required ambient conditions\nfor the IBM TS4500 tape storage\nunit without integrated cooling.',
+            data: [
+                { db: 15, other: 0.20, measurement: 'dbrh' },
+                { db: 32, other: 0.20, measurement: 'dbrh' },
+                { db: 32, other: 26, measurement: 'dbwb' },
+                { db: 28.8, other: 0.80, measurement: 'dbrh' },
+                { db: 15, other: 0.80, measurement: 'dbrh' },
+            ],
+        },
+        'IBM TS4500 Recommended': {
+            tooltip: 'The recommended ambient conditions\nfor the IBM TS4500 tape storage\nunit for optimal reliability and efficiency.',
+            data: [
+                { db: 16, other: 0.20, measurement: 'dbrh' },
+                { db: 25, other: 0.20, measurement: 'dbrh' },
+                { db: 25, other: 0.50, measurement: 'dbrh' },
+                { db: 16, other: 0.50, measurement: 'dbrh' },
+            ],
+        },
     };
     /**
      * The last states plotted on Psychart for each series.
