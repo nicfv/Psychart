@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.2.0
 
 - Add LBL/DOE notice in README
 - Replace custom `JMath` with [`smath`](https://www.npmjs.com/package/smath) dependency for linear interpolation functions
