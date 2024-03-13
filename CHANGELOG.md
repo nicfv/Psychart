@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Update dependency versions
+- Clean script can now remove backups
+- Minor cleanups within `Psychart` class
+
 ## 4.2.0
 
 - Add LBL/DOE notice in README
