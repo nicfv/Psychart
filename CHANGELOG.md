@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.2.2
+
+- Bug fix where region shading gradient was not reversed for light theme
+- Add option for rendering IBM TS4500 ambient envelopes in [standalone app](https://psychart.nicfv.com/)
+
 ## 4.2.1
 
 - Update dependency versions
