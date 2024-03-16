@@ -3,7 +3,9 @@
 ## 4.2.2
 
 - Bug fix where region shading gradient was not reversed for light theme
-- Add option for rendering IBM TS4500 ambient envelopes in [standalone app](https://psychart.nicfv.com/)
+- Updates to [standalone app](https://psychart.nicfv.com/)
+    - Add option for rendering IBM TS4500 ambient envelopes
+    - Use `script defer` and remove window load event listener
 
 ## 4.2.1
 
