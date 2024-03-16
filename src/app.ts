@@ -34,6 +34,8 @@ window.addEventListener('load', () => {
             parent = document.getElementById('ashrae-55-container');
         } else if (name.match(/Data Center.*/)) {
             parent = document.getElementById('ashrae-dc-container');
+        } else if (name.match(/IBM TS4500.*/)) {
+            parent = document.getElementById('ibm-ts4500-container');
         }
         parent?.appendChild(checkbox);
         parent?.appendChild(label);
@@ -52,7 +54,6 @@ window.addEventListener('load', () => {
 
     // Define a function to update the icon associated with the gradient.
     function updateIcon(): void {
-        console.log(getStringValue('gradient'));
         (document.getElementById('gradicon') as HTMLImageElement)
             .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as PaletteName));
     }
