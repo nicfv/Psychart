@@ -331,7 +331,11 @@ export class Psychart {
         Object.entries(Psychart.regions)
             .filter(([name,]) => config.regions?.includes(name as RegionName))
             .forEach(([, region]) => {
-                const maxRegion = this.config.regions.length - 1,
+                // Force region gradient to remain within subrange of full span to improve visual impact in light/dark themes
+                const minRegion = 0 + -1, // -1 (arbitrary) Affects minimum span of region
+                    maxRegion = this.config.regions.length - 1 + 4, // +4 (arbitrary) Affects maximum span of region
+                    minSpan = style.darkTheme ? maxRegion : minRegion,
+                    maxSpan = style.darkTheme ? minRegion : maxRegion,
                     data = this.deepCopy(region.data);
                 if (this.config.unitSystem === 'IP') {
                     // Convert from SI to US units
@@ -342,8 +346,7 @@ export class Psychart {
                         }
                     });
                 }
-                // +2/+6 (arbirary) forces gradient within subrange of full span - improves visual impact in light/dark themes
-                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(regionIndex + 2, 0, maxRegion + 6), region.tooltip);
+                this.drawRegion(data, Palette[Psychart.regionGradient].getColor(regionIndex, minSpan, maxSpan), region.tooltip);
                 regionIndex++;
             });
     }
@@ -514,13 +517,6 @@ export class Psychart {
         }
     }
     /**
-     * Return the normalized value to use in the gradient calculation.
-     */
-    private getGradientX(x: number, min: number, max: number): number {
-        const normalized = SMath.normalize(x, min, max);
-        return this.style.darkTheme ? 1 - normalized : normalized;
-    }
-    /**
      * Produce a deep copy of an object.
      */
     private deepCopy<T>(obj: T): T {
@@ -551,8 +547,9 @@ export class Psychart {
         const currentState = new PsyState(state),
             location = currentState.toXY();
         // Compute the current color to plot
-        const normalized = this.getGradientX(time, startTime, endTime),
-            color = Palette[options.gradient].getColor(normalized);
+        const tMin = this.style.darkTheme ? endTime : startTime,
+            tMax = this.style.darkTheme ? startTime : endTime,
+            color = Palette[options.gradient].getColor(time, tMin, tMax);
         // Determine whether to connect the states with a line
         if (!!this.lastState[id]) {
             this.g.trends.appendChild(this.createLine([this.lastState[id], currentState], color, +options.line));
