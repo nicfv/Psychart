@@ -67,12 +67,17 @@ export class PsyState {
      */
     private static padding: number;
     /**
+     * Render a Mollier diagram instead
+     */
+    private static flipXY: boolean;
+    /**
      * Compute a first-time initialization of psychrolib.
      */
     static initialize(layout: Layout, config: PsyOptions): void {
         PsyState.width = layout.size.x;
         PsyState.height = layout.size.y;
         PsyState.padding = layout.padding;
+        PsyState.flipXY = config.flipXY;
         Psychrolib.SetUnitSystem(config.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
         PsyState.atm = Psychrolib.GetStandardAtmPressure(config.altitude);
         PsyState.dbMin = config.dbMin;
@@ -127,9 +132,16 @@ export class PsyState {
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
     toXY(): Point {
-        return {
-            x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
-            y: SMath.clamp(PsyState.height - SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.height - PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
-        };
+        if (PsyState.flipXY) {
+            return {
+                x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
+                y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.height - PsyState.padding, PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+            }
+        } else {
+            return {
+                x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
+                y: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.height - PsyState.padding, PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+            };
+        }
     }
 }
