@@ -108,6 +108,10 @@ export interface PsyOptions {
      */
     dpMax: number;
     /**
+     * Determine whether to render a Mollier diagram.
+     */
+    flipXY: boolean;
+    /**
      * Render pre-defined shaded regions.
      */
     regions: RegionName[];
