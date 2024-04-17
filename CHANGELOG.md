@@ -4,6 +4,7 @@
 
 - Update to the latest version of `@grafana/create-plugin` (4.6.2)
     - Grafana version required: `>=10.3.3`
+    - Compatibility check workflow is now fixed!
 - Update dependency versions of [`smath`](https://www.npmjs.com/package/smath) (1.8.5) and [`viridis`](https://www.npmjs.com/package/viridis) (1.1.4)
 
 ## 4.2.2
