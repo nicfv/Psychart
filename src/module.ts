@@ -50,6 +50,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         step: 1,
         integer: true,
+        placeholder: context.options.altitude.toString(),
       },
     })
     .addNumberInput({
@@ -61,6 +62,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         step: 10,
         integer: true,
+        placeholder: context.options.dbMin.toString(),
       },
     })
     .addNumberInput({
@@ -72,6 +74,8 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         step: 10,
         integer: true,
+        min: context.options.dpMax,
+        placeholder: context.options.dbMax.toString(),
       },
     })
     .addNumberInput({
@@ -83,6 +87,8 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       settings: {
         step: 10,
         integer: true,
+        max: context.options.dbMax,
+        placeholder: context.options.dpMax.toString(),
       },
     })
     .addBooleanSwitch({
@@ -119,6 +125,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         min: 0,
         max: 100,
         step: 1,
+        placeholder: 'Number of series',
       },
     })
     .addNestedOptions<DataSeries>({
