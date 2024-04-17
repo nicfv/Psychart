@@ -49,7 +49,7 @@ This is the default panel options for all Grafana panels which gives the user ac
 
 These options affect how the chart itself is displayed.
 
-Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, and optionally display ASHRAE comfort regions (envelopes). For data center envelopes, these comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality. For human comfort envelopes, these comfort regions follow the ASHRAE-55 guidelines published in 2017. These human comfort envelopes are a function of metabolic rate (`MET`, which is dependent on the indoor activity), clothing level (`CLO`), and air speed. In both cases, the envelopes show the target region for conditioned air supplied into the indoor space.
+Allows the user to select whether measurements are being reported in US or SI units, the local altitude, graph bounds, flip X & Y, and optionally display ASHRAE comfort regions (envelopes). For data center envelopes, these comfort regions follow the 2021 ASHRAE standard and are designed for data centers and IT spaces of various criticality. For human comfort envelopes, these comfort regions follow the ASHRAE-55 guidelines published in 2017. These human comfort envelopes are a function of metabolic rate (`MET`, which is dependent on the indoor activity), clothing level (`CLO`), and air speed. In both cases, the envelopes show the target region for conditioned air supplied into the indoor space.
 
 ### Data options
 
@@ -93,3 +93,26 @@ Psychart was created by Nicolas Ventura, owned by Berkeley Lab, a DOE funded nat
 
 ## Screenshots
 
+![Basic HVAC use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/basic.png)
+*Basic HVAC use case: Air handler supply conditions for a data center*
+
+![Outdoor weather use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/outdoor.png)
+*Outdoor weather conditions use case*
+
+![Psychart with SI Units](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/si.png)
+*Using Psychart with SI units*
+
+![HVAC design use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/psycalc.png)
+*HVAC design use case: Using Psychart as a psychrometric calculator*
+
+![Panel editor](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor.png)
+*An example of the standard panel editor for Psychart*
+
+![Multi Series #1](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multiseries1.png)
+*Multiple data series on the same chart*
+
+![Multi Series #2](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multiseries2.png)
+*Psychart can handle a lot of data at once*
+
+![Mollier Diagram](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/mollier.png)
+*Usage of Psychart to render a [Mollier Diagram](https://en.wikipedia.org/wiki/Enthalpy%E2%80%93entropy_chart)*
