@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 4.3.0
 
 - Update to the latest version of `@grafana/create-plugin` (4.6.2)
     - Grafana version required: `>=10.3.3`
@@ -14,6 +14,7 @@
     - Changing `let` to `const`
     - Adding `readonly` modifiers where possible
     - Adding explicit access modifiers (by default, TypeScript sets all class members `public` if not specified)
+- Minor Webpack configuration simplifications (standalone app)
 
 ## 4.2.2
 
