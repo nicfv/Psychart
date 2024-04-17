@@ -4,12 +4,6 @@
   "name": "Psychart",
   "id": "ventura-psychrometric-panel",
   "info": {
-    "description": "View air conditions on a psychrometric chart.",
-    "author": {
-      "name": "Nicolas Ventura",
-      "url": "https://www.nersc.gov/about/nersc-staff/building-infrastructure-group/nicolas-ventura/",
-      "email": "ventura@lbl.gov"
-    },
     "keywords": [
       "air",
       "temperature",
@@ -19,6 +13,12 @@
       "psychrometry",
       "psychart"
     ],
+    "description": "View air conditions on a psychrometric chart.",
+    "author": {
+      "name": "Nicolas Ventura",
+      "url": "https://www.nersc.gov/about/nersc-staff/building-infrastructure-group/nicolas-ventura/",
+      "email": "ventura@lbl.gov"
+    },
     "logos": {
       "small": "img/logo.svg",
       "large": "img/logo.svg"
@@ -59,7 +59,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=10.0.3",
+    "grafanaDependency": ">=10.3.3",
     "plugins": []
   }
 }
