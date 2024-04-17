@@ -18,6 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 3,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -39,44 +40,42 @@
         "dbMax": 120,
         "dbMin": 20,
         "dpMax": 90,
+        "flipXY": false,
         "regions": [
           "Summer (sitting)",
           "Summer (walking)",
-          "Summer (light work)",
-          "Winter (sitting)",
-          "Winter (walking)",
-          "Winter (light work)"
+          "Summer (light work)"
         ],
         "series": {
           "0": {
             "advanced": true,
             "dryBulb": "Max",
-            "gradient": "Viridis",
+            "gradient": "Parula",
             "legend": "Sensor A",
-            "line": false,
-            "measurement": "dbwb",
-            "other": "Min",
-            "pointRadius": 5,
-            "relHumType": "percent"
-          },
-          "1": {
-            "advanced": true,
-            "dryBulb": "Max",
-            "gradient": "Inferno",
-            "legend": "Sensor B",
             "line": false,
             "measurement": "dbdp",
             "other": "Min",
+            "pointRadius": 10,
+            "relHumType": "percent"
+          },
+          "1": {
+            "advanced": false,
+            "dryBulb": "Max",
+            "gradient": "Warm",
+            "legend": "Sensor B",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Value",
             "pointRadius": 5,
             "relHumType": "percent"
           },
           "2": {
-            "advanced": true,
+            "advanced": false,
             "dryBulb": "Value",
-            "gradient": "Mint",
+            "gradient": "Bee",
             "legend": "Sensor C",
             "line": false,
-            "measurement": "dbrh",
+            "measurement": "dbwb",
             "other": "Min",
             "pointRadius": 5,
             "relHumType": "percent"
@@ -112,6 +111,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
-  "version": 0,
+  "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
+  "version": 2,
   "weekStart": ""
 }
