@@ -6,6 +6,14 @@
     - Grafana version required: `>=10.3.3`
     - Compatibility check workflow is now fixed!
 - Update dependency versions of [`smath`](https://www.npmjs.com/package/smath) (1.8.5) and [`viridis`](https://www.npmjs.com/package/viridis) (1.1.4)
+- Support the ability to render [Mollier Diagrams](https://en.wikipedia.org/wiki/Enthalpy%E2%80%93entropy_chart) by mirroring Psychart on the `x=y` line (thanks for the idea, [@yevgeny7](https://github.com/yevgeny7)!)
+- Improve panel interior padding by splitting it into `x` and `y` values instead of using a single value
+- Add placeholders in all panel option fields (shown when field is empty)
+- Min/max values for `dbMax` and `dpMax` options are now dynamically calculated so that `dbMax` must be strictly greater than or equal to `dpMax`
+- Improve code quality by...
+    - Changing `let` to `const`
+    - Adding `readonly` modifiers where possible
+    - Adding explicit access modifiers (by default, TypeScript sets all class members `public` if not specified)
 
 ## 4.2.2
 
