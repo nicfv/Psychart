@@ -85,6 +85,13 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         integer: true,
       },
     })
+    .addBooleanSwitch({
+      path: 'flipXY',
+      name: 'Flip XY',
+      description: 'Render a Mollier diagram (EU) instead of a standard (US) psychrometric chart.',
+      defaultValue: context.options.flipXY,
+      category: ['Chart options'],
+    })
     .addMultiSelect({
       path: 'regions',
       name: 'ASHRAE Comfort Regions',
