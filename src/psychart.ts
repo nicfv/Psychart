@@ -568,7 +568,7 @@ export class Psychart {
         const tooltipString: string = (options.legend ? options.legend + '\n' : '') +
             new Date(time).toLocaleString() + '\n' +
             currentState.db.toFixed(1) + this.units.temp + ' Dry Bulb\n' +
-            currentState.rh.toFixed() + '% Rel. Hum.\n' +
+            (currentState.rh * 100).toFixed() + '% Rel. Hum.\n' +
             currentState.wb.toFixed(1) + this.units.temp + ' Wet Bulb\n' +
             currentState.dp.toFixed(1) + this.units.temp + ' Dew Point' +
             (options.advanced ? '\n' +

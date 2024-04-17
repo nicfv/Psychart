@@ -15,6 +15,7 @@
     - Adding `readonly` modifiers where possible
     - Adding explicit access modifiers (by default, TypeScript sets all class members `public` if not specified)
 - Minor Webpack configuration simplifications (standalone app)
+- Fix bug where relative humidity was displayed from 0-1 instead of 0-100%
 
 ## 4.2.2
 
