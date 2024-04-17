@@ -93,15 +93,3 @@ Psychart was created by Nicolas Ventura, owned by Berkeley Lab, a DOE funded nat
 
 ## Screenshots
 
-![HVAC use case: Air handler supply temperatures.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/summer.png)
-![There are many different styling options for Psychart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/winter.png)
-![Psychart can render data in imperial or metric units!](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/metric.png)
-![IT use case: Data center supply air conditions.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/data_center.png)
-![Hover the mouse over the shaded regions to learn more!](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/region_hover.png)
-![Hover the mouse over the data points to show the thermodynamic properties of air. (Currently showing advanced state variables.)](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/style.png)
-![Meteorological use case: Long-term outdoor air conditions.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/outdoor.png)
-![General use case: Psychart as a thermodynamic calculator.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/calc.png)
-![Example: Rendering multiple data series on one chart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multi_series.png)
-![Grafana configuration options for Psychart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor_1.png)
-![Grafana configuration options for Psychart.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor_2.png)
-![Example with multiple data series.](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multi-series.png)
