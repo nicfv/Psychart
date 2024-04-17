@@ -9,7 +9,7 @@ import { Psychart } from 'psychart';
 export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = useTheme2().isDark;
   try {
-    const layout = { padding: 30, size: { x: width, y: height } } as Layout,
+    const layout = { padding: { x: 40, y: 20 }, size: { x: width, y: height } } as Layout,
       style = Psychart.getDefaultStyleOptions(isDarkTheme),
       psychart = new Psychart(layout, options, style),
       formatted = format(data.series),

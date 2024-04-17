@@ -23,7 +23,7 @@ export interface Layout {
     /**
      * The padding in pixels.
      */
-    padding: number;
+    padding: Point;
 }
 
 export interface Datum {

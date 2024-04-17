@@ -55,17 +55,13 @@ export class PsyState {
      */
     private static hrMax: number;
     /**
-     * Psychart panel width
+     * Psychart panel size
      */
-    private static width: number;
-    /**
-     * Psychart panel height
-     */
-    private static height: number;
+    private static size: Point;
     /**
      * Psychart panel padding
      */
-    private static padding: number;
+    private static padding: Point;
     /**
      * Render a Mollier diagram instead
      */
@@ -74,8 +70,7 @@ export class PsyState {
      * Compute a first-time initialization of psychrolib.
      */
     static initialize(layout: Layout, config: PsyOptions): void {
-        PsyState.width = layout.size.x;
-        PsyState.height = layout.size.y;
+        PsyState.size = layout.size;
         PsyState.padding = layout.padding;
         PsyState.flipXY = config.flipXY;
         Psychrolib.SetUnitSystem(config.unitSystem === 'IP' ? Psychrolib.IP : Psychrolib.SI);
@@ -134,13 +129,13 @@ export class PsyState {
     toXY(): Point {
         if (PsyState.flipXY) {
             return {
-                x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
-                y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.height - PsyState.padding, PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+                x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
+                y: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
             }
         } else {
             return {
-                x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding, PsyState.width - PsyState.padding), PsyState.padding, PsyState.width - PsyState.padding),
-                y: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.height - PsyState.padding, PsyState.padding), PsyState.padding, PsyState.height - PsyState.padding)
+                x: SMath.clamp(SMath.translate(this.db, PsyState.dbMin, PsyState.dbMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
+                y: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.size.y - PsyState.padding.y, PsyState.padding.y), PsyState.padding.y, PsyState.size.y - PsyState.padding.y)
             };
         }
     }

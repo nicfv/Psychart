@@ -69,7 +69,7 @@ setOnClick('btnGenerate', () => {
     } else {
         ps = new Psychart(
             {
-                padding: 30,
+                padding: { x: 40, y: 20 },
                 size: { x: 800, y: 600 },
             } as Layout,
             {
