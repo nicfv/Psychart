@@ -78,7 +78,7 @@ setOnClick('btnGenerate', () => {
                 dbMax: dbMax,
                 dbMin: dbMin,
                 dpMax: dpMax,
-                flipXY: false, // TODO - add control for flipping XY in standalone app
+                flipXY: getCheckedState('flip'),
                 regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
                 series: {
                     0: {
