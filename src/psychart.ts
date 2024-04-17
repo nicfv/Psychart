@@ -283,7 +283,7 @@ export class Psychart {
             data.push(new PsyState({ db: db, other: 1, measurement: 'dbrh' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(db + this.units.temp, data[0], TextAnchor.N, 'Dry Bulb');
+            this.drawLabel(db + this.units.temp, data[0], config.flipXY ? TextAnchor.E : TextAnchor.N, 'Dry Bulb');
         }
         // Draw constant dew point horizontal lines.
         for (let dp = 0; dp <= this.config.dpMax; dp += this.style.major) {
@@ -294,7 +294,7 @@ export class Psychart {
             data.push(new PsyState({ db: this.config.dbMax, other: dp, measurement: 'dbdp' }));
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(dp + this.units.temp, data[1], TextAnchor.W, 'Dew Point');
+            this.drawLabel(dp + this.units.temp, data[1], config.flipXY ? TextAnchor.S : TextAnchor.W, 'Dew Point');
         }
         // Draw constant wet bulb diagonal lines.
         for (let wb = this.config.dbMin; wb <= this.config.dpMax; wb += this.style.major) {
@@ -305,7 +305,7 @@ export class Psychart {
             }
             // Draw the axis and the label
             this.drawAxis(data);
-            this.drawLabel(wb + this.units.temp, data[0], TextAnchor.SE, 'Wet Bulb');
+            this.drawLabel(wb + this.units.temp, data[0], config.flipXY ? TextAnchor.NW : TextAnchor.SE, 'Wet Bulb');
         }
         // Draw constant relative humidity lines.
         for (let rh = 0; rh <= 100; rh += this.style.major) {
@@ -316,7 +316,7 @@ export class Psychart {
                 data.push(new PsyState({ db: db, other: rh / 100, measurement: 'dbrh' }));
                 // Stop drawing when the line surpasses the bounds of the chart
                 if (data[data.length - 1].dp >= this.config.dpMax) {
-                    preferredAnchor = TextAnchor.S;
+                    preferredAnchor = config.flipXY ? TextAnchor.W : TextAnchor.S;
                     break;
                 }
             }
