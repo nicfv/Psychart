@@ -19,11 +19,11 @@ export interface Layout {
     /**
      * The outer size of Psychart, in pixels.
      */
-    size: Point;
+    readonly size: Point;
     /**
      * The padding in pixels.
      */
-    padding: Point;
+    readonly padding: Point;
 }
 
 export interface Datum {
@@ -41,125 +41,125 @@ export interface Datum {
     /**
      * The type of measurements that were taken.
      */
-    measurement: Measurement;
+    readonly measurement: Measurement;
 }
 
 export interface Region {
     /**
      * The text to display on mouse hover
      */
-    tooltip: string;
+    readonly tooltip: string;
     /**
      * The data that represents the boundary of this region
      */
-    data: Datum[];
+    readonly data: Datum[];
 }
 
 export interface StyleOptions {
     /**
      * Determines whether or not the user is using a dark theme.
      */
-    darkTheme: boolean;
+    readonly darkTheme: boolean;
     /**
      * The font color.
      */
-    fontColor: Color;
+    readonly fontColor: Color;
     /**
      * The axis color.
      */
-    lineColor: Color;
+    readonly lineColor: Color;
     /**
      * The font size, in pixels.
      */
-    fontSize: number;
+    readonly fontSize: number;
     /**
      * The chart resolution, in units.
      */
-    resolution: number;
+    readonly resolution: number;
     /**
      * The major axis interval.
      */
-    major: number;
+    readonly major: number;
     /**
      * The default time span (ms) between the first and last plotted point.
      */
-    timeSpan: number;
+    readonly timeSpan: number;
 }
 
 export interface PsyOptions {
     /**
      * Represents the unit system, in either US (IP) or metric (SI)
      */
-    unitSystem: 'IP' | 'SI';
+    readonly unitSystem: 'IP' | 'SI';
     /**
      * The altitude of measurements taken.
      */
-    altitude: number;
+    readonly altitude: number;
     /**
      * The minimum value on the dry bulb axis.
      */
-    dbMin: number;
+    readonly dbMin: number;
     /**
      * The maximum value on the dry bulb axis.
      */
-    dbMax: number;
+    readonly dbMax: number;
     /**
      * The maximum value on the dew point axis.
      */
-    dpMax: number;
+    readonly dpMax: number;
     /**
      * Determine whether to render a Mollier diagram.
      */
-    flipXY: boolean;
+    readonly flipXY: boolean;
     /**
      * Render pre-defined shaded regions.
      */
-    regions: RegionName[];
+    readonly regions: RegionName[];
     /**
      * The number of data series to render.
      */
-    count: number;
+    readonly count: number;
     /**
      * The data series information.
      */
-    series: DataSeries;
+    readonly series: DataSeries;
 }
 
 export interface DataOptions {
     /**
      * Add a label to this data series.
      */
-    legend: string;
+    readonly legend: string;
     /**
      * The type of measurements that were taken.
      */
-    measurement: Measurement;
+    readonly measurement: Measurement;
     /**
      * The name of the dry bulb series.
      */
-    dryBulb: string;
+    readonly dryBulb: string;
     /**
      * The name of the wet bulb, dew point, or relative humidity series, depending on `measurement`.
      */
-    other: string;
+    readonly other: string;
     /**
      * The relative humidity measurement type, in percent [0-100] or float [0.0-1.0]
      */
-    relHumType: 'percent' | 'float';
+    readonly relHumType: 'percent' | 'float';
     /**
      * The point radius, in pixels.
      */
-    pointRadius: number;
+    readonly pointRadius: number;
     /**
      * Determines whether or not to connect points with a line.
      */
-    line: boolean;
+    readonly line: boolean;
     /**
      * Determines the color gradient for time series plots.
      */
-    gradient: PaletteName;
+    readonly gradient: PaletteName;
     /**
      * Defines whether or not to show advanced state variables.
      */
-    advanced: boolean;
+    readonly advanced: boolean;
 }

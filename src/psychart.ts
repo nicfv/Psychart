@@ -205,19 +205,19 @@ export class Psychart {
     /**
      * Return an array of all allowed gradient names.
      */
-    static getGradientNames(): PaletteName[] {
+    public static getGradientNames(): PaletteName[] {
         return Object.keys(Palette).filter(name => name !== this.regionGradient) as PaletteName[];
     }
     /**
      * Return an array of region names and their corresponding tooltips.
      */
-    static getRegionNamesAndTips(): Array<[RegionName, string]> {
+    public static getRegionNamesAndTips(): Array<[RegionName, string]> {
         return Object.entries(this.regions).map(([name, region]) => [name as RegionName, region.tooltip]);
     }
     /**
      * Return some suggested style options based on if the current display is dark or light theme.
      */
-    static getDefaultStyleOptions(isDarkTheme: boolean): StyleOptions {
+    public static getDefaultStyleOptions(isDarkTheme: boolean): StyleOptions {
         return {
             darkTheme: isDarkTheme,
             fontColor: isDarkTheme ? new Color(208, 208, 208) : new Color(32, 32, 32),
@@ -232,7 +232,7 @@ export class Psychart {
      * Generate an SVG element to use as this gradient's icon.
      * Returns the outer HTML string to be saved in a file.
      */
-    static generateGradientIcon(gradient: PaletteName): string {
+    public static generateGradientIcon(gradient: PaletteName): string {
         const maxColorIndex: number = Palette[gradient].colors.length - 1;
         return '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="grad" x1="0" y1="0" x2="1" y2="0">' +
             Palette[gradient].colors.map((color, i) => '<stop style="stop-color:' + color.toString() + '" offset="' + SMath.normalize(i, 0, maxColorIndex) + '" />').join('') +
@@ -241,7 +241,7 @@ export class Psychart {
     /**
      * Returns the path to the gradient icon.
      */
-    static getGradientIcon(gradient: PaletteName): string {
+    public static getGradientIcon(gradient: PaletteName): string {
         return require('img/' + gradient.toLowerCase() + '.svg');
     }
     /**
@@ -525,7 +525,7 @@ export class Psychart {
     /**
      * Plot one psychrometric state onto the psychrometric chart.
      */
-    plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
+    public plot(state: Datum, id = 0, time: number = Date.now(), startTime: number = this.startTime, endTime: number = this.endTime): void {
         // Skip series that are missing a measurement point.
         if (typeof state.db !== 'number' || typeof state.other !== 'number') {
             return;
@@ -583,7 +583,7 @@ export class Psychart {
     /**
      * Draw a shaded region on Psychart.
      */
-    drawRegion(states: Datum[], color: Color, tooltip?: string): void {
+    public drawRegion(states: Datum[], color: Color, tooltip?: string): void {
         // Add the first state to the data set
         const data: PsyState[] = [new PsyState(states[0])];
         for (let i = 1; i < states.length; i++) {
@@ -615,7 +615,7 @@ export class Psychart {
     /**
      * Clear all plotted data from Psychart.
      */
-    clearData(): void {
+    public clearData(): void {
         this.lastState = {};
         this.clearChildren(this.g.points);
         this.clearChildren(this.g.trends);
@@ -623,13 +623,13 @@ export class Psychart {
     /**
      * Clear all rendered regions from Psychart.
      */
-    clearRegions(): void {
+    public clearRegions(): void {
         this.clearChildren(this.g.regions);
     }
     /**
      * Return the SVG element to append on the parent.
      */
-    getElement(): SVGElement {
+    public getElement(): SVGElement {
         return this.base;
     }
 }
@@ -637,6 +637,6 @@ export class Psychart {
 /**
  * Represents where the origin is in relation to the text.
  */
-enum TextAnchor {
+const enum TextAnchor {
     NW, N, NE, E, SE, S, SW, W, C
 }

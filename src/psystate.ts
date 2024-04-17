@@ -9,35 +9,35 @@ export class PsyState {
     /**
      * Dry Bulb
      */
-    readonly db: number;
+    public readonly db: number;
     /**
      * Relative Humidity
      */
-    readonly rh: number = 0;
+    public readonly rh: number = 0;
     /**
      * Wet Bulb
      */
-    readonly wb: number = 0;
+    public readonly wb: number = 0;
     /**
      * Dew Point
      */
-    readonly dp: number = 0;
+    public readonly dp: number = 0;
     /**
      * Humidity Ratio
      */
-    readonly hr: number = 0;
+    public readonly hr: number = 0;
     /**
      * Vapor Pressure
      */
-    readonly vp: number = 0;
+    public readonly vp: number = 0;
     /**
      * Moist Air Enthalpy
      */
-    readonly h: number = 0;
+    public readonly h: number = 0;
     /**
      * Moist Air Volume
      */
-    readonly v: number = 0;
+    public readonly v: number = 0;
     /**
      * Standard Atmospheric Air Pressure
      */
@@ -69,7 +69,7 @@ export class PsyState {
     /**
      * Compute a first-time initialization of psychrolib.
      */
-    static initialize(layout: Layout, config: PsyOptions): void {
+    public static initialize(layout: Layout, config: PsyOptions): void {
         PsyState.size = layout.size;
         PsyState.padding = layout.padding;
         PsyState.flipXY = config.flipXY;
@@ -126,7 +126,7 @@ export class PsyState {
     /**
      * Convert this psychrometric state to an X-Y coordinate on a psychrometric chart.
      */
-    toXY(): Point {
+    public toXY(): Point {
         if (PsyState.flipXY) {
             return {
                 x: SMath.clamp(SMath.translate(this.hr, 0, PsyState.hrMax, PsyState.padding.x, PsyState.size.x - PsyState.padding.x), PsyState.padding.x, PsyState.size.x - PsyState.padding.x),
