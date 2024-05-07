@@ -3,6 +3,7 @@
 ## 4.3.1
 
 - Update to the latest version of `@grafana/create-plugin` (4.10.1)
+- Track `package-lock.json` in repository
 
 ## 4.3.0
 
