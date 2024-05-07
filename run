@@ -58,8 +58,8 @@ done
 }
 
 "${publishing}" && {
-  version=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)
-  verjson=$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" package.json | head -n1)
+  version="$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" CHANGELOG.md | head -n1)"
+  verjson="$(grep -oE "[0-9]+\.[0-9]+\.[0-9]+" package.json | head -n1)"
   if "${force_cmd}" ; then
     echo "Publishing with version ${version}."
     ext='.bk'
