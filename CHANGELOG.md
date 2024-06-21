@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.3.2
+
+- Update to the latest version of `@grafana/create-plugin` (4.12.0)
+- Remove dependency on Grafana legacy classes
+
 ## 4.3.1
 
 - Update to the latest version of `@grafana/create-plugin` (4.10.1)
