@@ -4,6 +4,8 @@
 
 - Update to the latest version of `@grafana/create-plugin` (4.12.0)
 - Remove dependency on Grafana legacy classes
+- Update dependency versions in `pages.yml` workflow file
+    - NodeJS updated to version 20
 
 ## 4.3.1
 
