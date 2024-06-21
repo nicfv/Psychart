@@ -7,7 +7,8 @@ import { format, getFieldList } from 'formatter';
 import { Psychart } from 'psychart';
 
 export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
-  const isDarkTheme = useTheme2().isDark;
+  const isDarkTheme = useTheme2().isDark,
+    errorColor = useTheme2().colors.error.text;
   try {
     const layout: Layout = { padding: { x: 40, y: 20 }, size: { x: width, y: height } },
       style = Psychart.getDefaultStyleOptions(isDarkTheme),
@@ -26,8 +27,14 @@ export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, widt
     return <Container child={psychart.getElement()} />;
   } catch (ex: any) {
     return (
-      <div className="panel-empty">
-        <p>{ex.name + ': ' + ex.message}</p>
+      <div style={{
+        color: errorColor,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+      }}>
+        <h3>{ex.name + ': ' + ex.message}</h3>
       </div>
     );
   }
