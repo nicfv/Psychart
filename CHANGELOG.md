@@ -2,8 +2,9 @@
 
 ## 4.4.0
 
-- Update to the latest version of `@grafana/create-plugin` (4.16.2)
+- Update to the latest version of `@grafana/create-plugin` (4.16.3)
     - Grafana version required: `>=10.4.0`
+- Update dependency versions
 
 ## 4.3.2
 
