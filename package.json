@@ -1,6 +1,6 @@
 {
   "name": "psychart",
-  "version": "4.3.2",
+  "version": "4.3.2b",
   "description": "View air conditions on a psychrometric chart",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
@@ -56,14 +56,15 @@
     "typescript": "4.8.4",
     "webpack": "^5.86.0",
     "webpack-cli": "^5.1.4",
-    "webpack-livereload-plugin": "^3.0.2"
+    "webpack-livereload-plugin": "^3.0.2",
+    "webpack-virtual-modules": "^0.6.2"
   },
   "engines": {
     "node": ">=20"
   },
   "dependencies": {
-    "smath": "1.8.5",
-    "viridis": "1.1.4",
+    "smath": "1.8.6",
+    "viridis": "1.1.5",
     "@emotion/css": "11.10.6",
     "@grafana/data": "^10.4.0",
     "@grafana/runtime": "^10.4.0",
