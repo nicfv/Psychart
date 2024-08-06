@@ -31,6 +31,8 @@ Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
     let parent: HTMLElement | null = null;
     if (name.match(/(Summer|Winter).*/)) {
         parent = document.getElementById('ashrae-55-container');
+    } else if (name.match(/Givoni.*/)) {
+        parent = document.getElementById('givoni-container');
     } else if (name.match(/Data Center.*/)) {
         parent = document.getElementById('ashrae-dc-container');
     } else if (name.match(/IBM TS4500.*/)) {
