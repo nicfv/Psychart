@@ -97,6 +97,16 @@ export class Psychart {
                 { db: 15.5, other: 0, measurement: 'dbrh' },
             ],
         },
+        'Givoni Comfort Zone': {
+            tooltip: 'Comfort Zone of the Building Bioclimatic Chart\n(based on Milne and Givoni 1979 & ASHRAE 55-2017)',
+            data: [
+                { db: 19, other: 0.20, measurement: 'dbrh' },
+                { db: 26, other: 0.20, measurement: 'dbrh' },
+                { db: 26, other: 0.50, measurement: 'dbrh' },
+                { db: 24, other: 0.80, measurement: 'dbrh' },
+                { db: 19, other: 0.80, measurement: 'dbrh' },
+            ],
+        },
         'Data Center A4': {
             tooltip: 'The A4 ASHRAE data center\ncomfort zone. Typically\nan IT space with low\nenvironmental requirements.',
             data: [

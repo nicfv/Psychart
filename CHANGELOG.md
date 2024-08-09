@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.0
+
+- Add new comfort region: Comfort Zone of the Building Bioclimatic Chart (based on Milne and Givoni 1979 & ASHRAE 55-2017)
+
 ## 4.4.0
 
 - Update to the latest version of `@grafana/create-plugin` (4.16.3)

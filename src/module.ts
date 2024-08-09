@@ -100,8 +100,8 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
     })
     .addMultiSelect({
       path: 'regions',
-      name: 'ASHRAE Comfort Regions',
-      description: 'Select which ASHRAE comfort regions to display.',
+      name: 'Comfort Regions',
+      description: 'Select which comfort regions to display.',
       category: ['Chart options'],
       settings: {
         allowCustomValue: false,
