@@ -18,6 +18,7 @@ export function getDefaultDataOptions(legend = ''): DataOptions {
     return {
         advanced: false,
         dryBulb: '',
+        enabled: true,
         gradient: 'Viridis',
         legend: legend,
         line: true,

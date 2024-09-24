@@ -162,4 +162,8 @@ export interface DataOptions {
      * Defines whether or not to show advanced state variables.
      */
     readonly advanced: boolean;
+    /**
+     * Optionally disable this series to hide it from the rendering.
+     */
+    readonly enabled: boolean;
 }

@@ -272,6 +272,14 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               defaultValue: subcontext.options[i].advanced,
               category: [subcategory],
               showIf: (x) => !!(x[i].legend),
+            })
+            .addBooleanSwitch({
+              path: i + '.enabled',
+              name: 'Enabled',
+              description: 'Optionally disable this series to hide it from the rendering when unchecked.',
+              defaultValue: subcontext.options[i].enabled,
+              category: [subcategory],
+              showIf: (x) => !!(x[i].legend),
             });
         }
       },

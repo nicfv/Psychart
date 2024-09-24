@@ -86,6 +86,7 @@ setOnClick('btnGenerate', () => {
                     0: {
                         advanced: getCheckedState('adv'),
                         dryBulb: '',
+                        enabled: true,
                         gradient: getStringValue('gradient'),
                         legend: '',
                         line: getCheckedState('ptLine'),
