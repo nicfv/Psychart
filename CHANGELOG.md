@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Update to the latest version of `@grafana/create-plugin` (5.3.7)
+- Update to the latest version of `@grafana/create-plugin` (5.3.10)
 
 ## 4.5.0
 
