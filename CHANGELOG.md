@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 4.5.1
 
+- Add an option called `Enable` when unchecked, will hide data series
 - Update to the latest version of `@grafana/create-plugin` (5.3.10)
 
 ## 4.5.0
