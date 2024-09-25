@@ -542,6 +542,10 @@ export class Psychart {
         }
         // Grab the corresponding data options
         const options: DataOptions = this.config.series[id];
+        // Skip series that are disabled.
+        if (!options.enabled) {
+            return;
+        }
         // Check for invalid timestamps.
         if (!Number.isFinite(time)) {
             throw new Error('Data timestamp is invalid for series ' + options.legend + '.');
