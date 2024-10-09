@@ -4,6 +4,7 @@
 
 - Update to the latest version of `@grafana/create-plugin` (5.5.2)
 - Address Dependabot security vulnerabilities
+- Fixed a bug where data series would initially be disabled, for existing dashboards that upgraded to plugin version 4.5.1
 
 ## 4.5.1
 
