@@ -1,4 +1,20 @@
 {
+  "__inputs": [],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.1.1"
+    },
+    {
+      "type": "panel",
+      "id": "ventura-psychrometric-panel",
+      "name": "Psychart",
+      "version": "4.5.1"
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -18,7 +34,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": null,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -50,6 +66,7 @@
           "0": {
             "advanced": true,
             "dryBulb": "Max",
+            "enabled": true,
             "gradient": "Parula",
             "legend": "Sensor A",
             "line": false,
@@ -61,6 +78,7 @@
           "1": {
             "advanced": false,
             "dryBulb": "Max",
+            "enabled": true,
             "gradient": "Warm",
             "legend": "Sensor B",
             "line": false,
@@ -72,6 +90,7 @@
           "2": {
             "advanced": false,
             "dryBulb": "Value",
+            "enabled": true,
             "gradient": "Bee",
             "legend": "Sensor C",
             "line": false,
@@ -112,6 +131,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }
