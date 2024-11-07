@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Update to the latest version of `@grafana/create-plugin` (5.8.2)
+
 ## 4.5.2
 
 - Update to the latest version of `@grafana/create-plugin` (5.5.2)
