@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 4.5.3
 
-- Update to the latest version of `@grafana/create-plugin` (5.8.2)
+- Update to the latest version of `@grafana/create-plugin` (5.9.2)
+    - Fix dependabot issues
+    - Update `node` version to 22
 
 ## 4.5.2
 
