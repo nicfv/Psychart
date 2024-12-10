@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.5.4
+
+- Update to the latest version of `@grafana/create-plugin` (5.11.1)
+- Update dependency versions
+
 ## 4.5.3
 
 - Update to the latest version of `@grafana/create-plugin` (5.9.3)
