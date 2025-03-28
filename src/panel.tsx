@@ -1,18 +1,16 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { Layout, PsyOptions } from 'types';
-import { Container } from 'container';
-import { format, getFieldList } from 'formatter';
+import { PsychartGrafanaOptions } from './types';
+import { Container } from './container';
+import { format, getFieldList } from './formatter';
 import { Psychart } from 'psychart';
 
-export const PsyPanel: React.FC<PanelProps<PsyOptions>> = ({ options, data, width, height }) => {
+export const PsyPanel: React.FC<PanelProps<PsychartGrafanaOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = useTheme2().isDark,
     errorColor = useTheme2().colors.error.text;
   try {
-    const layout: Layout = { padding: { x: 40, y: 20 }, size: { x: width, y: height } },
-      style = Psychart.getDefaultStyleOptions(isDarkTheme),
-      psychart: Psychart = new Psychart(layout, options, style),
+    const psychart: Psychart = new Psychart({ theme: (isDarkTheme ? 'dark' : 'light') }),
       formatted = format(data.series),
       fieldList = getFieldList(formatted),
       startTime = data.timeRange.from.unix() * 1e3,

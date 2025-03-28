@@ -70,8 +70,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "smath": "1.10.0",
-    "viridis": "1.1.7",
+    "psychart": "0.3.1",
     "@emotion/css": "11.10.6",
     "@grafana/data": "^11.5.3",
     "@grafana/runtime": "^11.5.3",

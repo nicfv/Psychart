@@ -1,11 +1,11 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
-import { DataSeries, PsyOptions } from 'types';
+import { PsychartGrafanaOptions } from 'types';
 import { PsyPanel } from 'panel';
 import { Psychart } from 'psychart';
 import { format, getFieldList } from 'formatter';
 import { cleanDataOptions, cleanPsyOptions } from 'validator';
 
-export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
+export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanelOptions((builder, context) => {
   context.options = cleanPsyOptions(context.options || {});
   // Generate a list of valid field options
   const fieldOptions: Array<SelectableValue<string>> = getFieldList(format(context.data)).map(f => {
