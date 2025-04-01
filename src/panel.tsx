@@ -9,12 +9,13 @@ import { getAxisColor, getFontColor } from './defaults';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = useTheme2().isDark,
-    errorColor = useTheme2().colors.error.text;
+    errorColor = useTheme2().colors.error.text,
+    legendHeight = 0.10 * height;
   try {
     const psychart: Psychart = new Psychart(
       {
         ...options,
-        size: { x: width, y: height },
+        size: { x: width, y: height - legendHeight - 10 },
         colors: {
           axis: getAxisColor(isDarkTheme),
           font: getFontColor(isDarkTheme),
@@ -36,7 +37,16 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = ({ options
         }
       }
     }
-    return <Container child={psychart.getElement()} />;
+    return <div>
+      <Container child={psychart.getElement()} />
+      <div style={{
+        height: legendHeight + 'px',
+        overflowX: 'hidden', overflowY: 'auto',
+        border: '1px solid ' + getAxisColor(isDarkTheme),
+      }}>
+        <Container child={psychart.getLegend()} />
+      </div>
+    </div>;
   } catch (ex: any) {
     return (
       <div style={{
