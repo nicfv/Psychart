@@ -3,7 +3,8 @@ import { DataSeries, GrafanaPsychartOptions } from './types';
 import { PsyPanel } from 'panel';
 import { Psychart } from 'psychart';
 import { clean, format, getFieldList } from './formatter';
-import { defaultDataOptions, defaultGrafanaOptions } from './defaults';
+import { defaultDataOptions, defaultGrafanaOptions, GradientNames } from './defaults';
+import { PaletteName } from 'viridis';
 
 export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanelOptions((builder, context) => {
   context.options = clean(context.options ?? {}, defaultGrafanaOptions);
@@ -114,19 +115,46 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
         }),
       },
     })
-    // .addNumberInput({
-    //   path: 'major.humRat',
-    //   name: 'Humidity Ratio',
-    //   description: 'The major interval between humidity ratio axes in the unites provided.',
-    //   defaultValue: context.options?.major.humRat ?? 10,
-    //   category: ['Axis Intervals'],
-    //   settings: {
-    //     step: 1,
-    //     min: 1,
-    //     max: 100,
-    //     placeholder: (context.options?.major.humRat ?? 10).toString(),
-    //   },
-    // })
+    .addNumberInput({
+      path: 'major.temp',
+      name: 'Temperature',
+      description: 'The major interval between temperature axes in the unites provided.',
+      defaultValue: context.options.major.temp,
+      category: ['Axis Intervals'],
+      settings: {
+        step: 1,
+        min: 1,
+        max: 100,
+        placeholder: context.options.major.temp.toString(),
+      },
+    })
+    .addNumberInput({
+      path: 'major.humRat',
+      name: 'Humidity Ratio',
+      description: 'The major interval between humidity ratio axes in the unites provided.',
+      defaultValue: context.options.major.humRat,
+      category: ['Axis Intervals'],
+      settings: {
+        step: 1,
+        min: 1,
+        max: 100,
+        placeholder: context.options.major.humRat.toString(),
+      },
+      showIf: (x) => x.mollier
+    })
+    .addNumberInput({
+      path: 'major.relHum',
+      name: 'Relative Humidity',
+      description: 'The major interval between relative humidity axes in the unites provided.',
+      defaultValue: context.options.major.relHum,
+      category: ['Axis Intervals'],
+      settings: {
+        step: 1,
+        min: 1,
+        max: 100,
+        placeholder: context.options.major.relHum.toString(),
+      },
+    })
     .addNumberInput({
       path: 'count',
       name: 'Series Count',
@@ -268,12 +296,12 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
               settings: {
                 allowCustomValue: false,
                 isClearable: false,
-                options: ['Viridis', 'Magma'].map(name => { // TODO
+                options: GradientNames.map(name => {
                   return {
                     value: name,
                     label: name,
                     imgUrl: require('img/' + name.toLowerCase() + '.svg'),
-                  } as SelectableValue;
+                  } as SelectableValue<PaletteName>;
                 }),
               },
               showIf: (x) => !!(x[i].seriesName),
