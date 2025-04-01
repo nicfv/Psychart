@@ -20,7 +20,8 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = ({ options
           font: getFontColor(isDarkTheme),
           regionGradient: 'Purplish',
         },
-        flipGradients: options.mollier,
+        flipGradients: isDarkTheme,
+        flipXY: options.mollier,
         yAxis: options.mollier ? 'hr' : 'dp',
       }
     ),
