@@ -1,18 +1,18 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
-import { PsychartGrafanaOptions } from 'types';
+import { DataSeries, GrafanaPsychartOptions } from './types';
 import { PsyPanel } from 'panel';
 import { Psychart } from 'psychart';
-import { format, getFieldList } from 'formatter';
-import { cleanDataOptions, cleanPsyOptions } from 'validator';
+import { clean, format, getFieldList } from './formatter';
+import { defaultDataOptions, defaultGrafanaOptions } from './defaults';
 
-export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanelOptions((builder, context) => {
-  context.options = cleanPsyOptions(context.options || {});
+export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanelOptions((builder, context) => {
+  context.options = clean(context.options ?? {}, defaultGrafanaOptions);
   // Generate a list of valid field options
   const fieldOptions: Array<SelectableValue<string>> = getFieldList(format(context.data)).map(f => {
     return {
       label: f,
       value: f,
-    };
+    } as SelectableValue;
   });
   // Delete data options that shouldn't be rendered
   for (let key in context.options.series) {
@@ -92,10 +92,10 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
       },
     })
     .addBooleanSwitch({
-      path: 'flipXY',
-      name: 'Flip XY',
+      path: 'mollier',
+      name: 'Mollier',
       description: 'Render a Mollier diagram (EU) instead of a standard (US) psychrometric chart.',
-      defaultValue: context.options.flipXY,
+      defaultValue: context.options.mollier,
       category: ['Chart options'],
     })
     .addMultiSelect({
@@ -114,6 +114,19 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
         }),
       },
     })
+    // .addNumberInput({
+    //   path: 'major.humRat',
+    //   name: 'Humidity Ratio',
+    //   description: 'The major interval between humidity ratio axes in the unites provided.',
+    //   defaultValue: context.options?.major.humRat ?? 10,
+    //   category: ['Axis Intervals'],
+    //   settings: {
+    //     step: 1,
+    //     min: 1,
+    //     max: 100,
+    //     placeholder: (context.options?.major.humRat ?? 10).toString(),
+    //   },
+    // })
     .addNumberInput({
       path: 'count',
       name: 'Series Count',
@@ -136,15 +149,15 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
         // Generate controls for data series
         for (let i = 0; i < context.options!.count; i++) {
           // Force clean data options
-          subcontext.options[i] = cleanDataOptions(subcontext.options[i] || {});
+          subcontext.options[i] = clean(subcontext.options[i] || {}, defaultDataOptions);
           // Use legend as subcategory or default string if none exists
-          const subcategory: string = subcontext.options[i].legend || 'Series ' + (i + 1);
+          const subcategory: string = subcontext.options[i].seriesName || 'Series ' + (i + 1);
           subbuilder
             .addTextInput({
-              path: i + '.legend',
+              path: i + '.seriesName',
               name: 'Legend',
               description: 'Add a label to this data series.',
-              defaultValue: undefined,
+              defaultValue: subcontext.options[i].seriesName,
               category: [subcategory],
               settings: {
                 maxLength: 50,
@@ -155,7 +168,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
               path: i + '.measurement',
               name: 'Measurements',
               description: 'Select which series are being measured.',
-              defaultValue: subcontext.options![i].measurement,
+              defaultValue: subcontext.options[i].measurement,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
@@ -175,7 +188,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.dryBulb',
@@ -188,7 +201,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.other',
@@ -201,7 +214,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addRadio({
               path: i + '.relHumType',
@@ -223,7 +236,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend && x[i].measurement === 'dbrh'),
+              showIf: (x) => !!(x[i].seriesName && x[i].measurement === 'dbrh'),
             })
             .addSliderInput({
               path: i + '.pointRadius',
@@ -236,7 +249,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
                 max: 10,
                 step: 1,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addBooleanSwitch({
               path: i + '.line',
@@ -244,7 +257,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
               description: 'Connect data points with a line?',
               defaultValue: subcontext.options[i].line,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.gradient',
@@ -255,15 +268,15 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
               settings: {
                 allowCustomValue: false,
                 isClearable: false,
-                options: Psychart.getGradientNames().map(name => {
+                options: ['Viridis', 'Magma'].map(name => { // TODO
                   return {
                     value: name,
                     label: name,
-                    imgUrl: Psychart.getGradientIcon(name),
-                  };
+                    imgUrl: require('img/' + name.toLowerCase() + '.svg'),
+                  } as SelectableValue;
                 }),
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addBooleanSwitch({
               path: i + '.advanced',
@@ -271,7 +284,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
               description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
               defaultValue: subcontext.options[i].advanced,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addBooleanSwitch({
               path: i + '.enabled',
@@ -279,7 +292,7 @@ export const plugin = new PanelPlugin<PsychartGrafanaOptions>(PsyPanel).setPanel
               description: 'Optionally disable this series to hide it from the rendering when unchecked.',
               defaultValue: subcontext.options[i].enabled,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             });
         }
       },
