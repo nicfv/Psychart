@@ -1,6 +1,6 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
 import { DataSeries, GrafanaPsychartOptions } from './types';
-import { PsyPanel } from 'panel';
+import { PsyPanel } from './components/panel';
 import { Psychart } from 'psychart';
 import { clean, format, getFieldList } from './formatter';
 import { defaultDataOptions, defaultGrafanaOptions, GradientNames } from './defaults';
