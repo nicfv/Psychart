@@ -1,11 +1,11 @@
 import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { useTheme2 } from '@grafana/ui';
-import { GrafanaPsychartOptions } from './types';
+import { GrafanaPsychartOptions } from '../types';
 import { Container } from './container';
-import { format, getFieldList } from './formatter';
+import { format, getFieldList } from '../formatter';
 import { Psychart } from 'psychart';
-import { getAxisColor, getFontColor } from './defaults';
+import { getAxisColor, getFontColor } from '../defaults';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = ({ options, data, width, height }) => {
   const isDarkTheme = useTheme2().isDark,
