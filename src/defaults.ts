@@ -23,7 +23,7 @@ export function getFontColor(darkTheme: boolean): string {
 /**
  * The list of all selectable gradient names.
  */
-export const GradientNames: Array<PaletteName> = Object.keys(Palette).filter(name => name !== regionGradient).map(name => name as PaletteName);
+export const GradientNames: PaletteName[] = Object.keys(Palette).filter(name => name !== regionGradient).map(name => name as PaletteName);
 
 /**
  * Default options for Psychart.
