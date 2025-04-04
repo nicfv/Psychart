@@ -1,73 +1,42 @@
 import { Palette, PaletteName } from 'viridis';
 import { GrafanaDataOptions, GrafanaPsychartOptions } from './types';
+import { PsychartOptions } from 'psychart';
 
 /**
- * Get the region gradient.
+ * Get the default colors for this theme.
  */
-export const regionGradient: PaletteName = 'Purplish';
-
-/**
- * Get the axis color for this theme.
- */
-export function getAxisColor(darkTheme: boolean): string {
-    return darkTheme ? '#303030' : '#E0E0E0';
-}
-
-/**
- * Get the font color for this theme.
- */
-export function getFontColor(darkTheme: boolean): string {
-    return darkTheme ? '#D0D0D0' : '#202020';
+export function getColors(darkTheme: boolean): PsychartOptions['colors'] {
+    return {
+        axis: darkTheme ? '#303030' : '#E0E0E0',
+        font: darkTheme ? '#D0D0D0' : '#202020',
+        regionGradient: 'Purplish',
+    };
 }
 
 /**
  * The list of all selectable gradient names.
  */
-export const GradientNames: PaletteName[] = Object.keys(Palette).filter(name => name !== regionGradient).map(name => name as PaletteName);
+export const GradientNames: PaletteName[] = Object.keys(Palette).filter(name => name !== getColors(false).regionGradient).map(name => name as PaletteName);
 
 /**
  * Default options for Psychart.
  */
 export const defaultGrafanaOptions: GrafanaPsychartOptions = {
     altitude: 0,
-    colors: {
-        axis: '#E0E0E0',
-        font: '#202020',
-        regionGradient: regionGradient,
-    },
     count: 0,
     dbMax: 120,
     dbMin: 20,
     dpMax: 90,
-    flipGradients: false,
-    flipXY: false,
-    font: {
-        family: 'sans-serif',
-        size: 12,
-    },
-    legend: {
-        placement: { x: 0, y: 0 },
-        size: { x: 0, y: 0 },
-    },
-    lineHeight: 1.25,
     major: {
         humRat: 10,
         relHum: 10,
         temp: 10,
     },
     mollier: false,
-    padding: { x: 40, y: 20 },
     regions: [],
-    resolution: 0.5,
     series: [],
     showLegend: true,
-    showUnits: {
-        axis: true,
-        tooltip: true,
-    },
-    size: { x: 0, y: 0 },
     unitSystem: 'IP',
-    yAxis: 'dp',
 };
 
 /**
@@ -75,19 +44,12 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
  */
 export const defaultDataOptions: GrafanaDataOptions = {
     advanced: false,
-    color: '#000000',
     dryBulb: '',
     gradient: 'Viridis',
     line: true,
     measurement: 'dbrh',
     other: '',
-    pointName: '',
     pointRadius: 5,
     relHumType: 'percent',
     seriesName: '',
-    time: {
-        now: NaN,
-        start: NaN,
-        end: NaN,
-    },
 };

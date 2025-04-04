@@ -5,7 +5,7 @@ import { GrafanaDataOptions, GrafanaPsychartOptions } from '../types';
 import { Container } from './container';
 import { format, getFieldList } from '../formatter';
 import { Point, Psychart } from 'psychart';
-import { getAxisColor, getFontColor, regionGradient } from '../defaults';
+import { getColors } from '../defaults';
 import { PanelDataErrorView } from '@grafana/runtime';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) => {
@@ -14,19 +14,21 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
   try {
     const psychart: Psychart = new Psychart(
       {
-        ...props.options,
-        size: { x: props.width, y: props.height },
+        altitude: props.options.altitude,
+        colors: getColors(isDarkTheme),
+        dbMax: props.options.dbMax,
+        dbMin: props.options.dbMin,
+        dpMax: props.options.dpMax,
+        flipGradients: isDarkTheme,
+        flipXY: props.options.mollier,
         legend: {
           placement: (props.options.mollier ? { x: props.width - legendSize.x, y: props.height - legendSize.y } : { x: 0, y: 0 }),
           size: legendSize,
         },
-        colors: {
-          axis: getAxisColor(isDarkTheme),
-          font: getFontColor(isDarkTheme),
-          regionGradient: regionGradient,
-        },
-        flipGradients: isDarkTheme,
-        flipXY: props.options.mollier,
+        major: props.options.major,
+        regions: props.options.regions,
+        size: { x: props.width, y: props.height },
+        unitSystem: props.options.unitSystem,
         yAxis: props.options.mollier ? 'hr' : 'dp',
       }
     ),
