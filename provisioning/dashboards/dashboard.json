@@ -61,57 +61,36 @@
         "series": {
           "0": {
             "advanced": true,
-            "color": "#000000",
             "dryBulb": "Max",
             "gradient": "Parula",
             "line": false,
             "measurement": "dbdp",
             "other": "Min",
-            "pointName": "",
             "pointRadius": 10,
             "relHumType": "percent",
-            "seriesName": "Room 1",
-            "time": {
-              "end": null,
-              "now": null,
-              "start": null
-            }
+            "seriesName": "${bldg} Room 1"
           },
           "1": {
             "advanced": false,
-            "color": "#000000",
             "dryBulb": "Max",
             "gradient": "Warm",
             "line": false,
             "measurement": "dbwb",
             "other": "Value",
-            "pointName": "",
             "pointRadius": 5,
             "relHumType": "percent",
-            "seriesName": "Room 2",
-            "time": {
-              "end": null,
-              "now": null,
-              "start": null
-            }
+            "seriesName": "${bldg} Room 2"
           },
           "2": {
             "advanced": false,
-            "color": "#000000",
             "dryBulb": "Value",
             "gradient": "Bee",
             "line": false,
             "measurement": "dbwb",
             "other": "Min",
-            "pointName": "",
             "pointRadius": 5,
             "relHumType": "percent",
-            "seriesName": "Room 3",
-            "time": {
-              "end": null,
-              "now": null,
-              "start": null
-            }
+            "seriesName": "${bldg} Room 3"
           }
         },
         "showLegend": true,
@@ -129,7 +108,7 @@
           "refId": "A"
         }
       ],
-      "title": "Psychart",
+      "title": "Psychart ${bldg}",
       "type": "ventura-psychrometric-panel"
     },
     {
@@ -179,11 +158,7 @@
             "pointRadius": 10,
             "relHumType": "percent",
             "seriesName": "Wet Bulb",
-            "time": {
-              "end": null,
-              "now": null,
-              "start": null
-            }
+            "time": {}
           },
           "1": {
             "advanced": false,
@@ -197,11 +172,7 @@
             "pointRadius": 10,
             "relHumType": "percent",
             "seriesName": "Dew Point",
-            "time": {
-              "end": null,
-              "now": null,
-              "start": null
-            }
+            "time": {}
           }
         },
         "showLegend": true,
@@ -228,7 +199,26 @@
   "schemaVersion": 40,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "text": "B1",
+          "value": "B1"
+        },
+        "description": "Enter the building name or number.",
+        "label": "Building",
+        "name": "bldg",
+        "options": [
+          {
+            "selected": true,
+            "text": "B1",
+            "value": "B1"
+          }
+        ],
+        "query": "B1",
+        "type": "textbox"
+      }
+    ]
   },
   "time": {
     "from": "now-5m",
@@ -238,6 +228,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
