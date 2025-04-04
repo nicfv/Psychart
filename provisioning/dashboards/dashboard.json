@@ -1,20 +1,4 @@
 {
-  "__inputs": [],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.1.1"
-    },
-    {
-      "type": "panel",
-      "id": "ventura-psychrometric-panel",
-      "name": "Psychart",
-      "version": "4.5.1"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -34,14 +18,17 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 1,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "datasource",
         "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -51,57 +38,86 @@
       },
       "id": 1,
       "options": {
-        "altitude": 0,
+        "altitude": 100,
         "count": 3,
         "dbMax": 120,
         "dbMin": 20,
         "dpMax": 90,
         "flipXY": false,
+        "major": {
+          "humRat": 10,
+          "relHum": 10,
+          "temp": 10
+        },
+        "mollier": false,
         "regions": [
-          "Summer (sitting)",
-          "Summer (walking)",
-          "Summer (light work)"
+          "Data Center A4",
+          "Data Center A3",
+          "Data Center A2",
+          "Data Center A1",
+          "Data Center Recommended (low pollutants)",
+          "Data Center Recommended (high pollutants)"
         ],
         "series": {
           "0": {
             "advanced": true,
+            "color": "#000000",
             "dryBulb": "Max",
-            "enabled": true,
             "gradient": "Parula",
-            "legend": "Sensor A",
             "line": false,
             "measurement": "dbdp",
             "other": "Min",
+            "pointName": "",
             "pointRadius": 10,
-            "relHumType": "percent"
+            "relHumType": "percent",
+            "seriesName": "Room 1",
+            "time": {
+              "end": null,
+              "now": null,
+              "start": null
+            }
           },
           "1": {
             "advanced": false,
+            "color": "#000000",
             "dryBulb": "Max",
-            "enabled": true,
             "gradient": "Warm",
-            "legend": "Sensor B",
             "line": false,
             "measurement": "dbwb",
             "other": "Value",
+            "pointName": "",
             "pointRadius": 5,
-            "relHumType": "percent"
+            "relHumType": "percent",
+            "seriesName": "Room 2",
+            "time": {
+              "end": null,
+              "now": null,
+              "start": null
+            }
           },
           "2": {
             "advanced": false,
+            "color": "#000000",
             "dryBulb": "Value",
-            "enabled": true,
             "gradient": "Bee",
-            "legend": "Sensor C",
             "line": false,
             "measurement": "dbwb",
             "other": "Min",
+            "pointName": "",
             "pointRadius": 5,
-            "relHumType": "percent"
+            "relHumType": "percent",
+            "seriesName": "Room 3",
+            "time": {
+              "end": null,
+              "now": null,
+              "start": null
+            }
           }
         },
+        "showLegend": true,
         "unitSystem": "IP"
       },
+      "pluginVersion": "4.5.4",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -115,10 +131,101 @@
       ],
       "title": "Psychart",
       "type": "ventura-psychrometric-panel"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "altitude": 0,
+        "count": 2,
+        "dbMax": 40,
+        "dbMin": 0,
+        "dpMax": 25,
+        "flipXY": false,
+        "major": {
+          "humRat": 5,
+          "relHum": 20,
+          "temp": 5
+        },
+        "mollier": true,
+        "regions": [
+          "Summer (sitting)",
+          "Summer (walking)",
+          "Summer (light work)"
+        ],
+        "series": {
+          "0": {
+            "advanced": true,
+            "color": "#000000",
+            "dryBulb": "Value",
+            "gradient": "Warm",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Min",
+            "pointName": "",
+            "pointRadius": 10,
+            "relHumType": "percent",
+            "seriesName": "Wet Bulb",
+            "time": {
+              "end": null,
+              "now": null,
+              "start": null
+            }
+          },
+          "1": {
+            "advanced": false,
+            "color": "#000000",
+            "dryBulb": "Value",
+            "gradient": "Cool",
+            "line": false,
+            "measurement": "dbdp",
+            "other": "Min",
+            "pointName": "",
+            "pointRadius": 10,
+            "relHumType": "percent",
+            "seriesName": "Dew Point",
+            "time": {
+              "end": null,
+              "now": null,
+              "start": null
+            }
+          }
+        },
+        "showLegend": true,
+        "unitSystem": "SI"
+      },
+      "pluginVersion": "4.5.4",
+      "targets": [
+        {
+          "channel": "plugin/testdata/random-2s-stream",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Mollier Example",
+      "type": "ventura-psychrometric-panel"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 39,
+  "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
