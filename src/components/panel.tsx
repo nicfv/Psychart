@@ -40,7 +40,16 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
       for (const f in props.options.series || {}) {
         const dataOpts: GrafanaDataOptions = props.options.series[f];
         if (dataOpts.seriesName && fieldList.includes(dataOpts.dryBulb) && fieldList.includes(dataOpts.other)) {
-          psychart.plot({ db: formatted[t][dataOpts.dryBulb], other: formatted[t][dataOpts.other], measurement: dataOpts.measurement }, { ...dataOpts, time: { now: +t, start: startTime, end: endTime } });
+          psychart.plot({ db: formatted[t][dataOpts.dryBulb], other: formatted[t][dataOpts.other], measurement: dataOpts.measurement },
+            {
+              advanced: dataOpts.advanced,
+              gradient: dataOpts.gradient,
+              line: dataOpts.line,
+              pointRadius: dataOpts.pointRadius,
+              relHumType: dataOpts.relHumType,
+              seriesName: props.replaceVariables(dataOpts.seriesName),
+              time: { now: +t, start: startTime, end: endTime }
+            });
         }
       }
     }
