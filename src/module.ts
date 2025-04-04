@@ -320,14 +320,6 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
               defaultValue: subcontext.options[i].advanced,
               category: [subcategory],
               showIf: (x) => !!(x[i].seriesName),
-            })
-            .addBooleanSwitch({
-              path: i + '.enabled',
-              name: 'Enabled',
-              description: 'Optionally disable this series to hide it from the rendering when unchecked.',
-              defaultValue: subcontext.options[i].enabled,
-              category: [subcategory],
-              showIf: (x) => !!(x[i].seriesName),
             });
         }
       },

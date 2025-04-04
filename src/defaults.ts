@@ -45,6 +45,10 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
         family: 'sans-serif',
         size: 12,
     },
+    legend: {
+        placement: { x: 0, y: 0 },
+        size: { x: 0, y: 0 },
+    },
     lineHeight: 1.25,
     major: {
         humRat: 10,
@@ -72,7 +76,6 @@ export const defaultDataOptions: GrafanaDataOptions = {
     advanced: false,
     color: '#000000',
     dryBulb: '',
-    enabled: true,
     gradient: 'Viridis',
     line: true,
     measurement: 'dbrh',
