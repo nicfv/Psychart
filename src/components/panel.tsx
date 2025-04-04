@@ -10,7 +10,7 @@ import { PanelDataErrorView } from '@grafana/runtime';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) => {
   const isDarkTheme = useTheme2().isDark,
-    legendSize: Point = { x: props.width / 3, y: props.height / 3 };
+    legendSize: Point = props.options.showLegend ? { x: props.width / 3, y: props.height / 3 } : { x: 0, y: 0 };
   try {
     const psychart: Psychart = new Psychart(
       {

@@ -3,6 +3,7 @@ import { PsychartOptions, DataOptions } from 'psychart';
 export type DataSeries = { [index: number]: GrafanaDataOptions };
 
 export interface GrafanaPsychartOptions extends PsychartOptions {
+    readonly showLegend: boolean;
     readonly mollier: boolean;
     readonly count: number;
     readonly series: DataSeries;

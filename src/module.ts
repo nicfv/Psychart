@@ -42,6 +42,13 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
         ],
       },
     })
+    .addBooleanSwitch({
+      path: 'showLegend',
+      name: 'Show Legend',
+      description: 'Display the legend in the panel.',
+      defaultValue: context.options.showLegend,
+      category: ['Chart options'],
+    })
     .addNumberInput({
       path: 'altitude',
       name: 'Altitude',

@@ -60,6 +60,7 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
     regions: [],
     resolution: 0.5,
     series: [],
+    showLegend: true,
     showUnits: {
         axis: true,
         tooltip: true,
