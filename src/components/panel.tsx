@@ -22,7 +22,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         flipGradients: isDarkTheme,
         flipXY: props.options.mollier,
         legend: {
-          placement: (props.options.mollier ? { x: props.width - legendSize.x, y: props.height - legendSize.y } : { x: 0, y: 0 }),
+          margin: { x: 0, y: 0 },
           size: legendSize,
         },
         major: props.options.major,
@@ -47,7 +47,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
               line: dataOpts.line,
               pointRadius: dataOpts.pointRadius,
               relHumType: dataOpts.relHumType,
-              seriesName: props.replaceVariables(dataOpts.seriesName),
+              name: props.replaceVariables(dataOpts.seriesName),
               time: { now: +t, start: startTime, end: endTime }
             });
         }
