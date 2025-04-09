@@ -60,7 +60,7 @@ function updateIcon(): void {
         icon: SVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect'),
         gradientName: PaletteName = getStringValue('gradient') as PaletteName,
         gradicon: HTMLSpanElement = document.getElementById('gradicon')!,
-        size: number = 12;
+        size = 12;
     base.setAttribute('x', '0');
     base.setAttribute('y', '0');
     base.setAttribute('width', size.toString());
