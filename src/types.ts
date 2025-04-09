@@ -1,4 +1,4 @@
-import { DataOptions, PsychartOptions } from 'psychart';
+import { DataOptions, Datum, PsychartOptions } from 'psychart';
 
 export interface GrafanaPsychartOptions {
     readonly altitude: PsychartOptions['altitude'];
@@ -23,5 +23,5 @@ export interface GrafanaDataOptions {
     readonly seriesName: DataOptions['name'];
     readonly dryBulb: string;
     readonly other: string;
-    readonly measurement: 'dbwb' | 'dbdp' | 'dbrh';
+    readonly measurement: Datum['measurement'];
 }
