@@ -22,7 +22,7 @@ export interface GrafanaDataOptions {
     readonly line: DataOptions['line'];
     readonly pointRadius: DataOptions['pointRadius'];
     readonly relHumType: DataOptions['relHumType'];
-    readonly seriesName: DataOptions['seriesName'];
+    readonly seriesName: DataOptions['name'];
     readonly dryBulb: string;
     readonly other: string;
     readonly measurement: 'dbwb' | 'dbdp' | 'dbrh';
