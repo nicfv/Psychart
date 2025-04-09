@@ -1,4 +1,4 @@
-import { getAxisColor, getFontColor, GradientNames, regionGradient } from 'defaults';
+import { getColors, GradientNames } from 'defaults';
 import { DataOptions, Psychart } from 'psychart';
 import { Palette, PaletteName } from 'viridis';
 
@@ -58,17 +58,26 @@ GradientNames.forEach(name => {
 function updateIcon(): void {
     const base: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
         icon: SVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect'),
-        gradientName: PaletteName = getStringValue('gradient') as PaletteName;
+        gradientName: PaletteName = getStringValue('gradient') as PaletteName,
+        gradicon: HTMLSpanElement = document.getElementById('gradicon')!,
+        size: number = 12;
+    base.setAttribute('x', '0');
+    base.setAttribute('y', '0');
+    base.setAttribute('width', size.toString());
+    base.setAttribute('height', size.toString());
+    base.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
     icon.setAttribute('x', '0');
     icon.setAttribute('y', '0');
-    icon.setAttribute('width', '10');
-    icon.setAttribute('height', '10');
-    icon.setAttribute('rx', '2');
+    icon.setAttribute('width', size.toString());
+    icon.setAttribute('height', size.toString());
+    icon.setAttribute('rx', (size * 0.2).toString());
     icon.setAttribute('fill', 'url(#g1)');
     base.appendChild(Palette[gradientName].toSVG('g1'));
     base.appendChild(icon);
-    (document.getElementById('gradicon') as HTMLDivElement).append(base);
-    // .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as PaletteName));
+    while (gradicon.firstChild) {
+        gradicon.removeChild(gradicon.firstChild);
+    }
+    gradicon.append(base);
 }
 updateIcon();
 
@@ -82,8 +91,6 @@ setOnClick('btnGenerate', () => {
         alert('Dew point max should be less than or equal to dry bulb max.');
     } else {
         ps = new Psychart({
-            padding: { x: 40, y: 20 },
-            size: { x: 800, y: 600 },
             altitude: getNumericValue('alt'),
             dbMax: dbMax,
             dbMin: dbMin,
@@ -91,11 +98,7 @@ setOnClick('btnGenerate', () => {
             flipXY: getCheckedState('flip'),
             yAxis: getCheckedState('flip') ? 'hr' : 'dp',
             regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
-            colors: {
-                axis: getAxisColor(isDarkTheme()),
-                font: getFontColor(isDarkTheme()),
-                regionGradient: regionGradient,
-            },
+            colors: getColors(isDarkTheme()),
             flipGradients: isDarkTheme(),
             unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
         });

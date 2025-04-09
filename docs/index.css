@@ -26,7 +26,7 @@ form h3 {
     border-bottom: 1px solid rgba(128, 128, 128, 0.25);
 }
 
-div {
+div[id] {
     margin: 1em auto;
     border: 0.1em solid rgba(128, 128, 128, 0.25);
     padding: 0.5em;
