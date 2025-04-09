@@ -4,13 +4,12 @@ import { useTheme2 } from '@grafana/ui';
 import { GrafanaDataOptions, GrafanaPsychartOptions } from '../types';
 import { Container } from './container';
 import { format, getFieldList } from '../formatter';
-import { Point, Psychart } from 'psychart';
+import { Psychart } from 'psychart';
 import { getColors } from '../defaults';
 import { PanelDataErrorView } from '@grafana/runtime';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) => {
-  const isDarkTheme = useTheme2().isDark,
-    legendSize: Point = props.options.showLegend ? { x: props.width / 3, y: props.height / 3 } : { x: 0, y: 0 };
+  const isDarkTheme = useTheme2().isDark;
   try {
     const psychart: Psychart = new Psychart(
       {
@@ -23,7 +22,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         flipXY: props.options.mollier,
         legend: {
           margin: { x: 0, y: 0 },
-          size: legendSize,
+          size: props.options.showLegend ? { x: props.width / 3, y: props.height / 3 } : { x: 0, y: 0 },
         },
         major: props.options.major,
         regions: props.options.regions,

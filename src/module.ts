@@ -1,5 +1,5 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
-import { DataSeries, GrafanaPsychartOptions } from './types';
+import { GrafanaPsychartOptions } from './types';
 import { PsyPanel } from './components/panel';
 import { Psychart } from 'psychart';
 import { clean, format, getFieldList } from './formatter';
@@ -122,7 +122,7 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
         }),
       },
     })
-    .addNestedOptions({
+    .addNestedOptions<GrafanaPsychartOptions['major']>({
       path: 'major',
       category: ['Chart options'],
       build(subbuilder, subcontext) {
@@ -183,7 +183,7 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
         placeholder: 'Number of series',
       },
     })
-    .addNestedOptions<DataSeries>({
+    .addNestedOptions<GrafanaPsychartOptions['series']>({
       path: 'series',
       category: ['Data options'],
       build(subbuilder, subcontext) {

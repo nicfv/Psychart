@@ -1,7 +1,5 @@
 import { DataOptions, PsychartOptions } from 'psychart';
 
-export type DataSeries = { [index: number]: GrafanaDataOptions };
-
 export interface GrafanaPsychartOptions {
     readonly altitude: PsychartOptions['altitude'];
     readonly dbMax: PsychartOptions['dbMax'];
@@ -13,7 +11,7 @@ export interface GrafanaPsychartOptions {
     readonly showLegend: boolean;
     readonly mollier: boolean;
     readonly count: number;
-    readonly series: DataSeries;
+    readonly series: { [index: number]: GrafanaDataOptions };
 }
 
 export interface GrafanaDataOptions {
