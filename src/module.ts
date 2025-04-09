@@ -126,45 +126,46 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
       path: 'major',
       category: ['Chart options'],
       build(subbuilder, subcontext) {
+        subcontext.options = subcontext.options || defaultGrafanaOptions.major;
         subbuilder
           .addNumberInput({
             path: 'temp',
             name: 'Temperature',
-            description: 'The major interval between temperature axes in the unites provided.',
-            defaultValue: context.options!.major.temp,
+            description: 'The major interval between temperature axes in the units provided.',
+            defaultValue: subcontext.options.temp,
             category: ['Axis Intervals'],
             settings: {
               step: 1,
               min: 1,
               max: 100,
-              placeholder: context.options!.major.temp.toString(),
+              placeholder: subcontext.options.temp.toString(),
             },
           })
           .addNumberInput({
             path: 'humRat',
             name: 'Humidity Ratio',
-            description: 'The major interval between humidity ratio axes in the unites provided.',
-            defaultValue: context.options!.major.humRat,
+            description: 'The major interval between humidity ratio axes in the units provided.',
+            defaultValue: subcontext.options.humRat,
             category: ['Axis Intervals'],
             settings: {
               step: 1,
               min: 1,
               max: 100,
-              placeholder: context.options!.major.humRat.toString(),
+              placeholder: subcontext.options.humRat.toString(),
             },
             showIf: (x) => context.options!.mollier
           })
           .addNumberInput({
             path: 'relHum',
             name: 'Relative Humidity',
-            description: 'The major interval between relative humidity axes in the unites provided.',
-            defaultValue: context.options!.major.relHum,
+            description: 'The major interval between relative humidity axes in percent.',
+            defaultValue: subcontext.options.relHum,
             category: ['Axis Intervals'],
             settings: {
               step: 1,
               min: 1,
               max: 100,
-              placeholder: context.options!.major.relHum.toString(),
+              placeholder: subcontext.options.relHum.toString(),
             },
           });
       },
