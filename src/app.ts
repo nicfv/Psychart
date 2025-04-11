@@ -118,8 +118,11 @@ setOnClick('btnGenerate', () => {
 });
 
 setOnClick('btnPlot', () => {
-    const db = getNumericValue('db'),
-        state2 = getNumericValue('state2');
+    const db: number = getNumericValue('db'),
+        state2: number = getNumericValue('state2'),
+        name: string = getStringValue('name'),
+        color: string = getStringValue('color');
+    dataOpts = { ...dataOpts, color: color, name: name };
     if (getCheckedState('measurementType_dbwb')) {
         if (state2 > db) {
             alert('Wet bulb is greater than dry bulb temperature!');
