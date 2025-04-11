@@ -1,5 +1,3 @@
-@import url('https://raw.githubusercontent.com/sindresorhus/modern-normalize/refs/heads/main/modern-normalize.css');
-
 body {
     background-color: white;
     font-family: sans-serif;
@@ -18,6 +16,7 @@ form input[type=number] {
 }
 
 form input[type=button] {
+    cursor: pointer;
     float: right;
 }
 
