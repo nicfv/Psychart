@@ -100,6 +100,7 @@ setOnClick('btnGenerate', () => {
             regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
             colors: getColors(isDarkTheme()),
             flipGradients: isDarkTheme(),
+            major: getCheckedState('unitSystem_SI') ? { humRat: 5, relHum: 10, temp: 5 } : { humRat: 5, relHum: 10, temp: 10 },
             unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
         });
         dataOpts = {
