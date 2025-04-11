@@ -1,13 +1,12 @@
 import React from 'react';
 
-export class Container extends React.Component<{ child: Element }> {
-  render() {
+export class Container extends React.PureComponent<{ readonly child: Element }> {
+  public override render(): React.JSX.Element {
     return (
       <div
-        ref={(ref) => {
-          const child = ref?.firstChild;
-          if (child instanceof Element) {
-            ref?.removeChild(child);
+        ref={ref => {
+          if (ref?.firstChild) {
+            ref.removeChild(ref.firstChild);
           }
           ref?.appendChild(this.props.child);
         }}
