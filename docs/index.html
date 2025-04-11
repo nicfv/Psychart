@@ -58,15 +58,17 @@
     <div id="data-input">
         <form action="javascript:void(0);">
             <h3>Data Input</h3>
-            <input type="number" id="db">
-            <label for="db">Dry Bulb (&deg;C/&deg;F)</label>
-            <input type="number" id="state2">
-            <input type="radio" name="measurementType" id="measurementType_dbwb" checked>
-            <label for="measurementType_dbwb">Wet Bulb (&deg;C/&deg;F)</label>
-            <input type="radio" name="measurementType" id="measurementType_dbdp">
-            <label for="measurementType_dbdp">Dew Point (&deg;C/&deg;F)</label>
-            <input type="radio" name="measurementType" id="measurementType_dbrh">
-            <label for="measurementType_dbrh">Humidity (0%-100%)</label>
+            <div>
+                <input type="number" id="db">
+                <label for="db">Dry Bulb (&deg;C/&deg;F)</label>
+                <input type="number" id="state2">
+                <input type="radio" name="measurementType" id="measurementType_dbwb" checked>
+                <label for="measurementType_dbwb">Wet Bulb (&deg;C/&deg;F)</label>
+                <input type="radio" name="measurementType" id="measurementType_dbdp">
+                <label for="measurementType_dbdp">Dew Point (&deg;C/&deg;F)</label>
+                <input type="radio" name="measurementType" id="measurementType_dbrh">
+                <label for="measurementType_dbrh">Humidity (0%-100%)</label>
+            </div>
             <input type="button" id="btnClear" value="Clear">
             <input type="button" id="btnPlot" value="Plot">
             <div class="clear"></div>
