@@ -31,11 +31,7 @@
             <input type="number" id="alt" step="10" value="0">
             <label for="alt">Altitude (m/ft)</label><br>
             <input type="checkbox" id="flip">
-            <label for="flip">Flip X and Y to render a Mollier Diagram</label><br>
-            <input type="checkbox" id="adv">
-            <label for="adv">Advanced mode: Additionally calculate humidity ratio, vapor pressure, enthalpy, and
-                specific volume. (Psychart calculates dry bulb, wet bulb, dew point, and relative humidity by
-                default.)</label>
+            <label for="flip">Flip X and Y to render a Mollier Diagram</label>
             <h3>ASHRAE-55 Zones for Human Comfort</h3>
             <span id="ashrae-55-container"></span>
             <h3>Givoni Zones for Human Comfort</h3>
@@ -44,12 +40,6 @@
             <span id="ashrae-dc-container"></span>
             <h3>IBM TS4500 Tape Storage Unit</h3>
             <span id="ibm-ts4500-container"></span>
-            <h3>Visual Options</h3>
-            <span id="gradicon"></span>
-            <select id="gradient"></select>
-            <label for="gradient">Color Gradient</label>
-            <input type="range" id="ptRad" step="1" min="1" max="10" value="5"><label for="ptRad">Point Radius</label>
-            <input type="checkbox" id="ptLine"><label for="ptLine">Connect with a line?</label>
             <input type="button" id="btnGenerate" value="Confirm">
             <div class="clear"></div>
         </form>
@@ -73,6 +63,13 @@
                 <label for="measurementType_dbdp">Dew Point (&deg;C/&deg;F)</label>
                 <input type="radio" name="measurementType" id="measurementType_dbrh">
                 <label for="measurementType_dbrh">Humidity (0%-100%)</label>
+                <br>
+                <input type="range" id="ptRad" step="1" min="1" max="10" value="5">
+                <label for="ptRad">Point Radius</label>
+                <input type="checkbox" id="ptLine">
+                <label for="ptLine">Connect with a line?</label>
+                <input type="checkbox" id="adv">
+                <label for="adv">Calculate advanced state variables?</label>
             </div>
             <input type="button" id="btnClear" value="Clear">
             <input type="button" id="btnPlot" value="Plot">

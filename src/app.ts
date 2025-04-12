@@ -1,9 +1,7 @@
-import { getColors, GradientNames } from 'defaults';
+import { getColors } from 'defaults';
 import { DataOptions, Psychart } from 'psychart';
-import { Palette, PaletteName } from 'viridis';
 
-let ps: Psychart,
-    dataOpts: Partial<DataOptions>;
+let ps: Psychart;
 
 const setVisibility = (id: string, visible: boolean): string => document.getElementById(id)!.style.display = visible ? 'block' : 'none',
     getCheckedState = (id: string): boolean => (document.getElementById(id) as HTMLInputElement)?.checked,
@@ -44,43 +42,6 @@ Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
     parent?.appendChild(linebreak);
 });
 
-// Add gradient dropdown options
-GradientNames.forEach(name => {
-    const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
-    document.getElementById('gradient')?.appendChild(option);
-});
-
-(document.getElementById('gradient') as HTMLSelectElement).addEventListener('change', updateIcon);
-
-// Define a function to update the icon associated with the gradient.
-function updateIcon(): void {
-    const base: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
-        icon: SVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect'),
-        gradientName: PaletteName = getStringValue('gradient') as PaletteName,
-        gradicon: HTMLSpanElement = document.getElementById('gradicon')!,
-        size = 12;
-    base.setAttribute('x', '0');
-    base.setAttribute('y', '0');
-    base.setAttribute('width', size.toString());
-    base.setAttribute('height', size.toString());
-    base.setAttribute('viewBox', '0 0 ' + size + ' ' + size);
-    icon.setAttribute('x', '0');
-    icon.setAttribute('y', '0');
-    icon.setAttribute('width', size.toString());
-    icon.setAttribute('height', size.toString());
-    icon.setAttribute('rx', (size * 0.2).toString());
-    icon.setAttribute('fill', 'url(#g1)');
-    base.appendChild(Palette[gradientName].toSVG('g1'));
-    base.appendChild(icon);
-    while (gradicon.firstChild) {
-        gradicon.removeChild(gradicon.firstChild);
-    }
-    gradicon.append(base);
-}
-updateIcon();
-
 setOnClick('btnGenerate', () => {
     const dbMin = getNumericValue('db_min'),
         dbMax = getNumericValue('db_max'),
@@ -103,13 +64,6 @@ setOnClick('btnGenerate', () => {
             major: getCheckedState('unitSystem_SI') ? { humRat: 5, relHum: 10, temp: 5 } : { humRat: 5, relHum: 10, temp: 10 },
             unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
         });
-        dataOpts = {
-            advanced: getCheckedState('adv'),
-            gradient: getStringValue('gradient'),
-            line: getCheckedState('ptLine'),
-            pointRadius: getNumericValue('ptRad'),
-            relHumType: 'percent',
-        } as DataOptions;
         document.getElementById('svg-container')?.appendChild(ps.getElement());
         setVisibility('generator', false);
         setVisibility('svg-container', true);
@@ -119,10 +73,15 @@ setOnClick('btnGenerate', () => {
 
 setOnClick('btnPlot', () => {
     const db: number = getNumericValue('db'),
-        state2: number = getNumericValue('state2'),
-        name: string = getStringValue('name'),
-        color: string = getStringValue('color');
-    dataOpts = { ...dataOpts, color: color, name: name };
+        state2: number = getNumericValue('state2');
+    const dataOpts: Partial<DataOptions> = {
+        advanced: getCheckedState('adv'),
+        color: getStringValue('color'),
+        line: getCheckedState('ptLine'),
+        name: getStringValue('name'),
+        pointRadius: getNumericValue('ptRad'),
+        relHumType: 'percent',
+    };
     if (getCheckedState('measurementType_dbwb')) {
         if (state2 > db) {
             alert('Wet bulb is greater than dry bulb temperature!');
