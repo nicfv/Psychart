@@ -48,5 +48,5 @@ ci/
 # Custom
 .DS_Store
 .backup
-docs/app.js
+docs/*.js
 docs/*.svg
