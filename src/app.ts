@@ -1,7 +1,7 @@
 import { getColors } from 'defaults';
 import { DataOptions, Psychart } from 'psychart';
 
-let ps: Psychart;
+let psychart: Psychart;
 
 const setVisibility = (id: string, visible: boolean): string => document.getElementById(id)!.style.display = visible ? 'block' : 'none',
     getCheckedState = (id: string): boolean => (document.getElementById(id) as HTMLInputElement)?.checked,
@@ -10,12 +10,12 @@ const setVisibility = (id: string, visible: boolean): string => document.getElem
     setOnClick = (id: string, onclick: () => void): void => document.getElementById(id)?.addEventListener('click', onclick),
     isDarkTheme = (): boolean => window.matchMedia("(prefers-color-scheme: dark)").matches;
 
+// Set chart and data input invisible
 setVisibility('svg-container', false);
 setVisibility('data-input', false);
 
 // Set the window icon
-document.querySelector('link[rel=icon]')
-    ?.setAttribute('href', require('img/logo.svg'));
+document.querySelector('link[rel=icon]')!.setAttribute('href', require('img/logo.svg'));
 
 // Create region checkboxes
 Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
@@ -51,7 +51,7 @@ setOnClick('btnGenerate', () => {
     } else if (dpMax > dbMax) {
         alert('Dew point max should be less than or equal to dry bulb max.');
     } else {
-        ps = new Psychart({
+        psychart = new Psychart({
             altitude: getNumericValue('alt'),
             dbMax: dbMax,
             dbMin: dbMin,
@@ -64,7 +64,7 @@ setOnClick('btnGenerate', () => {
             major: getCheckedState('unitSystem_SI') ? { humRat: 5, relHum: 10, temp: 5 } : { humRat: 5, relHum: 10, temp: 10 },
             unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
         });
-        document.getElementById('svg-container')?.appendChild(ps.getElement());
+        document.getElementById('svg-container')?.appendChild(psychart.getElement());
         setVisibility('generator', false);
         setVisibility('svg-container', true);
         setVisibility('data-input', true);
@@ -86,25 +86,25 @@ setOnClick('btnPlot', () => {
         if (state2 > db) {
             alert('Wet bulb is greater than dry bulb temperature!');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbwb' }, dataOpts);
+            psychart.plot({ db: db, other: state2, measurement: 'dbwb' }, dataOpts);
         }
     } else if (getCheckedState('measurementType_dbdp')) {
         if (state2 > db) {
             alert('Dew point is greater than dry bulb temperature!');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbdp' }, dataOpts);
+            psychart.plot({ db: db, other: state2, measurement: 'dbdp' }, dataOpts);
         }
     } else if (getCheckedState('measurementType_dbrh')) {
         if (state2 < 0 || state2 > 100) {
             alert('Relative humidity is out of bounds! [0%-100%]');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbrh' }, dataOpts);
+            psychart.plot({ db: db, other: state2, measurement: 'dbrh' }, dataOpts);
         }
     }
 });
 
 setOnClick('btnClear', () => {
     if (confirm('This will clear ALL data. Are you sure?')) {
-        ps.clearData();
+        psychart.clearData();
     }
 });
