@@ -13,7 +13,7 @@
     "e2e": "playwright test",
     "server": "docker compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
-    "clean": "rm -rf dist node_modules package-lock.json .eslintcache .backup docs/app.js docs/*.svg",
+    "clean": "rm -rf dist node_modules package-lock.json .eslintcache .backup docs/*.js docs/*.svg",
     "docs": "webpack -c ./webpack.config.docs.ts"
   },
   "author": "Nicolas Ventura",
