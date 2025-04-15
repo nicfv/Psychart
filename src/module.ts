@@ -5,6 +5,7 @@ import { Psychart } from 'psychart';
 import { clean, format, getFieldList } from './formatter';
 import { defaultDataOptions, defaultGrafanaOptions, GradientNames } from './defaults';
 import { PaletteName } from 'viridis';
+import { getURL } from 'icon';
 
 export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanelOptions((builder, context) => {
   context.options = clean(context.options ?? {}, defaultGrafanaOptions);
@@ -315,7 +316,7 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
                   return {
                     value: name,
                     label: name,
-                    imgUrl: require('img/' + name.toLowerCase() + '.svg'),
+                    imgUrl: getURL(name, 10, 2),
                   } as SelectableValue<PaletteName>;
                 }),
               },
