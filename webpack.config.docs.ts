@@ -5,7 +5,6 @@ const config: webpack.Configuration = {
     mode: 'production',
     entry: {
         'app': './src/app.ts',
-        'icon': './src/igen.ts',
     },
     output: {
         filename: '[name].js',
