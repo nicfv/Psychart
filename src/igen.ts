@@ -1,18 +1,22 @@
-import fs from 'fs';
 import { GradientNames } from './defaults';
 import { Gradient, Palette } from 'viridis';
 
+const sizePx = 10;
+
 for (const name of GradientNames) {
-    const gradient: Gradient = Palette[name],
+    const safeName: string = name.toLowerCase().replaceAll(' ', '_'),
+        gradient: Gradient = Palette[name],
         base: SVGSVGElement = document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
         icon: SVGRectElement = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    base.append(gradient.toSVG('grad'), icon);
-    icon.setAttribute('fill', 'url(#grad)');
-    base.setAttribute('viewBox', '0 0 10 10');
+    base.setAttribute('width', sizePx.toString());
+    base.setAttribute('height', sizePx.toString());
+    base.setAttribute('viewBox', '0 0 ' + sizePx + ' ' + sizePx);
+    base.append(gradient.toSVG(safeName), icon);
+    icon.setAttribute('fill', 'url(#' + safeName + ')');
     icon.setAttribute('x', '0');
     icon.setAttribute('y', '0');
-    icon.setAttribute('width', '10');
-    icon.setAttribute('height', '10');
+    icon.setAttribute('width', sizePx.toString());
+    icon.setAttribute('height', sizePx.toString());
     icon.setAttribute('rx', '2');
-    fs.writeFileSync('src/img/' + name.toLowerCase() + '.svg', base.outerHTML);
+    document.body.append(base, name);
 }
