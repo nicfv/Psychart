@@ -23,8 +23,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
       },
       "fieldConfig": {
         "defaults": {},
@@ -36,61 +36,30 @@
         "x": 0,
         "y": 0
       },
-      "id": 1,
+      "id": 3,
       "options": {
-        "altitude": 100,
-        "count": 3,
+        "altitude": 0,
+        "count": 1,
         "dbMax": 120,
         "dbMin": 20,
         "dpMax": 90,
-        "flipXY": false,
         "major": {
           "humRat": 10,
           "relHum": 10,
           "temp": 10
         },
         "mollier": false,
-        "regions": [
-          "Data Center A4",
-          "Data Center A3",
-          "Data Center A2",
-          "Data Center A1",
-          "Data Center Recommended (low pollutants)",
-          "Data Center Recommended (high pollutants)"
-        ],
         "series": {
           "0": {
             "advanced": true,
-            "dryBulb": "Max",
-            "gradient": "Parula",
+            "dryBulb": "dry bulb",
+            "gradient": "Viridis",
             "line": false,
-            "measurement": "dbdp",
-            "other": "Min",
+            "measurement": "dbrh",
+            "other": "rel hum",
             "pointRadius": 10,
             "relHumType": "percent",
-            "seriesName": "${bldg} Room 1"
-          },
-          "1": {
-            "advanced": false,
-            "dryBulb": "Max",
-            "gradient": "Warm",
-            "line": false,
-            "measurement": "dbwb",
-            "other": "Value",
-            "pointRadius": 5,
-            "relHumType": "percent",
-            "seriesName": "${bldg} Room 2"
-          },
-          "2": {
-            "advanced": false,
-            "dryBulb": "Value",
-            "gradient": "Bee",
-            "line": false,
-            "measurement": "dbwb",
-            "other": "Min",
-            "pointRadius": 5,
-            "relHumType": "percent",
-            "seriesName": "${bldg} Room 3"
+            "seriesName": "Calculation"
           }
         },
         "showLegend": true,
@@ -99,16 +68,27 @@
       "pluginVersion": "4.5.4",
       "targets": [
         {
-          "channel": "plugin/testdata/random-2s-stream",
+          "alias": "dry bulb",
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
           },
-          "queryType": "measurements",
-          "refId": "A"
+          "refId": "A",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "${db},${db}"
+        },
+        {
+          "alias": "rel hum",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "trlxrdZVk"
+          },
+          "refId": "B",
+          "scenarioId": "csv_metric_values",
+          "stringInput": "${rh},${rh}"
         }
       ],
-      "title": "Psychart ${bldg}",
+      "title": "Psycalc",
       "type": "ventura-psychrometric-panel"
     },
     {
@@ -192,6 +172,96 @@
       ],
       "title": "Mollier Example",
       "type": "ventura-psychrometric-panel"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 1,
+      "options": {
+        "altitude": 100,
+        "count": 3,
+        "dbMax": 120,
+        "dbMin": 20,
+        "dpMax": 90,
+        "flipXY": false,
+        "major": {
+          "humRat": 10,
+          "relHum": 10,
+          "temp": 10
+        },
+        "mollier": false,
+        "regions": [
+          "Data Center A4",
+          "Data Center A3",
+          "Data Center A2",
+          "Data Center A1",
+          "Data Center Recommended (low pollutants)",
+          "Data Center Recommended (high pollutants)"
+        ],
+        "series": {
+          "0": {
+            "advanced": true,
+            "dryBulb": "Max",
+            "gradient": "Parula",
+            "line": false,
+            "measurement": "dbdp",
+            "other": "Min",
+            "pointRadius": 10,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 1"
+          },
+          "1": {
+            "advanced": false,
+            "dryBulb": "Max",
+            "gradient": "Warm",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Value",
+            "pointRadius": 5,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 2"
+          },
+          "2": {
+            "advanced": false,
+            "dryBulb": "Value",
+            "gradient": "Bee",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Min",
+            "pointRadius": 5,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 3"
+          }
+        },
+        "showLegend": true,
+        "unitSystem": "IP"
+      },
+      "pluginVersion": "4.5.4",
+      "targets": [
+        {
+          "channel": "plugin/testdata/random-2s-stream",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Psychart ${bldg}",
+      "type": "ventura-psychrometric-panel"
     }
   ],
   "preload": false,
@@ -217,6 +287,41 @@
         ],
         "query": "B1",
         "type": "textbox"
+      },
+      {
+        "current": {
+          "text": "68",
+          "value": "68"
+        },
+        "label": "Dry Bulb",
+        "name": "db",
+        "options": [
+          {
+            "selected": true,
+            "text": "68",
+            "value": "68"
+          }
+        ],
+        "query": "68",
+        "type": "textbox"
+      },
+      {
+        "current": {
+          "text": "50",
+          "value": "50"
+        },
+        "description": "0% - 100%",
+        "label": "Relative Humidity",
+        "name": "rh",
+        "options": [
+          {
+            "selected": true,
+            "text": "50",
+            "value": "50"
+          }
+        ],
+        "query": "50",
+        "type": "textbox"
       }
     ]
   },
@@ -228,6 +333,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }
