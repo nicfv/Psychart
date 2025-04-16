@@ -52,11 +52,11 @@
     "screenshots": [
       {
         "name": "The panel editor options",
-        "path": "../screenshots/editor-1.png"
+        "path": "img/editor-1.png"
       },
       {
         "name": "Hovering over a data point",
-        "path": "../screenshots/hover.png"
+        "path": "img/hover.png"
       }
     ],
     "version": "%VERSION%",
