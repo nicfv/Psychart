@@ -1,16 +1,12 @@
 # Changelog
 
-## 5.0.1 (Unreleased)
-
-- Add build attestation in workflow
-- Minor updates in main README (e.g. mention variable interpolation)
-
 ## 5.0.0
 
 - Break out Psychart source code into its own [npm package](https://www.npmjs.com/package/psychart). Major updates include:
     - Adding a legend! Legend is interactive; clicking on a series name in the legend will toggle its points visibility
     - Mollier diagrams now will show humidity ratio on their x-axis, instead of dew point
     - Units are shown both on the axis labels and in the axis tooltips
+    - Psychart now calculates degree of saturation, which can be shown in "advanced" mode!
 - Standalone app: Enter data display options after generating chart, and while plotting data
 - Add more examples and instructions into the provisioning dashboard
 - Remove all screenshots, new screenshots of new version will be added in a future update
@@ -23,7 +19,8 @@
     - Remove "enabled" switch (since series can now be hidden by simply clicking on their name in the legend)
 - Re-package new screenshots with the plugin
 - Add (empty) unit tests file
-- Update readme file
+- Minor updates in main README (e.g. mention variable interpolation)
+- Add build attestation in Grafana workflow
 - Update to the latest version of `@grafana/create-plugin` (5.19.5)
 
 ## 4.5.4
