@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.1 (Unreleased)
+
+- Add build attestation in workflow
+- Minor updates in main README (e.g. mention variable interpolation)
+
 ## 5.0.0
 
 - Break out Psychart source code into its own [npm package](https://www.npmjs.com/package/psychart). Major updates include:
