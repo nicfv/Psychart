@@ -3,9 +3,8 @@ import { GrafanaPsychartOptions } from './types';
 import { PsyPanel } from './components/panel';
 import { Psychart } from 'psychart';
 import { clean, format, getFieldList } from './formatter';
-import { defaultDataOptions, defaultGrafanaOptions, GradientNames } from './defaults';
+import { defaultDataOptions, defaultGrafanaOptions, Gradients } from './defaults';
 import { PaletteName } from 'viridis';
-import { getURL } from 'icon';
 
 export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanelOptions((builder, context) => {
   context.options = clean(context.options ?? {}, defaultGrafanaOptions);
@@ -312,11 +311,11 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
               settings: {
                 allowCustomValue: false,
                 isClearable: false,
-                options: GradientNames.map(name => {
+                options: Gradients.map(grad => {
                   return {
-                    value: name,
-                    label: name,
-                    imgUrl: getURL(name, 10, 2),
+                    value: grad.name,
+                    label: grad.name,
+                    imgUrl: grad.url,
                   } as SelectableValue<PaletteName>;
                 }),
               },

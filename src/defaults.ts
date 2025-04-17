@@ -1,6 +1,7 @@
 import { Palette, PaletteName } from 'viridis';
 import { GrafanaDataOptions, GrafanaPsychartOptions } from './types';
 import { PsychartOptions } from 'psychart';
+import { getURL } from 'icon';
 
 /**
  * Get the default colors for this theme.
@@ -16,7 +17,7 @@ export function getColors(darkTheme: boolean): PsychartOptions['colors'] {
 /**
  * The list of all selectable gradient names.
  */
-export const GradientNames: PaletteName[] = Object.keys(Palette).filter(name => name !== getColors(false).regionGradient).map(name => name as PaletteName);
+export const Gradients: Array<{ name: PaletteName, url: string }> = Object.keys(Palette).filter(name => name !== getColors(false).regionGradient).map(name => { return { name: name as PaletteName, url: getURL(name as PaletteName, 10, 2) } });
 
 /**
  * Default options for Psychart.
