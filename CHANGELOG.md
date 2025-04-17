@@ -18,6 +18,7 @@
     - Remove "enabled" switch (since series can now be hidden by simply clicking on their name in the legend)
 - Re-package new screenshots with the plugin
 - Add (empty) unit tests file
+- Update readme file
 - Update to the latest version of `@grafana/create-plugin` (5.19.5)
 
 ## 4.5.4
