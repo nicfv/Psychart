@@ -98,29 +98,3 @@ Psychart was created by Nicolas Ventura, owned by Berkeley Lab, a DOE funded nat
 | `%PLUGIN_ID%` | `%TODAY%` | `%VERSION%` |
 
 [Copyright Notice](https://raw.githubusercontent.com/nicfv/Psychart/main/LEGAL)
-
-## Screenshots
-
-![Basic HVAC use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/basic.png)
-*Basic HVAC use case: Air handler supply conditions for a data center*
-
-![Outdoor weather use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/outdoor.png)
-*Outdoor weather conditions use case*
-
-![Psychart with SI Units](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/si.png)
-*Using Psychart with SI units*
-
-![HVAC design use case](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/psycalc.png)
-*HVAC design use case: Using Psychart as a psychrometric calculator*
-
-![Panel editor](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/editor.png)
-*An example of the standard panel editor for Psychart*
-
-![Multi Series #1](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multiseries1.png)
-*Multiple data series on the same chart*
-
-![Multi Series #2](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/multiseries2.png)
-*Psychart can handle a lot of data at once*
-
-![Mollier Diagram](https://raw.githubusercontent.com/nicfv/Psychart/main/screenshots/mollier.png)
-*Usage of Psychart to render a [Mollier Diagram](https://en.wikipedia.org/wiki/Enthalpy%E2%80%93entropy_chart)*
