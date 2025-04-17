@@ -16,7 +16,7 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
     } as SelectableValue;
   });
   // Delete data options that shouldn't be rendered
-  for (let key in context.options.series) {
+  for (const key in context.options.series) {
     if (+key >= context.options.count) {
       delete context.options.series[+key];
     }
