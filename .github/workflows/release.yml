@@ -7,7 +7,11 @@ on:
     tags:
       - 'v*' # Run workflow on version tags, e.g. v1.0.0.
 
-permissions: read-all
+# https://grafana.com/developers/plugin-tools/publish-a-plugin/build-automation#enable-provenance-attestation
+permissions:
+  id-token: write
+  contents: write
+  attestations: write
 
 jobs:
   release:
