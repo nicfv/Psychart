@@ -71,7 +71,7 @@ Different data series are independent from one another - one series may incorpor
 
 This section configures each individual data series.
 
-First, a legend must be set. This will name your data series as well as add a label when hovering the cursor over the plotted data. Then, select the 2 data series which represent the 2 psychrometric measurements.
+First, a legend must be set. This will name your data series as well as add a label when hovering the cursor over the plotted data. This supports Grafana dashboard variables, written as `${variable}`. After the legend name is set, then select the 2 data series that represent the 2 psychrometric measurements to fix the state.
 
 The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the more saturated/contrasting colors for the more recent data points, regardless of which theme (light/dark) is preferred. The user can also optionally select to view more state variables here.
 
