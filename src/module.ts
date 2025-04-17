@@ -1,21 +1,22 @@
 import { PanelPlugin, SelectableValue } from '@grafana/data';
-import { DataSeries, PsyOptions } from 'types';
-import { PsyPanel } from 'panel';
+import { GrafanaPsychartOptions } from './types';
+import { PsyPanel } from './components/panel';
 import { Psychart } from 'psychart';
-import { format, getFieldList } from 'formatter';
-import { cleanDataOptions, cleanPsyOptions } from 'validator';
+import { clean, format, getFieldList } from './formatter';
+import { defaultDataOptions, defaultGrafanaOptions, Gradients } from './defaults';
+import { PaletteName } from 'viridis';
 
-export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((builder, context) => {
-  context.options = cleanPsyOptions(context.options || {});
+export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanelOptions((builder, context) => {
+  context.options = clean(context.options ?? {}, defaultGrafanaOptions);
   // Generate a list of valid field options
   const fieldOptions: Array<SelectableValue<string>> = getFieldList(format(context.data)).map(f => {
     return {
       label: f,
       value: f,
-    };
+    } as SelectableValue;
   });
   // Delete data options that shouldn't be rendered
-  for (let key in context.options.series) {
+  for (const key in context.options.series) {
     if (+key >= context.options.count) {
       delete context.options.series[+key];
     }
@@ -40,6 +41,13 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
           },
         ],
       },
+    })
+    .addBooleanSwitch({
+      path: 'showLegend',
+      name: 'Show Legend',
+      description: 'Display the legend in the panel.',
+      defaultValue: context.options.showLegend,
+      category: ['Chart options'],
     })
     .addNumberInput({
       path: 'altitude',
@@ -92,10 +100,10 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
       },
     })
     .addBooleanSwitch({
-      path: 'flipXY',
-      name: 'Flip XY',
+      path: 'mollier',
+      name: 'Mollier',
       description: 'Render a Mollier diagram (EU) instead of a standard (US) psychrometric chart.',
-      defaultValue: context.options.flipXY,
+      defaultValue: context.options.mollier,
       category: ['Chart options'],
     })
     .addMultiSelect({
@@ -114,6 +122,54 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         }),
       },
     })
+    .addNestedOptions<GrafanaPsychartOptions['major']>({
+      path: 'major',
+      category: ['Chart options'],
+      build(subbuilder, subcontext) {
+        subcontext.options = subcontext.options || defaultGrafanaOptions.major;
+        subbuilder
+          .addNumberInput({
+            path: 'temp',
+            name: 'Temperature',
+            description: 'The major interval between temperature axes in the units provided.',
+            defaultValue: subcontext.options.temp,
+            category: ['Axis Intervals'],
+            settings: {
+              step: 1,
+              min: 1,
+              max: 100,
+              placeholder: subcontext.options.temp.toString(),
+            },
+          })
+          .addNumberInput({
+            path: 'humRat',
+            name: 'Humidity Ratio',
+            description: 'The major interval between humidity ratio axes in the units provided.',
+            defaultValue: subcontext.options.humRat,
+            category: ['Axis Intervals'],
+            settings: {
+              step: 1,
+              min: 1,
+              max: 100,
+              placeholder: subcontext.options.humRat.toString(),
+            },
+            showIf: (x) => context.options!.mollier
+          })
+          .addNumberInput({
+            path: 'relHum',
+            name: 'Relative Humidity',
+            description: 'The major interval between relative humidity axes in percent.',
+            defaultValue: subcontext.options.relHum,
+            category: ['Axis Intervals'],
+            settings: {
+              step: 1,
+              min: 1,
+              max: 100,
+              placeholder: subcontext.options.relHum.toString(),
+            },
+          });
+      },
+    })
     .addNumberInput({
       path: 'count',
       name: 'Series Count',
@@ -128,7 +184,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         placeholder: 'Number of series',
       },
     })
-    .addNestedOptions<DataSeries>({
+    .addNestedOptions<GrafanaPsychartOptions['series']>({
       path: 'series',
       category: ['Data options'],
       build(subbuilder, subcontext) {
@@ -136,15 +192,15 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
         // Generate controls for data series
         for (let i = 0; i < context.options!.count; i++) {
           // Force clean data options
-          subcontext.options[i] = cleanDataOptions(subcontext.options[i] || {});
+          subcontext.options[i] = clean(subcontext.options[i] || {}, defaultDataOptions);
           // Use legend as subcategory or default string if none exists
-          const subcategory: string = subcontext.options[i].legend || 'Series ' + (i + 1);
+          const subcategory: string = subcontext.options[i].seriesName || 'Series ' + (i + 1);
           subbuilder
             .addTextInput({
-              path: i + '.legend',
+              path: i + '.seriesName',
               name: 'Legend',
               description: 'Add a label to this data series.',
-              defaultValue: undefined,
+              defaultValue: subcontext.options[i].seriesName,
               category: [subcategory],
               settings: {
                 maxLength: 50,
@@ -155,7 +211,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               path: i + '.measurement',
               name: 'Measurements',
               description: 'Select which series are being measured.',
-              defaultValue: subcontext.options![i].measurement,
+              defaultValue: subcontext.options[i].measurement,
               category: [subcategory],
               settings: {
                 allowCustomValue: false,
@@ -175,7 +231,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.dryBulb',
@@ -188,7 +244,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.other',
@@ -201,7 +257,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                 isClearable: true,
                 options: fieldOptions,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addRadio({
               path: i + '.relHumType',
@@ -223,7 +279,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                   },
                 ],
               },
-              showIf: (x) => !!(x[i].legend && x[i].measurement === 'dbrh'),
+              showIf: (x) => !!(x[i].seriesName && x[i].measurement === 'dbrh'),
             })
             .addSliderInput({
               path: i + '.pointRadius',
@@ -236,7 +292,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
                 max: 10,
                 step: 1,
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addBooleanSwitch({
               path: i + '.line',
@@ -244,7 +300,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               description: 'Connect data points with a line?',
               defaultValue: subcontext.options[i].line,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addSelect({
               path: i + '.gradient',
@@ -255,15 +311,15 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               settings: {
                 allowCustomValue: false,
                 isClearable: false,
-                options: Psychart.getGradientNames().map(name => {
+                options: Gradients.map(grad => {
                   return {
-                    value: name,
-                    label: name,
-                    imgUrl: Psychart.getGradientIcon(name),
-                  };
+                    value: grad.name,
+                    label: grad.name,
+                    imgUrl: grad.url,
+                  } as SelectableValue<PaletteName>;
                 }),
               },
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             })
             .addBooleanSwitch({
               path: i + '.advanced',
@@ -271,15 +327,7 @@ export const plugin = new PanelPlugin<PsyOptions>(PsyPanel).setPanelOptions((bui
               description: 'Additionally show humidity ratio, vapor pressure, enthalpy, and specific volume on hover.',
               defaultValue: subcontext.options[i].advanced,
               category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
-            })
-            .addBooleanSwitch({
-              path: i + '.enabled',
-              name: 'Enabled',
-              description: 'Optionally disable this series to hide it from the rendering when unchecked.',
-              defaultValue: subcontext.options[i].enabled,
-              category: [subcategory],
-              showIf: (x) => !!(x[i].legend),
+              showIf: (x) => !!(x[i].seriesName),
             });
         }
       },

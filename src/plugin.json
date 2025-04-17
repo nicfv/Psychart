@@ -51,8 +51,12 @@
     ],
     "screenshots": [
       {
-        "name": "Logo - See screenshots in README.md",
-        "path": "img/logo.svg"
+        "name": "The panel editor options",
+        "path": "img/editor-1.png"
+      },
+      {
+        "name": "Hovering over a data point",
+        "path": "img/hover.png"
       }
     ],
     "version": "%VERSION%",

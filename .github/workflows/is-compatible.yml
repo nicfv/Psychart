@@ -1,14 +1,5 @@
 name: Latest Grafana API compatibility check
-
-on:
-  push:
-    branches:
-      - master
-      - main
-  pull_request:
-    branches:
-      - master
-      - main
+on: [pull_request]
 
 jobs:
   compatibilitycheck:
@@ -25,4 +16,4 @@ jobs:
       - name: Build plugin
         run: npm run build
       - name: Compatibility check
-        run: npx @grafana/levitate@latest is-compatible --path src/module.ts --target @grafana/data,@grafana/ui,@grafana/runtime
+        run: npx --yes @grafana/levitate@latest is-compatible --path $(find ./src -type f \( -name "module.ts" -o -name "module.tsx" \)) --target @grafana/data,@grafana/ui,@grafana/runtime

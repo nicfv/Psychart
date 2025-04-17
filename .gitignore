@@ -8,6 +8,13 @@ yarn-error.log*
 
 node_modules/
 
+# yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
 # Runtime data
 pids
 *.pid
@@ -41,5 +48,5 @@ ci/
 # Custom
 .DS_Store
 .backup
-docs/app.js
+docs/*.js
 docs/*.svg

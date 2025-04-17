@@ -3,7 +3,6 @@
 usage() {
   echo "Usage: ${0} [ options ]"
   echo '  -h: Show this help message.'
-  echo '  -g: Starts or restarts Grafana.'
   echo '  -v: Validate the plugin using grafana/plugin-validator.'
   echo '  -P: Publish the plugin to Grafana with the latest version number in the'
   echo '      changelog. Computes a dry-run first and asks for confirmation.'
@@ -20,17 +19,14 @@ git_status() {
 # Print usage for no arguments
 [[ "${#}" -eq 0 ]] && usage
 
-grafana_restart=false
 validate_plugin=false
 force_cmd=false
 publishing=false
 update_plugin=false
 
 # Parse command line arguments
-while getopts ':hgvxPU' opt ; do
+while getopts ':hvxPU' opt ; do
   case "${opt}" in
-    'g')
-      grafana_restart=true ;;
     'v')
       validate_plugin=true ;;
     'x')
@@ -43,8 +39,6 @@ while getopts ':hgvxPU' opt ; do
       usage ;;
   esac
 done
-
-"${grafana_restart}" && brew services restart grafana
 
 "${validate_plugin}" && {
   plugin_id="$(grep '"id"' < src/plugin.json | sed -E 's/.*"id" *: *"(.*)".*/\1/')"

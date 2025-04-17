@@ -46,3 +46,17 @@ export function getFieldList(data: FormattedData): string[] {
   Object.values(data).forEach(point => store = { ...store, ...point });
   return Object.keys(store);
 }
+
+/**
+ * Set empty options of `dirty` to defaults.
+ * @param dirty Any object with similar keys to `T`
+ * @param defaultObj The default options for `T`
+ * @returns A cleaned-up object.
+ */
+export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
+  const cleaned: T = JSON.parse(JSON.stringify(defaultObj));
+  for (const key in cleaned) {
+      cleaned[key] = dirty[key] ?? defaultObj[key];
+  }
+  return cleaned;
+}

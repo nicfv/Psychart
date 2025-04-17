@@ -1,8 +1,7 @@
-import { Psychart } from 'psychart';
-import { Layout, PsyOptions } from 'types';
-import { PaletteName } from 'viridis';
+import { getColors } from 'defaults';
+import { DataOptions, Psychart } from 'psychart';
 
-let ps: Psychart;
+let psychart: Psychart;
 
 const setVisibility = (id: string, visible: boolean): string => document.getElementById(id)!.style.display = visible ? 'block' : 'none',
     getCheckedState = (id: string): boolean => (document.getElementById(id) as HTMLInputElement)?.checked,
@@ -11,12 +10,12 @@ const setVisibility = (id: string, visible: boolean): string => document.getElem
     setOnClick = (id: string, onclick: () => void): void => document.getElementById(id)?.addEventListener('click', onclick),
     isDarkTheme = (): boolean => window.matchMedia("(prefers-color-scheme: dark)").matches;
 
+// Set chart and data input invisible
 setVisibility('svg-container', false);
 setVisibility('data-input', false);
 
 // Set the window icon
-document.querySelector('link[rel=icon]')
-    ?.setAttribute('href', require('img/logo.svg'));
+document.querySelector('link[rel=icon]')!.setAttribute('href', require('img/logo.svg'));
 
 // Create region checkboxes
 Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
@@ -43,23 +42,6 @@ Psychart.getRegionNamesAndTips().forEach(([name, tip]) => {
     parent?.appendChild(linebreak);
 });
 
-// Add gradient dropdown options
-Psychart.getGradientNames().forEach(name => {
-    const option = document.createElement('option');
-    option.value = name;
-    option.textContent = name;
-    document.getElementById('gradient')?.appendChild(option);
-});
-
-(document.getElementById('gradient') as HTMLSelectElement).addEventListener('change', updateIcon);
-
-// Define a function to update the icon associated with the gradient.
-function updateIcon(): void {
-    (document.getElementById('gradicon') as HTMLImageElement)
-        .setAttribute('src', Psychart.getGradientIcon(getStringValue('gradient') as PaletteName));
-}
-updateIcon();
-
 setOnClick('btnGenerate', () => {
     const dbMin = getNumericValue('db_min'),
         dbMax = getNumericValue('db_max'),
@@ -69,37 +51,20 @@ setOnClick('btnGenerate', () => {
     } else if (dpMax > dbMax) {
         alert('Dew point max should be less than or equal to dry bulb max.');
     } else {
-        ps = new Psychart(
-            {
-                padding: { x: 40, y: 20 },
-                size: { x: 800, y: 600 },
-            } as Layout,
-            {
-                altitude: getNumericValue('alt'),
-                count: 1,
-                dbMax: dbMax,
-                dbMin: dbMin,
-                dpMax: dpMax,
-                flipXY: getCheckedState('flip'),
-                regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
-                series: {
-                    0: {
-                        advanced: getCheckedState('adv'),
-                        dryBulb: '',
-                        enabled: true,
-                        gradient: getStringValue('gradient'),
-                        legend: '',
-                        line: getCheckedState('ptLine'),
-                        measurement: 'dbdp',
-                        other: '',
-                        pointRadius: getNumericValue('ptRad'),
-                        relHumType: 'percent',
-                    }
-                },
-                unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
-            } as PsyOptions,
-            Psychart.getDefaultStyleOptions(isDarkTheme()));
-        document.getElementById('svg-container')?.appendChild(ps.getElement());
+        psychart = new Psychart({
+            altitude: getNumericValue('alt'),
+            dbMax: dbMax,
+            dbMin: dbMin,
+            dpMax: dpMax,
+            flipXY: getCheckedState('flip'),
+            yAxis: getCheckedState('flip') ? 'hr' : 'dp',
+            regions: Psychart.getRegionNamesAndTips().map(([name,]) => name).filter(name => getCheckedState(name)),
+            colors: getColors(isDarkTheme()),
+            flipGradients: isDarkTheme(),
+            major: getCheckedState('unitSystem_SI') ? { humRat: 5, relHum: 10, temp: 5 } : { humRat: 5, relHum: 10, temp: 10 },
+            unitSystem: getCheckedState('unitSystem_SI') ? 'SI' : 'IP',
+        });
+        document.getElementById('svg-container')?.appendChild(psychart.getElement());
         setVisibility('generator', false);
         setVisibility('svg-container', true);
         setVisibility('data-input', true);
@@ -107,31 +72,39 @@ setOnClick('btnGenerate', () => {
 });
 
 setOnClick('btnPlot', () => {
-    const db = getNumericValue('db'),
-        state2 = getNumericValue('state2');
+    const db: number = getNumericValue('db'),
+        state2: number = getNumericValue('state2');
+    const dataOpts: Partial<DataOptions> = {
+        advanced: getCheckedState('adv'),
+        color: getStringValue('color'),
+        line: getCheckedState('ptLine'),
+        name: getStringValue('name'),
+        pointRadius: getNumericValue('ptRad'),
+        relHumType: 'percent',
+    };
     if (getCheckedState('measurementType_dbwb')) {
         if (state2 > db) {
             alert('Wet bulb is greater than dry bulb temperature!');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbwb' });
+            psychart.plot({ db: db, other: state2, measurement: 'dbwb' }, dataOpts);
         }
     } else if (getCheckedState('measurementType_dbdp')) {
         if (state2 > db) {
             alert('Dew point is greater than dry bulb temperature!');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbdp' });
+            psychart.plot({ db: db, other: state2, measurement: 'dbdp' }, dataOpts);
         }
     } else if (getCheckedState('measurementType_dbrh')) {
         if (state2 < 0 || state2 > 100) {
             alert('Relative humidity is out of bounds! [0%-100%]');
         } else {
-            ps.plot({ db: db, other: state2, measurement: 'dbrh' });
+            psychart.plot({ db: db, other: state2, measurement: 'dbrh' }, dataOpts);
         }
     }
 });
 
 setOnClick('btnClear', () => {
     if (confirm('This will clear ALL data. Are you sure?')) {
-        ps.clearData();
+        psychart.clearData();
     }
 });

@@ -34,7 +34,11 @@ __webpack_public_path__ =
 `,
 });
 
-const config = async (env): Promise<Configuration> => {
+export type Env = {
+  [key: string]: true | string | Env;
+};
+
+const config = async (env: Env): Promise<Configuration> => {
   const baseConfig: Configuration = {
     cache: {
       type: 'filesystem',
@@ -71,17 +75,17 @@ const config = async (env): Promise<Configuration> => {
       'react-router-dom',
       'd3',
       'angular',
-      '@grafana/ui',
-      '@grafana/runtime',
-      '@grafana/data',
+      /^@grafana\/ui/i,
+      /^@grafana\/runtime/i,
+      /^@grafana\/data/i,
 
       // Mark legacy SDK imports as external if their name starts with the "grafana/" prefix
       ({ request }, callback) => {
         const prefix = 'grafana/';
-        const hasPrefix = (request) => request.indexOf(prefix) === 0;
-        const stripPrefix = (request) => request.substr(prefix.length);
+        const hasPrefix = (request: string) => request.indexOf(prefix) === 0;
+        const stripPrefix = (request: string) => request.substr(prefix.length);
 
-        if (hasPrefix(request)) {
+        if (request && hasPrefix(request)) {
           return callback(undefined, stripPrefix(request));
         }
 
@@ -176,6 +180,7 @@ const config = async (env): Promise<Configuration> => {
         keep: new RegExp(`(.*?_(amd64|arm(64)?)(.exe)?|go_plugin_build_manifest)`),
       },
       filename: '[name].js',
+      chunkFilename: env.production ? '[name].js?_cache=[contenthash]' : '[name].js',
       library: {
         type: 'amd',
       },
@@ -202,14 +207,14 @@ const config = async (env): Promise<Configuration> => {
           { from: 'plugin.json', to: '.' },
           { from: '../LICENSE', to: '.' },
           { from: '../CHANGELOG.md', to: '.', force: true },
-          { from: '**/*.json', to: '.' }, // TODO<Add an error for checking the basic structure of the repo>
-          { from: '**/*.svg', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.png', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/*.html', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'img/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'libs/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: 'static/**/*', to: '.', noErrorOnMissing: true }, // Optional
-          { from: '**/query_help.md', to: '.', noErrorOnMissing: true }, // Optional
+          { from: '**/*.json', to: '.' },
+          { from: '**/*.svg', to: '.', noErrorOnMissing: true },
+          { from: '**/*.png', to: '.', noErrorOnMissing: true },
+          { from: '**/*.html', to: '.', noErrorOnMissing: true },
+          { from: 'img/**/*', to: '.', noErrorOnMissing: true },
+          { from: 'libs/**/*', to: '.', noErrorOnMissing: true },
+          { from: 'static/**/*', to: '.', noErrorOnMissing: true },
+          { from: '**/query_help.md', to: '.', noErrorOnMissing: true },
         ],
       }),
       // Replace certain template-variables in the README and plugin.json

@@ -3,9 +3,11 @@ import webpack from 'webpack';
 
 const config: webpack.Configuration = {
     mode: 'production',
-    entry: './src/app.ts',
+    entry: {
+        'app': './src/app.ts',
+    },
     output: {
-        filename: 'app.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'docs'),
     },
     module: {
