@@ -22,10 +22,37 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "grafana-testdata-datasource",
-        "uid": "trlxrdZVk"
+      "description": "May need to scroll on small screens.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "- Hover over regions or points in each panel in the dashboard to view additional thermodynamic state information.\n- Click on entries in the legend to toggle the visibility of points/lines in that series.\n- Use the `building` variable to change some text in the `Psychart` panel.\n- Use the `dry bulb` and `relative humidity` variables to calculate a psychrometric state on the `Psycalc` panel.\n- Edit a panel to open the panel editor. Try changing graph bounds, toggling on/off regions, and changing data series gradients, for example.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.5.3",
+      "title": "Instructions",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "description": "Typical for American HVAC engineering.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -33,8 +60,99 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 0
+      },
+      "id": 1,
+      "options": {
+        "altitude": 100,
+        "count": 3,
+        "dbMax": 120,
+        "dbMin": 20,
+        "dpMax": 90,
+        "flipXY": false,
+        "major": {
+          "humRat": 10,
+          "relHum": 10,
+          "temp": 10
+        },
+        "mollier": false,
+        "regions": [
+          "Data Center A4",
+          "Data Center A3",
+          "Data Center A2",
+          "Data Center A1",
+          "Data Center Recommended (low pollutants)",
+          "Data Center Recommended (high pollutants)"
+        ],
+        "series": {
+          "0": {
+            "advanced": true,
+            "dryBulb": "Max",
+            "gradient": "Parula",
+            "line": false,
+            "measurement": "dbdp",
+            "other": "Min",
+            "pointRadius": 8,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 1"
+          },
+          "1": {
+            "advanced": false,
+            "dryBulb": "Max",
+            "gradient": "Inferno",
+            "line": false,
+            "measurement": "dbwb",
+            "other": "Value",
+            "pointRadius": 6,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 2"
+          },
+          "2": {
+            "advanced": false,
+            "dryBulb": "Value",
+            "gradient": "Bee",
+            "line": true,
+            "measurement": "dbwb",
+            "other": "Min",
+            "pointRadius": 4,
+            "relHumType": "percent",
+            "seriesName": "${bldg} Room 3"
+          }
+        },
+        "showLegend": true,
+        "unitSystem": "IP"
+      },
+      "pluginVersion": "4.5.4",
+      "targets": [
+        {
+          "channel": "plugin/testdata/random-2s-stream",
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "queryType": "measurements",
+          "refId": "A"
+        }
+      ],
+      "title": "Psychart ${bldg}",
+      "type": "ventura-psychrometric-panel"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "trlxrdZVk"
+      },
+      "description": "Use the variables above to calculate a state.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 6
       },
       "id": 3,
       "options": {
@@ -96,6 +214,7 @@
         "type": "datasource",
         "uid": "grafana"
       },
+      "description": "Typical for European HVAC engineering.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -104,7 +223,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 8
       },
       "id": 2,
       "options": {
@@ -123,36 +242,33 @@
         "regions": [
           "Summer (sitting)",
           "Summer (walking)",
-          "Summer (light work)"
+          "Summer (light work)",
+          "Winter (sitting)",
+          "Winter (walking)",
+          "Winter (light work)"
         ],
         "series": {
           "0": {
-            "advanced": true,
-            "color": "#000000",
+            "advanced": false,
             "dryBulb": "Value",
             "gradient": "Warm",
             "line": false,
             "measurement": "dbwb",
             "other": "Min",
-            "pointName": "",
-            "pointRadius": 10,
+            "pointRadius": 5,
             "relHumType": "percent",
-            "seriesName": "Wet Bulb",
-            "time": {}
+            "seriesName": "Wet Bulb"
           },
           "1": {
             "advanced": false,
-            "color": "#000000",
             "dryBulb": "Value",
             "gradient": "Cool",
             "line": false,
             "measurement": "dbdp",
             "other": "Min",
-            "pointName": "",
-            "pointRadius": 10,
+            "pointRadius": 5,
             "relHumType": "percent",
-            "seriesName": "Dew Point",
-            "time": {}
+            "seriesName": "Dew Point"
           }
         },
         "showLegend": true,
@@ -171,96 +287,6 @@
         }
       ],
       "title": "Mollier Example",
-      "type": "ventura-psychrometric-panel"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 8
-      },
-      "id": 1,
-      "options": {
-        "altitude": 100,
-        "count": 3,
-        "dbMax": 120,
-        "dbMin": 20,
-        "dpMax": 90,
-        "flipXY": false,
-        "major": {
-          "humRat": 10,
-          "relHum": 10,
-          "temp": 10
-        },
-        "mollier": false,
-        "regions": [
-          "Data Center A4",
-          "Data Center A3",
-          "Data Center A2",
-          "Data Center A1",
-          "Data Center Recommended (low pollutants)",
-          "Data Center Recommended (high pollutants)"
-        ],
-        "series": {
-          "0": {
-            "advanced": true,
-            "dryBulb": "Max",
-            "gradient": "Parula",
-            "line": false,
-            "measurement": "dbdp",
-            "other": "Min",
-            "pointRadius": 10,
-            "relHumType": "percent",
-            "seriesName": "${bldg} Room 1"
-          },
-          "1": {
-            "advanced": false,
-            "dryBulb": "Max",
-            "gradient": "Warm",
-            "line": false,
-            "measurement": "dbwb",
-            "other": "Value",
-            "pointRadius": 5,
-            "relHumType": "percent",
-            "seriesName": "${bldg} Room 2"
-          },
-          "2": {
-            "advanced": false,
-            "dryBulb": "Value",
-            "gradient": "Bee",
-            "line": false,
-            "measurement": "dbwb",
-            "other": "Min",
-            "pointRadius": 5,
-            "relHumType": "percent",
-            "seriesName": "${bldg} Room 3"
-          }
-        },
-        "showLegend": true,
-        "unitSystem": "IP"
-      },
-      "pluginVersion": "4.5.4",
-      "targets": [
-        {
-          "channel": "plugin/testdata/random-2s-stream",
-          "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
-          },
-          "queryType": "measurements",
-          "refId": "A"
-        }
-      ],
-      "title": "Psychart ${bldg}",
       "type": "ventura-psychrometric-panel"
     }
   ],
@@ -293,6 +319,7 @@
           "text": "68",
           "value": "68"
         },
+        "description": "Degrees F",
         "label": "Dry Bulb",
         "name": "db",
         "options": [
@@ -333,6 +360,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
