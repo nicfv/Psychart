@@ -19,7 +19,7 @@
     - Remove "enabled" switch (since series can now be hidden by simply clicking on their name in the legend)
 - Re-package new screenshots with the plugin
 - Add (empty) unit tests file
-- Minor updates in main README (e.g. mention variable interpolation)
+- Minor updates in main README (e.g. mention variable interpolation, fix broken link)
 - Add build attestation in Grafana workflow
 - Update to the latest version of `@grafana/create-plugin` (5.19.5)
 
