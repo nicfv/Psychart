@@ -1,4 +1,4 @@
-import { getColors } from 'defaults';
+import { getColors } from '../src/defaults';
 import { DataOptions, Psychart } from 'psychart';
 
 let psychart: Psychart;
