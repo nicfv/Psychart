@@ -39,6 +39,8 @@ jobs:
         run: |
           VERSION=$(grep version < package.json | grep -oE "[0-9]+\.[0-9]+\.[0-9]+")
           sed -i "s/%VERSION%/${VERSION}/" docs/*.html
+      - name: Remove source files
+        run: rm docs/*.ts
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
