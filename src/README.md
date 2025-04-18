@@ -26,7 +26,7 @@ Psychrometric charts are charts adopted by [ASHRAE](https://www.ashrae.org/) tha
 - Relative Humidity
   - A ratio of vapor pressure in the air to the saturation vapor pressure. 0%rh indicates absolutely dry air, and 100%rh indicates saturated air.
 
-Psychart also has the capability to derive the following state variables, which are optionally displayed using the _Show Advanced State Variables_ switch in [Display options](#display-options).
+Psychart also has the capability to derive the following state variables, which are optionally displayed using the _Show Advanced State Variables_ switch in [series display options](#series-display-options).
 
 - Vapor Pressure
   - The partial pressure of water in the vapor-air mixture.
@@ -73,7 +73,7 @@ This section configures each individual data series.
 
 First, a legend must be set. This will name your data series as well as add a label when hovering the cursor over the plotted data. This supports Grafana dashboard variables, written as `${variable}`. After the legend name is set, then select the 2 data series that represent the 2 psychrometric measurements to fix the state.
 
-The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the more saturated/contrasting colors for the more recent data points, regardless of which theme (light/dark) is preferred. The user can also optionally select to view more state variables here.
+The rest of the options change the visual appearance of data within the chart. This allows the user to change the point radius, optionally draw a line between adjacent points in time, and select a color gradient for the data series. Gradients always use the more saturated/contrasting colors for the more recent data points, regardless of which theme (light/dark) is preferred. The user can also optionally select to view the advanced state variables that were described in the introduction.
 
 ## Errors & Troubleshooting
 
