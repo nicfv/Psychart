@@ -4,7 +4,7 @@ import webpack from 'webpack';
 const config: webpack.Configuration = {
     mode: 'production',
     entry: {
-        'app': './src/app.ts',
+        'app': './docs/app.ts',
     },
     output: {
         filename: '[name].js',
