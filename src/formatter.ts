@@ -82,3 +82,14 @@ export function clean<T>(dirty: Partial<T>, defaultObj: T, overrides: Override<T
   }
   return cleaned;
 }
+
+/**
+ * Migrate an older set of panel options to a current model.
+ */
+export function migrate(panel: PanelModel) {
+  const options = Object.assign({}, panel.options);
+  console.log('Migrating: ' + JSON.stringify(options));
+  // v4.x.x -> v5.0.0
+  options['mollier'] = options['flipXY'] ?? defaultGrafanaOptions.mollier;
+  return options;
+}
