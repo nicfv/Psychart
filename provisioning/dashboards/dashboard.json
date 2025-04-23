@@ -76,7 +76,6 @@
           "relHum": 10,
           "temp": 10
         },
-        "mollier": false,
         "regions": [
           "Data Center A4",
           "Data Center A3",
@@ -166,7 +165,6 @@
           "relHum": 10,
           "temp": 10
         },
-        "mollier": false,
         "series": {
           "0": {
             "advanced": true,
@@ -232,13 +230,12 @@
         "dbMax": 40,
         "dbMin": 0,
         "dpMax": 25,
-        "flipXY": false,
+        "flipXY": true,
         "major": {
           "humRat": 5,
           "relHum": 20,
           "temp": 5
         },
-        "mollier": true,
         "regions": [
           "Summer (sitting)",
           "Summer (walking)",
