@@ -66,15 +66,19 @@ export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
  */
 export function migrate(panel: PanelModel) {
   const options = Object.assign({}, panel.options);
-  // v4.x.x -> v5.0.0
-  if ('flipXY' in options) {
-    options['mollier'] = options['flipXY'];
-    delete options['flipXY'];
-  }
-  for (const key in options['series']) {
-    if ('legend' in options['series'][key]) {
-      options['series'][key]['seriesName'] = options['series'][key]['legend'];
-      delete options['series'][key]['legend'];
+  const version = panel.pluginVersion ?? '';
+  if (version.startsWith('4.')) {
+    // `flipXY` was changed to `mollier`
+    if ('flipXY' in options) {
+      options['mollier'] = options['flipXY'];
+      delete options['flipXY'];
+    }
+    // `legend` was changed to `seriesName`
+    for (const key in options['series']) {
+      if ('legend' in options['series'][key]) {
+        options['series'][key]['seriesName'] = options['series'][key]['legend'];
+        delete options['series'][key]['legend'];
+      }
     }
   }
   return options;
