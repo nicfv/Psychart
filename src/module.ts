@@ -2,7 +2,7 @@ import { PanelPlugin, SelectableValue } from '@grafana/data';
 import { GrafanaPsychartOptions } from './types';
 import { PsyPanel } from './components/panel';
 import { Psychart } from 'psychart';
-import { clean, format, getFieldList } from './formatter';
+import { clean, format, getFieldList, migrate } from './formatter';
 import { defaultDataOptions, defaultGrafanaOptions, Gradients } from './defaults';
 import { PaletteName } from 'viridis';
 
@@ -332,4 +332,4 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
         }
       },
     });
-});
+}).setMigrationHandler(migrate);
