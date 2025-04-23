@@ -21,6 +21,7 @@
 - Add (empty) unit tests file
 - Minor updates in main README (e.g. mention variable interpolation, fix broken link)
 - Add build attestation in Grafana workflow
+- Add options migration handling from version 4.x.x to version 5.x.x
 - Update to the latest version of `@grafana/create-plugin` (5.19.5)
 
 ## 4.5.4
