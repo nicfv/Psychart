@@ -71,5 +71,11 @@ export function migrate(panel: PanelModel) {
     options['mollier'] = options['flipXY'];
     delete options['flipXY'];
   }
+  for (const key in options['series']) {
+    if ('legend' in options['series'][key]) {
+      options['series'][key]['seriesName'] = options['series'][key]['legend'];
+      delete options['series'][key]['legend'];
+    }
+  }
   return options;
 }
