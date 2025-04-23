@@ -1,5 +1,4 @@
 import { DataFrame, PanelModel } from '@grafana/data';
-import { defaultGrafanaOptions } from 'defaults';
 
 /**
  * Represents a single-dimensional data point in time.
@@ -67,8 +66,10 @@ export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
  */
 export function migrate(panel: PanelModel) {
   const options = Object.assign({}, panel.options);
-  console.log('Migrating: ' + JSON.stringify(options));
   // v4.x.x -> v5.0.0
-  options['mollier'] = options['flipXY'] ?? defaultGrafanaOptions.mollier;
+  if ('flipXY' in options) {
+    options['mollier'] = options['flipXY'];
+    delete options['flipXY'];
+  }
   return options;
 }
