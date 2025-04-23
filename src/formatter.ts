@@ -1,4 +1,5 @@
-import { DataFrame } from '@grafana/data';
+import { DataFrame, PanelModel } from '@grafana/data';
+import { defaultGrafanaOptions } from 'defaults';
 
 /**
  * Represents a single-dimensional data point in time.
@@ -48,15 +49,36 @@ export function getFieldList(data: FormattedData): string[] {
 }
 
 /**
+ * Represents an override used for options migration.
+ */
+export interface Override<T> {
+  /**
+   * The target key on the cleaned options
+   */
+  readonly cleanKey: keyof T;
+  /**
+   * The source key on the original options
+   */
+  readonly dirtyKey: string;
+  /**
+   * The default value, if neither exists
+   */
+  readonly defaultVal: any;
+}
+
+/**
  * Set empty options of `dirty` to defaults.
  * @param dirty Any object with similar keys to `T`
  * @param defaultObj The default options for `T`
  * @returns A cleaned-up object.
  */
-export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
+export function clean<T>(dirty: Partial<T>, defaultObj: T, overrides: Override<T>[] = []): T {
   const cleaned: T = JSON.parse(JSON.stringify(defaultObj));
   for (const key in cleaned) {
-      cleaned[key] = dirty[key] ?? defaultObj[key];
+    cleaned[key] = dirty[key] ?? defaultObj[key];
+  }
+  for (const override of overrides) {
+    cleaned[override.cleanKey] = cleaned[override.cleanKey] ?? dirty[override.dirtyKey as keyof T] ?? override.defaultVal;
   }
   return cleaned;
 }
