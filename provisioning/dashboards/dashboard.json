@@ -70,12 +70,12 @@
         "dbMax": 120,
         "dbMin": 20,
         "dpMax": 90,
-        "flipXY": false,
         "major": {
           "humRat": 10,
           "relHum": 10,
           "temp": 10
         },
+        "mollier": false,
         "regions": [
           "Data Center A4",
           "Data Center A3",
@@ -122,7 +122,7 @@
         "showLegend": true,
         "unitSystem": "IP"
       },
-      "pluginVersion": "4.5.4",
+      "pluginVersion": "0.0.0",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -165,6 +165,7 @@
           "relHum": 10,
           "temp": 10
         },
+        "mollier": false,
         "series": {
           "0": {
             "advanced": true,
@@ -181,7 +182,7 @@
         "showLegend": true,
         "unitSystem": "IP"
       },
-      "pluginVersion": "4.5.4",
+      "pluginVersion": "0.0.0",
       "targets": [
         {
           "alias": "dry bulb",
@@ -230,12 +231,12 @@
         "dbMax": 40,
         "dbMin": 0,
         "dpMax": 25,
-        "flipXY": true,
         "major": {
           "humRat": 5,
           "relHum": 20,
           "temp": 5
         },
+        "mollier": true,
         "regions": [
           "Summer (sitting)",
           "Summer (walking)",
@@ -271,7 +272,7 @@
         "showLegend": true,
         "unitSystem": "SI"
       },
-      "pluginVersion": "4.5.4",
+      "pluginVersion": "0.0.0",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -357,6 +358,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 6,
+  "version": 3,
   "weekStart": ""
 }
