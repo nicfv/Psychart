@@ -298,7 +298,7 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
               path: i + '.line',
               name: 'Show Line',
               description: 'Connect data points with a line?',
-              defaultValue: subcontext.options[i].line,
+              defaultValue: subcontext.options[i].line as boolean,
               category: [subcategory],
               showIf: (x) => !!(x[i].seriesName),
             })
