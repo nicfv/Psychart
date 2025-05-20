@@ -57,6 +57,10 @@
       {
         "name": "Hovering over a data point",
         "path": "img/hover.png"
+      },
+      {
+        "name": "Showing off multiple data series, overlayed on top of data center ASHRAE regions",
+        "path": "img/series-regions.png"
       }
     ],
     "version": "%VERSION%",
