@@ -20,10 +20,11 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         dpMax: props.options.dpMax,
         flipGradients: isDarkTheme,
         flipXY: props.options.mollier,
-        legend: {
+        legend: props.options.showLegend ? {
+          title: 'Legend',
           margin: { x: 0, y: 0 },
-          size: props.options.showLegend ? { x: props.width / 3, y: props.height / 3 } : { x: 0, y: 0 },
-        },
+          size: { x: props.width / 3, y: props.height / 3 },
+        } : false,
         major: props.options.major,
         regions: props.options.regions,
         size: { x: props.width, y: props.height },
