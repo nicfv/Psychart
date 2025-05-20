@@ -122,7 +122,7 @@
         "showLegend": true,
         "unitSystem": "IP"
       },
-      "pluginVersion": "0.0.0",
+      "pluginVersion": "5.0.0",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -179,10 +179,10 @@
             "seriesName": "Calculation"
           }
         },
-        "showLegend": true,
+        "showLegend": false,
         "unitSystem": "IP"
       },
-      "pluginVersion": "0.0.0",
+      "pluginVersion": "5.0.0",
       "targets": [
         {
           "alias": "dry bulb",
@@ -272,7 +272,7 @@
         "showLegend": true,
         "unitSystem": "SI"
       },
-      "pluginVersion": "0.0.0",
+      "pluginVersion": "5.0.0",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -358,6 +358,6 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
