@@ -1,5 +1,12 @@
 # Changelog
 
+## 5.0.1
+
+- Update to the latest version of `psychart` (0.5.0, [changelog](https://npm.nicfv.com/documents/psychart.CHANGELOG.html))
+    - Makes multiple panels of Psychart on the same dashboard, more robust, and skips generating the legend when it's toggled off
+- Add new screenshot to show off the ability to plot multiple data series
+- Update to the latest version of `@grafana/create-plugin` (5.22.1)
+
 ## 5.0.0
 
 - Break out Psychart source code into its own [npm package](https://www.npmjs.com/package/psychart). Major updates include:
