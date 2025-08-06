@@ -12,7 +12,9 @@ permissions: read-all
 jobs:
   release:
     permissions:
+      id-token: write # needed for attestation
       contents: write
+      attestations: write # needed for attestation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
