@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.2
+
+- Update to the latest version of `@grafana/create-plugin` (5.25.8)
+
 ## 5.0.1
 
 - Update to the latest version of `psychart` (0.5.0, [changelog](https://npm.nicfv.com/documents/psychart.CHANGELOG.html))
