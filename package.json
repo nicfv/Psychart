@@ -1,6 +1,6 @@
 {
   "name": "psychart",
-  "version": "0.0.0",
+  "version": "5.0.3",
   "description": "View air conditions on a psychrometric chart",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
