@@ -43,7 +43,7 @@
         "content": "- Hover over regions or points in each panel in the dashboard to view additional thermodynamic state information.\n- Click on entries in the legend to toggle the visibility of points/lines in that series.\n- Use the `building` variable to change some text in the `Psychart` panel.\n- Use the `dry bulb` and `relative humidity` variables to calculate a psychrometric state on the `Psycalc` panel.\n- Edit a panel to open the panel editor. Try changing graph bounds, toggling on/off regions, and changing data series gradients, for example.",
         "mode": "markdown"
       },
-      "pluginVersion": "11.5.3",
+      "pluginVersion": "12.2.0",
       "title": "Instructions",
       "type": "text"
     },
@@ -122,7 +122,7 @@
         "showLegend": true,
         "unitSystem": "IP"
       },
-      "pluginVersion": "5.0.0",
+      "pluginVersion": "5.0.2",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -182,7 +182,7 @@
         "showLegend": false,
         "unitSystem": "IP"
       },
-      "pluginVersion": "5.0.0",
+      "pluginVersion": "5.0.2",
       "targets": [
         {
           "alias": "dry bulb",
@@ -272,7 +272,7 @@
         "showLegend": true,
         "unitSystem": "SI"
       },
-      "pluginVersion": "5.0.0",
+      "pluginVersion": "5.0.2",
       "targets": [
         {
           "channel": "plugin/testdata/random-2s-stream",
@@ -290,7 +290,7 @@
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 40,
+  "schemaVersion": 42,
   "tags": [],
   "templating": {
     "list": [
@@ -358,6 +358,5 @@
   "timezone": "",
   "title": "Provisioned Psychart dashboard",
   "uid": "c23c26ef-1f07-4f1c-82fd-d0b4cdef1e24",
-  "version": 1,
-  "weekStart": ""
+  "version": 1
 }
