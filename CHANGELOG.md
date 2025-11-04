@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.4
+
+- Update to the latest version of `viridis` (1.3.1)
+- Update to the latest version of `@grafana/create-plugin` (6.1.7)
+
 ## 5.0.3
 
 - Update to the latest versions of `psychart` (0.6.1) and `viridis` (1.2.1)
