@@ -54,7 +54,6 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         }
       }
     }
-    // eslint-disable-next-line
     return <Container child={psychart.getElement()} />;
   } catch (ex: any) {
     return <PanelDataErrorView panelId={props.id} data={props.data} message={'' + ex} />;
