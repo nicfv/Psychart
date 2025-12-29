@@ -10,7 +10,7 @@ export function getColors(darkTheme: boolean): PsychartTypes.Options['colors'] {
     return {
         axis: darkTheme ? '#303030' : '#E0E0E0',
         font: darkTheme ? '#D0D0D0' : '#202020',
-        highlight: darkTheme ? '#444400' : '#FFFF00',
+        highlight: darkTheme ? '#555500' : '#FFFF00',
         regionGradient: 'Purplish',
     };
 }
