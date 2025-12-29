@@ -37,6 +37,7 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
     mollier: false,
     regions: [],
     series: [],
+    showAxisNames: true,
     showLegend: true,
     unitSystem: 'IP',
 };
