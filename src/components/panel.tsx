@@ -28,6 +28,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         } : false,
         major: props.options.major,
         regions: props.options.regions,
+        showAxisNames: props.options.showAxisNames,
         size: { x: props.width, y: props.height },
         unitSystem: props.options.unitSystem,
         yAxis: props.options.mollier ? 'hr' : 'dp',
