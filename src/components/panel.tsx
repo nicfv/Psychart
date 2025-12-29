@@ -10,6 +10,7 @@ import { PanelDataErrorView } from '@grafana/runtime';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) => {
   const isDarkTheme = useTheme2().isDark;
+  let psychartElement: HTMLDivElement;
   try {
     const psychart: Psychart = new Psychart(
       {
@@ -55,8 +56,13 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         }
       }
     }
-    return <Container child={psychart.getElement()} />;
+    psychartElement = psychart.getElement();
   } catch (ex: any) {
     return <PanelDataErrorView panelId={props.id} data={props.data} message={'' + ex} />;
+  }
+  if (psychartElement) {
+    return <Container child={psychartElement} />;
+  } else {
+    return <PanelDataErrorView panelId={props.id} data={props.data} message='A rendering error occurred.' />;
   }
 };
