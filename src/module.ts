@@ -43,6 +43,13 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
       },
     })
     .addBooleanSwitch({
+      path: 'showAxisNames',
+      name: 'Show Axis Names',
+      description: 'Display the axis names in the panel.',
+      defaultValue: context.options.showAxisNames,
+      category: ['Chart options'],
+    })
+    .addBooleanSwitch({
       path: 'showLegend',
       name: 'Show Legend',
       description: 'Display the legend in the panel.',
