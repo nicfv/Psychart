@@ -8,6 +8,7 @@ export interface GrafanaPsychartOptions {
     readonly major: PsychartTypes.Options['major'];
     readonly regions: PsychartTypes.Options['regions'];
     readonly unitSystem: PsychartTypes.Options['unitSystem'];
+    readonly showAxisNames: PsychartTypes.Options['showAxisNames'];
     readonly showLegend: boolean;
     readonly mollier: boolean;
     readonly count: number;
