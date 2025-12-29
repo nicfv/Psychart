@@ -15,6 +15,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
       {
         altitude: props.options.altitude,
         colors: getColors(isDarkTheme),
+        dAxis: props.options.mollier ? 'h' : 'wb',
         dbMax: props.options.dbMax,
         dbMin: props.options.dbMin,
         dpMax: props.options.dpMax,
@@ -53,6 +54,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         }
       }
     }
+    // eslint-disable-next-line
     return <Container child={psychart.getElement()} />;
   } catch (ex: any) {
     return <PanelDataErrorView panelId={props.id} data={props.data} message={'' + ex} />;
