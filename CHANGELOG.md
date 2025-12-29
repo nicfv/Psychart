@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased (5.0.4)
+## 5.1.0
 
 - Update to the latest version of `psychart` (0.10.0)
 - Update to the latest version of `viridis` (1.4.2)
