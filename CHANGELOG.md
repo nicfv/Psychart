@@ -3,6 +3,10 @@
 ## 5.1.0
 
 - Update to the latest version of `psychart` (0.10.0)
+    - Support ability to highlight points by clicking on them
+    - Some axes label texts are rotated to save space
+    - Render enthalpy instead of wet bulb for Mollier Diagrams
+    - Add option to show axes names
 - Update to the latest version of `viridis` (1.4.2)
 - Update to the latest version of `@grafana/create-plugin` (6.6.0)
 
