@@ -7,6 +7,7 @@
     - Some axes label texts are rotated to save space
     - Render enthalpy instead of wet bulb for Mollier Diagrams
     - Add option to show axes names
+    - Fix bug where point radius was actually setting the diameter
 - Update to the latest version of `viridis` (1.4.2)
 - Update to the latest version of `@grafana/create-plugin` (6.6.0)
 
