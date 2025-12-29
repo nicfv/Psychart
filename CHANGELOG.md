@@ -1,5 +1,16 @@
 # Changelog
 
+## 5.1.0
+
+- Update to the latest version of `psychart` (0.10.0)
+    - **Add** boolean option to show axes names
+    - **Add** ability to highlight points by clicking on them
+    - **Update:** Some axes label texts are rotated to save space
+    - **Update:** Render enthalpy lines instead of wet bulb for Mollier diagrams
+    - **Fix:** A bug caused the point *radius* setting to actually set the *diameter*
+- Update to the latest version of `viridis` (1.4.2)
+- Update to the latest version of `@grafana/create-plugin` (6.6.0)
+
 ## 5.0.4
 
 - Update to the latest version of `viridis` (1.3.1)

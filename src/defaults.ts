@@ -1,15 +1,16 @@
 import { Palette, PaletteName } from 'viridis';
 import { GrafanaDataOptions, GrafanaPsychartOptions } from './types';
-import { PsychartOptions } from 'psychart';
+import { PsychartTypes } from 'psychart';
 import { getURL } from 'icon';
 
 /**
  * Get the default colors for this theme.
  */
-export function getColors(darkTheme: boolean): PsychartOptions['colors'] {
+export function getColors(darkTheme: boolean): PsychartTypes.Options['colors'] {
     return {
         axis: darkTheme ? '#303030' : '#E0E0E0',
         font: darkTheme ? '#D0D0D0' : '#202020',
+        highlight: darkTheme ? '#555500' : '#FFFF00',
         regionGradient: 'Purplish',
     };
 }
@@ -36,6 +37,7 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
     mollier: false,
     regions: [],
     series: [],
+    showAxisNames: true,
     showLegend: true,
     unitSystem: 'IP',
 };

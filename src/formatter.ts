@@ -81,5 +81,14 @@ export function migrate(panel: PanelModel) {
       }
     }
   }
+  if (version.startsWith('5.0.')) {
+    // Point "radius" was actually measuring the diameter
+    for (const key in options['series']) {
+      const diameter = options['series'][key]?.['pointRadius'];
+      if (typeof diameter === 'number') {
+        options['series'][key]['pointRadius'] = Math.ceil(diameter / 2);
+      }
+    }
+  }
   return options;
 }

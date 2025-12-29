@@ -10,11 +10,13 @@ import { PanelDataErrorView } from '@grafana/runtime';
 
 export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) => {
   const isDarkTheme = useTheme2().isDark;
+  let psychartElement: HTMLDivElement;
   try {
     const psychart: Psychart = new Psychart(
       {
         altitude: props.options.altitude,
         colors: getColors(isDarkTheme),
+        dAxis: props.options.mollier ? 'h' : 'wb',
         dbMax: props.options.dbMax,
         dbMin: props.options.dbMin,
         dpMax: props.options.dpMax,
@@ -27,6 +29,7 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         } : false,
         major: props.options.major,
         regions: props.options.regions,
+        showAxisNames: props.options.showAxisNames,
         size: { x: props.width, y: props.height },
         unitSystem: props.options.unitSystem,
         yAxis: props.options.mollier ? 'hr' : 'dp',
@@ -53,8 +56,13 @@ export const PsyPanel: React.FC<PanelProps<GrafanaPsychartOptions>> = (props) =>
         }
       }
     }
-    return <Container child={psychart.getElement()} />;
+    psychartElement = psychart.getElement();
   } catch (ex: any) {
     return <PanelDataErrorView panelId={props.id} data={props.data} message={'' + ex} />;
+  }
+  if (psychartElement) {
+    return <Container child={psychartElement} />;
+  } else {
+    return <PanelDataErrorView panelId={props.id} data={props.data} message='A rendering error occurred.' />;
   }
 };

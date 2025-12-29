@@ -1,13 +1,14 @@
-import { DataOptions, Datum, PsychartOptions } from 'psychart';
+import { PsychartTypes } from 'psychart';
 
 export interface GrafanaPsychartOptions {
-    readonly altitude: PsychartOptions['altitude'];
-    readonly dbMax: PsychartOptions['dbMax'];
-    readonly dbMin: PsychartOptions['dbMin'];
-    readonly dpMax: PsychartOptions['dpMax'];
-    readonly major: PsychartOptions['major'];
-    readonly regions: PsychartOptions['regions'];
-    readonly unitSystem: PsychartOptions['unitSystem'];
+    readonly altitude: PsychartTypes.Options['altitude'];
+    readonly dbMax: PsychartTypes.Options['dbMax'];
+    readonly dbMin: PsychartTypes.Options['dbMin'];
+    readonly dpMax: PsychartTypes.Options['dpMax'];
+    readonly major: PsychartTypes.Options['major'];
+    readonly regions: PsychartTypes.Options['regions'];
+    readonly unitSystem: PsychartTypes.Options['unitSystem'];
+    readonly showAxisNames: PsychartTypes.Options['showAxisNames'];
     readonly showLegend: boolean;
     readonly mollier: boolean;
     readonly count: number;
@@ -15,13 +16,13 @@ export interface GrafanaPsychartOptions {
 }
 
 export interface GrafanaDataOptions {
-    readonly advanced: DataOptions['advanced'];
-    readonly gradient: DataOptions['gradient'];
-    readonly line: DataOptions['line'];
-    readonly pointRadius: DataOptions['pointRadius'];
-    readonly relHumType: DataOptions['relHumType'];
-    readonly seriesName: DataOptions['name'];
+    readonly advanced: PsychartTypes.DataOptions['advanced'];
+    readonly gradient: PsychartTypes.DataOptions['gradient'];
+    readonly line: PsychartTypes.DataOptions['line'];
+    readonly pointRadius: PsychartTypes.DataOptions['pointRadius'];
+    readonly relHumType: PsychartTypes.DataOptions['relHumType'];
+    readonly seriesName: PsychartTypes.DataOptions['name'];
     readonly dryBulb: string;
     readonly other: string;
-    readonly measurement: Datum['measurement'];
+    readonly measurement: PsychartTypes.State['measurement'];
 }
