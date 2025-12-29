@@ -71,7 +71,7 @@
   "dependencies": {
     "psychart": "0.10.0",
     "viridis": "1.4.2",
-    "@emotion/css": "11.10.6",
+    "@emotion/css": "11.13.5",
     "@grafana/data": "^12.3.0",
     "@grafana/i18n": "^12.3.0",
     "@grafana/runtime": "^12.3.0",
