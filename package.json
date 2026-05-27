@@ -69,8 +69,8 @@
     "node": ">=22"
   },
   "dependencies": {
-    "psychart": "0.10.0",
-    "viridis": "1.4.2",
+    "psychart": "1.0.0",
+    "viridis": "1.5.0",
     "@emotion/css": "11.10.6",
     "@grafana/data": "12.4.2",
     "@grafana/i18n": "12.4.2",
