@@ -174,6 +174,19 @@ export const plugin = new PanelPlugin<GrafanaPsychartOptions>(PsyPanel).setPanel
               max: 100,
               placeholder: subcontext.options.relHum.toString(),
             },
+          })
+          .addNumberInput({
+            path: 'enthalpy',
+            name: 'Enthalpy',
+            description: 'The major interval between enthalpy axes in the units provided.',
+            defaultValue: subcontext.options.enthalpy,
+            category: ['Axis Intervals'],
+            settings: {
+              step: 1,
+              min: 1,
+              max: 100,
+              placeholder: subcontext.options.enthalpy.toString(),
+            },
           });
       },
     })
