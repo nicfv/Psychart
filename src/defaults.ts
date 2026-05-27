@@ -30,6 +30,7 @@ export const defaultGrafanaOptions: GrafanaPsychartOptions = {
     dbMin: 20,
     dpMax: 90,
     major: {
+        enthalpy: 10,
         humRat: 10,
         relHum: 10,
         temp: 10,
