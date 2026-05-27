@@ -1,4 +1,4 @@
-import { DataFrame, PanelModel } from '@grafana/data';
+import { DataFrame, PanelMigrationHandler } from '@grafana/data';
 
 /**
  * Represents a single-dimensional data point in time.
@@ -64,7 +64,7 @@ export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
 /**
  * Migrate an older set of panel options to a current model.
  */
-export function migrate(panel: PanelModel) {
+export const migrate: PanelMigrationHandler = (panel) => {
   const options = Object.assign({}, panel.options);
   const version = panel.pluginVersion ?? '';
   if (version.startsWith('4.')) {
