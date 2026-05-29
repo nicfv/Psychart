@@ -2,7 +2,7 @@
 
 ## 5.2.0
 
-- Update to the latest version of `@grafana/create-plugin` (7.6.2)
+- Update to the latest version of `@grafana/create-plugin` (7.7.0)
     - Grafana required: 12.3.0
 - Update to the latest version of `psychart` (1.0.0)
     - **Add** major axis interval option for enthalpy
