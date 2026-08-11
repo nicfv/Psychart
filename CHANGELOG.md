@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.2.0
+
+- Update to the latest version of `@grafana/create-plugin` (7.9.2)
+    - Grafana required: 12.3.0
+- Update to the latest version of `psychart` (1.0.0)
+    - **Add** major axis interval option for enthalpy
+- Update to the latest version of `viridis` (1.6.1)
+- Update GitHub workflow actions
+
 ## 5.1.0
 
 - Update to the latest version of `psychart` (0.10.0)
