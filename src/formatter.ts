@@ -54,7 +54,7 @@ export function getFieldList(data: FormattedData): string[] {
  * @returns A cleaned-up object.
  */
 export function clean<T>(dirty: Partial<T>, defaultObj: T): T {
-  const cleaned: T = JSON.parse(JSON.stringify(defaultObj));
+  const cleaned: T = structuredClone(defaultObj);
   for (const key in cleaned) {
     cleaned[key] = dirty[key] ?? defaultObj[key];
   }
