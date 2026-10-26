@@ -7,6 +7,7 @@
 - Update to the latest version of `psychart` (1.1.0)
 - Update to the latest version of `viridis` (1.7.0)
 - Use `getFieldDisplayName` Grafana API function within data formatter
+- Update `basic-ftp` to 6.2.1 mitigate against security vulnerability
 
 ## 5.2.0
 
