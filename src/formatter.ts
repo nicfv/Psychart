@@ -1,4 +1,4 @@
-import { DataFrame, PanelMigrationHandler } from '@grafana/data';
+import { DataFrame, PanelMigrationHandler, getFieldDisplayName } from '@grafana/data';
 
 /**
  * Represents a single-dimensional data point in time.
@@ -27,7 +27,7 @@ export function format(series: DataFrame[]): FormattedData {
         frame.fields
           .filter((field) => field.type === 'number')
           .forEach((field) => {
-            const name: string = field.config.displayNameFromDS || field.config.displayName || field.name;
+            const name: string = getFieldDisplayName(field, frame, series);
             formatted[t] = formatted[t] || {};
             formatted[t][name] = field.values[i];
           });

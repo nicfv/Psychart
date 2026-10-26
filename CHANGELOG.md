@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.3.0
+
+- Update to the latest version of `@grafana/create-plugin` (7.16.0)
+    - Grafana version required: `>=13.2.0`
+- Update to the latest version of `psychart` (1.1.0)
+- Update to the latest version of `viridis` (1.7.0)
+- Use `getFieldDisplayName` Grafana API function within data formatter
+
 ## 5.2.0
 
 - Update to the latest version of `@grafana/create-plugin` (7.9.2)
